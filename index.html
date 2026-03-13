@@ -749,8 +749,11 @@ footer {
 }
 .ft-brand { font-family: var(--serif); font-size: 16px; font-weight:600; letter-spacing: .22em; color: var(--gold-lo); text-transform:uppercase; }
 .ft-copy { font-family: var(--ui); font-size: 10px; letter-spacing: .1em; color: var(--edge); }
+.ft-links { display: flex; gap: 24px; align-items: center; }
 .ft-link { font-family: var(--ui); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--smoke); transition: color .3s; }
 .ft-link:hover { color: var(--parch); }
+.ft-link-dim { color: var(--edge); font-size: 9px; letter-spacing: .14em; }
+.ft-link-dim:hover { color: var(--smoke); }
 
 /* ============================================================
    REVEAL
@@ -793,6 +796,7 @@ footer {
   #nav { padding: 18px 20px; }
   #nav.frosted { padding: 13px 20px; }
   .nav-live { display:none; }
+  .nav-story { display:none; }
 
   .hero { min-height: 100svh; }
   .hero-content { padding: 0 20px; max-width: 100%; }
@@ -1091,7 +1095,10 @@ footer {
 <footer>
   <div class="ft-brand">Progressio</div>
   <div class="ft-copy">© 2026 Progressio. All rights reserved.</div>
-  <a href="story.html" class="ft-link">Our Story →</a>
+  <div class="ft-links">
+    <a href="story.html" class="ft-link">Our Story →</a>
+    <a href="work.html" class="ft-link ft-link-dim">Work →</a>
+  </div>
 </footer>
 
 <!-- ================================================================
