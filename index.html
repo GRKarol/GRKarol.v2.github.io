@@ -203,8 +203,7 @@ button { border: none; background: none; font-family: inherit; }
 }
 .ht-l3 {
   display: block;
-  -webkit-text-stroke: 1.5px rgba(255,255,255,.13);
-  color: transparent;
+  color: var(--gold);
   opacity: 0; animation: heroUp .9s var(--silk) .85s forwards;
 }
 
@@ -957,7 +956,7 @@ footer {
 }
 
 /* ── ROTATING WORD ── */
-#rotating-word { transition: opacity 0.18s ease; }
+#rotating-word { transition: none; }
 
 /* ── COVER SECTION ── */
 .cover-section {
@@ -1461,9 +1460,13 @@ window.addEventListener('scroll',()=>{
       idx = (idx+1) % words.length;
       el.textContent = words[idx];
       el.style.opacity = '1';
-    }, 180);
+    }, 200);
   }
-  setInterval(nextWord, 1600);
+  // wait for heroUp animation to finish, then enable transition and start rotation
+  setTimeout(()=>{
+    el.style.transition = 'opacity 0.2s ease';
+    setInterval(nextWord, 1600);
+  }, 2000);
 })();
 
 /* ── BOOK PARALLAX ───────────────────────────────────── */
