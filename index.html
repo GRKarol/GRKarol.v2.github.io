@@ -957,16 +957,7 @@ footer {
 }
 
 /* ── ROTATING WORD ── */
-@keyframes wordFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes wordFadeOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-#rotating-word.fading-out { animation: wordFadeOut 0.2s ease forwards; }
-#rotating-word.fading-in  { animation: wordFadeIn  0.2s ease forwards; }
+#rotating-word { transition: opacity 0.18s ease; }
 
 /* ── COVER SECTION ── */
 .cover-section {
@@ -1465,14 +1456,12 @@ window.addEventListener('scroll',()=>{
   const el = document.getElementById('rotating-word');
   let idx = 0;
   function nextWord(){
-    el.classList.add('fading-out');
+    el.style.opacity = '0';
     setTimeout(()=>{
       idx = (idx+1) % words.length;
       el.textContent = words[idx];
-      el.classList.remove('fading-out');
-      el.classList.add('fading-in');
-      setTimeout(()=> el.classList.remove('fading-in'), 200);
-    }, 200);
+      el.style.opacity = '1';
+    }, 180);
   }
   setInterval(nextWord, 1600);
 })();
