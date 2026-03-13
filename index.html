@@ -203,8 +203,7 @@ button { border: none; background: none; font-family: inherit; }
 }
 .ht-l3 {
   display: block;
-  -webkit-text-stroke: 1.5px rgba(255,255,255,.13);
-  color: transparent;
+  color: var(--gold);
   opacity: 0; animation: heroUp .9s var(--silk) .85s forwards;
 }
 
@@ -957,16 +956,7 @@ footer {
 }
 
 /* ── ROTATING WORD ── */
-@keyframes wordFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes wordFadeOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-#rotating-word.fading-out { animation: wordFadeOut 0.2s ease forwards; }
-#rotating-word.fading-in  { animation: wordFadeIn  0.2s ease forwards; }
+#rotating-word { transition: none; }
 
 /* ── COVER SECTION ── */
 .cover-section {
@@ -1465,16 +1455,18 @@ window.addEventListener('scroll',()=>{
   const el = document.getElementById('rotating-word');
   let idx = 0;
   function nextWord(){
-    el.classList.add('fading-out');
+    el.style.opacity = '0';
     setTimeout(()=>{
       idx = (idx+1) % words.length;
       el.textContent = words[idx];
-      el.classList.remove('fading-out');
-      el.classList.add('fading-in');
-      setTimeout(()=> el.classList.remove('fading-in'), 200);
+      el.style.opacity = '1';
     }, 200);
   }
-  setInterval(nextWord, 1600);
+  // wait for heroUp animation to finish, then enable transition and start rotation
+  setTimeout(()=>{
+    el.style.transition = 'opacity 0.2s ease';
+    setInterval(nextWord, 1600);
+  }, 2000);
 })();
 
 /* ── BOOK PARALLAX ───────────────────────────────────── */
