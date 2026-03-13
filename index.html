@@ -958,15 +958,15 @@ footer {
 
 /* ── ROTATING WORD ── */
 @keyframes wordFadeIn {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 @keyframes wordFadeOut {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-14px); }
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
-#rotating-word.fading-out { animation: wordFadeOut 0.38s var(--ease-silk) forwards; }
-#rotating-word.fading-in  { animation: wordFadeIn  0.38s var(--ease-silk) forwards; }
+#rotating-word.fading-out { animation: wordFadeOut 0.2s ease forwards; }
+#rotating-word.fading-in  { animation: wordFadeIn  0.2s ease forwards; }
 
 /* ── COVER SECTION ── */
 .cover-section {
@@ -1461,7 +1461,7 @@ window.addEventListener('scroll',()=>{
 
 /* ── ROTATING WORD ─────────────────────────────────── */
 (function(){
-  const words = ['Story.','Systems.','Future.','Yourself.','Legacy.','Rules.'];
+  const words = ['Story.','Systems.','Future.','Selfe.','Legacy.','Rules.'];
   const el = document.getElementById('rotating-word');
   let idx = 0;
   function nextWord(){
@@ -1471,10 +1471,10 @@ window.addEventListener('scroll',()=>{
       el.textContent = words[idx];
       el.classList.remove('fading-out');
       el.classList.add('fading-in');
-      setTimeout(()=> el.classList.remove('fading-in'), 380);
-    }, 380);
+      setTimeout(()=> el.classList.remove('fading-in'), 200);
+    }, 200);
   }
-  setInterval(nextWord, 2800);
+  setInterval(nextWord, 1600);
 })();
 
 /* ── BOOK PARALLAX ───────────────────────────────────── */
