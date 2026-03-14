@@ -36,7 +36,9 @@ body {
   font-weight: 300;
   overflow-x: hidden;
   min-height: 100vh;
+  transition: padding-bottom .4s var(--silk);
 }
+body.admin-active { padding-bottom: 68px; }
 a { text-decoration: none; color: inherit; }
 
 /* ── NAV ── */
@@ -83,6 +85,21 @@ a { text-decoration: none; color: inherit; }
   font-size: 13px; line-height: 1.7; color: var(--smoke);
   max-width: 480px; letter-spacing: .04em;
 }
+
+/* ── SETUP BANNER ── */
+#setup-banner {
+  margin: 0 56px 40px;
+  padding: 20px 24px;
+  border: 1px solid var(--gold-lo);
+  background: rgba(201,168,76,.04);
+}
+#setup-banner p { font-size: 12px; line-height: 1.8; color: var(--smoke); }
+#setup-banner strong { color: var(--gold); font-family: var(--serif); font-size: 14px; }
+#setup-banner code {
+  font-family: monospace; font-size: 11px;
+  color: var(--gold); background: var(--ink); padding: 1px 6px;
+}
+#setup-banner.hidden { display: none; }
 
 /* ── GRID ── */
 .wip-grid {
@@ -145,6 +162,18 @@ a { text-decoration: none; color: inherit; }
 }
 .wip-card.has-image .card-content { padding: 24px 28px 28px; }
 
+/* Video card variant */
+.wip-card.has-video { padding: 0; }
+.wip-card.has-video .card-content { padding: 24px 28px 28px; }
+.card-video-wrap { width: 100%; aspect-ratio: 16/9; display: block; background: var(--deep); }
+.card-video-wrap iframe,
+.card-video-wrap video { width: 100%; height: 100%; display: block; border: none; }
+.card-no-media {
+  aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
+  background: var(--lift);
+}
+.card-no-media span { font-size: 10px; letter-spacing: .1em; color: var(--smoke); text-transform: uppercase; }
+
 /* Status badge */
 .card-status {
   display: inline-block;
@@ -153,25 +182,21 @@ a { text-decoration: none; color: inherit; }
   border: 1px solid var(--edge); color: var(--smoke);
   margin-bottom: 14px;
 }
-.card-status.active { border-color: var(--gold-lo); color: var(--gold-lo); }
+.card-status.active   { border-color: var(--gold-lo); color: var(--gold-lo); }
+.card-status.upcoming { border-color: var(--smoke);   color: var(--smoke); }
+.card-status.done     { border-color: var(--edge);    color: var(--edge); }
 
-/* ── EMPTY STATE (for new cards) ── */
+/* ── EMPTY STATE ── */
 .wip-card.add-new {
   border: 1px dashed var(--edge);
   background: transparent;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   min-height: 220px; text-align: center; gap: 10px;
-  cursor: default;
-  opacity: .35;
+  cursor: default; opacity: .35;
 }
-.wip-card.add-new .add-icon {
-  font-size: 24px; color: var(--edge); line-height: 1;
-}
-.wip-card.add-new .add-text {
-  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--edge);
-}
+.wip-card.add-new .add-icon { font-size: 24px; color: var(--edge); }
+.wip-card.add-new .add-text { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--edge); }
 
 /* ── DIVIDER ── */
 .wip-divider {
@@ -192,6 +217,172 @@ footer {
 .ft-link { font-family: var(--ui); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--smoke); transition: color .3s; }
 .ft-link:hover { color: var(--parch); }
 
+/* ══════════════════════════════════════════
+   ADMIN STYLES
+══════════════════════════════════════════ */
+
+/* ── Admin card controls (visible only in admin mode) ── */
+.card-admin-overlay {
+  display: none;
+  position: absolute; inset: 0; z-index: 20;
+  pointer-events: none;
+}
+.admin-active .wip-card:not(.add-new) .card-admin-overlay { display: block; }
+.admin-active .wip-card:not(.add-new) { outline: 1px solid var(--edge); }
+
+.card-ctrl-top {
+  position: absolute; top: 8px; right: 8px;
+  display: flex; gap: 4px; pointer-events: all;
+}
+.card-ctrl-order {
+  position: absolute; top: 8px; left: 8px;
+  display: flex; flex-direction: column; gap: 3px; pointer-events: all;
+}
+.ctrl-btn {
+  font-family: var(--ui); font-size: 8px; letter-spacing: .14em;
+  text-transform: uppercase; padding: 4px 9px;
+  background: rgba(7,6,10,.92); border: 1px solid var(--edge);
+  color: var(--smoke); cursor: pointer;
+  transition: all .18s; white-space: nowrap;
+}
+.ctrl-btn:hover { border-color: var(--gold-lo); color: var(--parch); }
+.ctrl-btn.del:hover { border-color: #b85840; color: #d4694e; }
+.ctrl-btn.ord { padding: 3px 7px; font-size: 11px; }
+.ctrl-btn:disabled { opacity: .2; cursor: not-allowed; pointer-events: none; }
+
+/* ── Admin bar (fixed bottom) ── */
+#admin-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
+  background: rgba(7,6,10,.97);
+  border-top: 1px solid var(--gold-lo);
+  padding: 12px 56px;
+  display: flex; align-items: center; gap: 12px;
+  transform: translateY(100%);
+  transition: transform .4s var(--silk);
+}
+#admin-bar.visible { transform: translateY(0); }
+.admin-label {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--gold); margin-right: auto;
+  display: flex; align-items: center; gap: 8px;
+}
+.admin-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #c9614a;
+  animation: adot 2s ease-in-out infinite;
+}
+@keyframes adot { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.admin-btn {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
+  text-transform: uppercase; padding: 8px 16px;
+  background: none; border: 1px solid var(--edge);
+  color: var(--smoke); cursor: pointer; transition: all .2s;
+}
+.admin-btn:hover { border-color: var(--smoke); color: var(--parch); }
+.admin-btn.primary { border-color: var(--gold-lo); color: var(--gold); }
+.admin-btn.primary:hover { background: var(--gold-lo); color: var(--ink); }
+.admin-btn.danger:hover { border-color: #b85840; color: #d4694e; }
+#btn-save-order { display: none; }
+
+/* ── Modal overlay ── */
+#modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(7,6,10,.88);
+  backdrop-filter: blur(24px) saturate(1.2);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+#modal-overlay.open { opacity: 1; pointer-events: all; }
+
+#modal {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  width: 100%; max-width: 580px;
+  max-height: 90vh; overflow-y: auto;
+  padding: 40px;
+  transform: translateY(12px);
+  transition: transform .3s var(--silk);
+}
+#modal-overlay.open #modal { transform: translateY(0); }
+
+.modal-heading {
+  font-family: var(--serif); font-size: 24px; font-weight: 300;
+  color: var(--cream); margin-bottom: 28px;
+}
+
+/* Template selector */
+.tpl-row { display: flex; gap: 6px; margin-bottom: 28px; }
+.tpl-btn {
+  flex: 1; padding: 10px 8px;
+  background: var(--ink); border: 1px solid var(--edge);
+  font-family: var(--ui); font-size: 8px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--smoke);
+  cursor: pointer; transition: all .2s; text-align: center;
+}
+.tpl-btn:hover { border-color: var(--smoke); color: var(--parch); }
+.tpl-btn.active { border-color: var(--gold-lo); color: var(--gold); background: rgba(201,168,76,.06); }
+
+/* Form fields */
+.form-row { margin-bottom: 18px; }
+.form-label {
+  display: block; font-family: var(--ui); font-size: 9px;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-lo); margin-bottom: 7px;
+}
+.form-input, .form-textarea, .form-select {
+  width: 100%; background: var(--ink); border: 1px solid var(--edge);
+  color: var(--parch); font-family: var(--ui); font-size: 13px;
+  font-weight: 300; padding: 10px 12px; transition: border-color .2s;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  outline: none; border-color: var(--gold-lo);
+}
+.form-textarea { resize: vertical; min-height: 96px; line-height: 1.6; }
+.form-select option { background: var(--surface); }
+.form-hint {
+  font-size: 10px; color: var(--smoke); margin-top: 6px;
+  letter-spacing: .03em; line-height: 1.5;
+}
+
+/* Upload area */
+.upload-area {
+  border: 1px dashed var(--edge); padding: 22px;
+  text-align: center; cursor: pointer; transition: border-color .2s;
+  position: relative;
+}
+.upload-area:hover { border-color: var(--gold-lo); }
+.upload-area input[type="file"] { display: none; }
+.upload-area-label {
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--smoke);
+  display: block;
+}
+.upload-preview {
+  max-width: 100%; max-height: 180px; object-fit: cover;
+  display: none; margin: 12px auto 0;
+}
+.upload-bar-wrap { height: 2px; background: var(--edge); margin-top: 10px; }
+.upload-bar { height: 100%; background: var(--gold); width: 0%; transition: width .3s; }
+
+.modal-actions {
+  display: flex; gap: 8px; margin-top: 28px; justify-content: flex-end;
+}
+
+/* Toast notification */
+#toast {
+  position: fixed; bottom: 80px; right: 24px; z-index: 1100;
+  background: var(--lift); border: 1px solid var(--edge);
+  color: var(--parch); font-family: var(--ui); font-size: 11px;
+  letter-spacing: .06em; padding: 12px 20px;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .3s, transform .3s;
+  pointer-events: none;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+#toast.ok { border-color: var(--gold-lo); color: var(--gold); }
+#toast.err { border-color: #b85840; color: #d4694e; }
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   #nav { padding: 18px 20px; }
@@ -199,7 +390,10 @@ footer {
   .page-header { padding: 120px 20px 56px; }
   .wip-grid { padding: 0 20px 80px; grid-template-columns: 1fr; }
   .wip-divider { margin: 0 20px; margin-bottom: 48px; }
+  #setup-banner { margin: 0 20px 32px; }
   footer { flex-direction:column; gap:16px; text-align:center; padding:28px 20px; }
+  #admin-bar { padding: 12px 20px; flex-wrap: wrap; gap: 8px; }
+  #modal { padding: 28px 20px; }
 }
 @media(max-width:480px){
   .ph-title { font-size: clamp(28px, 9vw, 40px); }
@@ -221,79 +415,16 @@ footer {
   <p class="ph-sub">Raw updates from the studio. Current designs, decisions, and iterations — documented as they happen.</p>
 </div>
 
+<!-- ═══ SETUP BANNER ═══ -->
+<div id="setup-banner">
+  <p><strong>Firebase nie jest skonfigurowany.</strong><br>
+  Wypełnij obiekt <code>firebaseConfig</code> na dole tego pliku, żeby włączyć dynamiczne posty.<br>
+  Póki co strona pokazuje przykładowe posty. Po skonfigurowaniu Firebase ten baner zniknie automatycznie.</p>
+</div>
+
 <!-- ═══ WIP GRID ═══ -->
-<div class="wip-grid">
-
-  <!-- ─ POST TEMPLATE: text update ─
-       Copy, fill in, and paste above this comment.
-  <div class="wip-card">
-    <div class="card-type"><span class="card-dot"></span>Update</div>
-    <div class="card-status active">In Progress</div>
-    <h2 class="card-title">Title of <em>the update</em></h2>
-    <p class="card-body">
-      Your text here. Describe what you're working on, what changed,
-      what decision you made.
-    </p>
-    <div class="card-date">March 2026</div>
-  </div>
-  -->
-
-  <!-- ─ POST TEMPLATE: image card ─
-       Copy, fill in, and paste above this comment.
-  <div class="wip-card has-image">
-    <img class="card-img" src="path/to/image.jpg" alt="Description">
-    <div class="card-content">
-      <div class="card-type"><span class="card-dot"></span>Design</div>
-      <h2 class="card-title">Image <em>caption</em></h2>
-      <p class="card-body">Short context or note about this image.</p>
-      <div class="card-date">March 2026</div>
-    </div>
-  </div>
-  -->
-
-  <!-- ─────────────── LIVE POSTS BELOW ─────────────── -->
-
-  <div class="wip-card">
-    <div class="card-type"><span class="card-dot"></span>Design</div>
-    <div class="card-status active">In Progress</div>
-    <h2 class="card-title">Full graphic layout — <em>every page</em></h2>
-    <p class="card-body">
-      Building out the internal structure. Each section designed with intention —
-      daily log, weekly review, monthly reflection, project pages.
-      The system is taking shape.
-    </p>
-    <div class="card-date">March 2026</div>
-  </div>
-
-  <div class="wip-card">
-    <div class="card-type"><span class="card-dot"></span>Object</div>
-    <div class="card-status">Upcoming</div>
-    <h2 class="card-title">First physical <em>prototype</em></h2>
-    <p class="card-body">
-      ~20 copies. Real leather, real binding, real weight in hand.
-      This is the moment everything either works or gets iterated.
-    </p>
-    <div class="card-date">April 2026</div>
-  </div>
-
-  <div class="wip-card">
-    <div class="card-type"><span class="card-dot"></span>Cover</div>
-    <div class="card-status">Done</div>
-    <h2 class="card-title">Cover design — <em>front, spine & back</em></h2>
-    <p class="card-body">
-      Full leather binding. Gold foil embossing. The cover went through
-      multiple rounds — typography, proportions, the lion mark.
-      Now locked in.
-    </p>
-    <div class="card-date">February 2026</div>
-  </div>
-
-  <!-- Placeholder for next post -->
-  <div class="wip-card add-new" aria-hidden="true">
-    <div class="add-icon">+</div>
-    <div class="add-text">Next update</div>
-  </div>
-
+<div class="wip-grid" id="wip-grid">
+  <!-- posty renderowane przez JS -->
 </div>
 
 <div class="wip-divider"></div>
@@ -304,10 +435,544 @@ footer {
   <a href="index.html" class="ft-link">Back to main →</a>
 </footer>
 
+<!-- ═══ ADMIN BAR ═══ -->
+<div id="admin-bar">
+  <span class="admin-label">
+    <span class="admin-dot"></span>
+    Admin Mode
+  </span>
+  <button class="admin-btn primary" id="btn-new" onclick="openModal()">+ New Post</button>
+  <button class="admin-btn" id="btn-save-order" onclick="saveOrder()">Save Order</button>
+  <button class="admin-btn danger" onclick="exitAdmin()">Exit</button>
+</div>
+
+<!-- ═══ MODAL ═══ -->
+<div id="modal-overlay">
+  <div id="modal">
+    <div class="modal-heading" id="modal-heading">New Post</div>
+
+    <!-- Template selector -->
+    <div class="tpl-row">
+      <button class="tpl-btn active" data-tpl="text"  onclick="setTemplate('text',this)">Text Update</button>
+      <button class="tpl-btn"        data-tpl="image" onclick="setTemplate('image',this)">Image Card</button>
+      <button class="tpl-btn"        data-tpl="video" onclick="setTemplate('video',this)">Video Card</button>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Type label</label>
+      <input class="form-input" id="f-type" placeholder="Design / Update / Object / Cover…" maxlength="32">
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="f-status">
+        <option value="">— brak —</option>
+        <option value="active">In Progress</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Tytuł</label>
+      <input class="form-input" id="f-title" placeholder="Tytuł posta">
+      <p class="form-hint">Zawiń słowa w *gwiazdki* żeby je pochylić: <code>projekt *w toku*</code></p>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Treść</label>
+      <textarea class="form-textarea" id="f-body" placeholder="Opisz co robisz, jaką decyzję podjąłeś…"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">Data</label>
+      <input class="form-input" id="f-date" placeholder="March 2026">
+    </div>
+
+    <!-- Image upload (image + video templates) -->
+    <div class="form-row" id="row-image" style="display:none">
+      <label class="form-label" id="row-image-label">Zdjęcie</label>
+      <div class="upload-area" id="upload-area" onclick="document.getElementById('f-img-file').click()">
+        <input type="file" id="f-img-file" accept="image/*" onchange="handleImagePick(this)">
+        <span class="upload-area-label" id="img-upload-label">Kliknij żeby wybrać zdjęcie</span>
+        <img id="img-preview" class="upload-preview" alt="preview">
+        <div class="upload-bar-wrap"><div class="upload-bar" id="img-bar"></div></div>
+      </div>
+      <p class="form-hint" style="margin-top:8px">Lub wklej URL:</p>
+      <input class="form-input" id="f-img-url" placeholder="https://…" style="margin-top:6px" oninput="handleImageUrl(this)">
+    </div>
+
+    <!-- Video URL (video template only) -->
+    <div class="form-row" id="row-video" style="display:none">
+      <label class="form-label">URL wideo</label>
+      <input class="form-input" id="f-video-url" placeholder="YouTube / Vimeo URL, lub bezpośredni .mp4">
+      <p class="form-hint">Obsługuje YouTube, Vimeo i bezpośrednie pliki wideo.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="admin-btn" onclick="closeModal()">Anuluj</button>
+      <button class="admin-btn primary" onclick="savePost()">Zapisz post</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast"></div>
+
+<!-- ═══ FIREBASE SDK ═══ -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
 <script>
+/* ══════════════════════════════════════════════════════════
+   ██████╗ ██████╗ ███╗   ██╗███████╗██╗ ██████╗
+  ██╔════╝██╔═══██╗████╗  ██║██╔════╝██║██╔════╝
+  ██║     ██║   ██║██╔██╗ ██║█████╗  ██║██║  ███╗
+  ██║     ██║   ██║██║╚██╗██║██╔══╝  ██║██║   ██║
+  ╚██████╗╚██████╔╝██║ ╚████║██║     ██║╚██████╔╝
+   ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
+
+  ▶ KROK 1 — Wypełnij firebaseConfig swoimi danymi z Firebase Console
+             console.firebase.google.com → Twój projekt → Project Settings → Your apps
+
+  ▶ KROK 2 — Zmień ADMIN_CODE na swoje tajne słowo (tylko Ty możesz je znać)
+
+  ▶ KROK 3 — Ustaw reguły Firestore (patrz README poniżej)
+══════════════════════════════════════════════════════════ */
+
+const firebaseConfig = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+
+/* ─── TAJNY KOD ADMINA ───────────────────────────────────
+   Wpisz to słowo na klawiaturze (POZA polem tekstowym)
+   żeby odpalić tryb admina. Nikt tego nie widzi w UI.
+   Zmień na cokolwiek chcesz — np. "karolAdmin2026"      */
+
+const ADMIN_CODE = "progressio";
+
+/* ══════════════════════════════════════════════════════════
+   NIE ZMIENIAJ NIC PONIŻEJ (chyba że wiesz co robisz)
+══════════════════════════════════════════════════════════ */
+
+// ─── helpers ───────────────────────────────────────────
+const isConfigured = () => firebaseConfig.apiKey !== "YOUR_API_KEY";
+const $  = id => document.getElementById(id);
+const esc = s  => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const escAttr = s => String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+function italicize(raw) {
+  return esc(raw).replace(/\*([^*]+)\*/g, '<em>$1</em>');
+}
+
+const STATUS_LABELS = { active:'In Progress', upcoming:'Upcoming', done:'Done' };
+
+function nowDate() {
+  return new Date().toLocaleDateString('en-GB',{ month:'long', year:'numeric' });
+}
+
+// ─── Toast ─────────────────────────────────────────────
+let toastTimer;
+function toast(msg, type = 'ok') {
+  const el = $('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 3000);
+}
+
+// ─── Firebase init ─────────────────────────────────────
+let db = null, storage = null;
+if (isConfigured()) {
+  firebase.initializeApp(firebaseConfig);
+  db      = firebase.firestore();
+  storage = firebase.storage();
+  $('setup-banner').classList.add('hidden');
+}
+
+// ─── State ─────────────────────────────────────────────
+let posts          = [];
+let adminMode      = false;
+let editingId      = null;
+let currentTpl     = 'text';
+let pendingImgUrl  = '';
+let orderDirty     = false;
+let unsubscribe    = null;
+
+// ─── Fallback posts (shown before Firebase is configured) ──
+const FALLBACK = [
+  { id:'f1', kind:'text',  type:'Design', status:'active',
+    title:'Full graphic layout — *every page*',
+    body:'Building out the internal structure. Each section designed with intention — daily log, weekly review, monthly reflection, project pages. The system is taking shape.',
+    date:'March 2026', order:0 },
+  { id:'f2', kind:'text',  type:'Object', status:'upcoming',
+    title:'First physical *prototype*',
+    body:'~20 copies. Real leather, real binding, real weight in hand. This is the moment everything either works or gets iterated.',
+    date:'April 2026', order:1 },
+  { id:'f3', kind:'text',  type:'Cover', status:'done',
+    title:'Cover design — *front, spine & back*',
+    body:'Full leather binding. Gold foil embossing. The cover went through multiple rounds — typography, proportions, the lion mark. Now locked in.',
+    date:'February 2026', order:2 },
+];
+
+// ─── Load posts ────────────────────────────────────────
+function loadPosts() {
+  if (!isConfigured()) {
+    posts = FALLBACK;
+    renderPosts();
+    return;
+  }
+  if (unsubscribe) unsubscribe();
+  unsubscribe = db.collection('posts')
+    .orderBy('order', 'asc')
+    .onSnapshot(
+      snap => {
+        posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPosts();
+      },
+      err => {
+        console.error('Firestore:', err);
+        if (!posts.length) { posts = FALLBACK; renderPosts(); }
+        toast('Błąd połączenia z Firestore', 'err');
+      }
+    );
+}
+
+// ─── Render ────────────────────────────────────────────
+function renderPosts() {
+  const sorted = [...posts].sort((a,b) => (a.order||0)-(b.order||0));
+  const grid   = $('wip-grid');
+
+  if (!sorted.length) {
+    grid.innerHTML = `
+      <div class="wip-card add-new" aria-hidden="true">
+        <div class="add-icon">+</div>
+        <div class="add-text">Brak postów — wejdź w tryb admina żeby dodać</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = sorted.map((p, i) => cardHTML(p, i, sorted.length)).join('');
+}
+
+function cardHTML(p, idx, total) {
+  const sl      = STATUS_LABELS[p.status] || '';
+  const statEl  = sl ? `<div class="card-status ${esc(p.status)}">${esc(sl)}</div>` : '';
+  const typeEl  = `<div class="card-type"><span class="card-dot"></span>${esc(p.type||'Update')}</div>`;
+  const titleEl = `<h2 class="card-title">${italicize(p.title||'')}</h2>`;
+  const bodyEl  = p.body ? `<p class="card-body">${esc(p.body)}</p>` : '';
+  const dateEl  = p.date ? `<div class="card-date">${esc(p.date)}</div>` : '';
+
+  const adminOverlay = `
+    <div class="card-admin-overlay">
+      <div class="card-ctrl-order">
+        <button class="ctrl-btn ord" onclick="movePost('${escAttr(p.id)}',-1)" ${idx===0?'disabled':''} title="Wyżej">↑</button>
+        <button class="ctrl-btn ord" onclick="movePost('${escAttr(p.id)}',1)"  ${idx===total-1?'disabled':''} title="Niżej">↓</button>
+      </div>
+      <div class="card-ctrl-top">
+        <button class="ctrl-btn" onclick="openModal('${escAttr(p.id)}')">Edytuj</button>
+        <button class="ctrl-btn del" onclick="confirmDelete('${escAttr(p.id)}')">Usuń</button>
+      </div>
+    </div>`;
+
+  if (p.kind === 'image') {
+    const media = p.imageUrl
+      ? `<img class="card-img" src="${escAttr(p.imageUrl)}" alt="${escAttr(p.title)}" loading="lazy">`
+      : `<div class="card-no-media"><span>Brak zdjęcia</span></div>`;
+    return `
+<div class="wip-card has-image" data-id="${escAttr(p.id)}">
+  ${adminOverlay}
+  ${media}
+  <div class="card-content">${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
+</div>`;
+  }
+
+  if (p.kind === 'video') {
+    const embed = buildVideoEmbed(p.videoUrl);
+    return `
+<div class="wip-card has-video" data-id="${escAttr(p.id)}">
+  ${adminOverlay}
+  <div class="card-video-wrap">${embed}</div>
+  <div class="card-content">${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
+</div>`;
+  }
+
+  // text
+  return `
+<div class="wip-card" data-id="${escAttr(p.id)}">
+  ${adminOverlay}
+  ${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}
+</div>`;
+}
+
+function buildVideoEmbed(url) {
+  if (!url) return `<div class="card-no-media"><span>Brak wideo</span></div>`;
+
+  const yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+  if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}" allow="autoplay;encrypted-media" allowfullscreen loading="lazy"></iframe>`;
+
+  const vm = url.match(/vimeo\.com\/(\d+)/);
+  if (vm) return `<iframe src="https://player.vimeo.com/video/${vm[1]}" allow="autoplay;fullscreen" allowfullscreen loading="lazy"></iframe>`;
+
+  return `<video controls preload="metadata" style="background:var(--ink)"><source src="${escAttr(url)}"></video>`;
+}
+
+// ─── Secret code detection ─────────────────────────────
+let secretBuf = '';
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if (e.key === 'Escape') { exitAdmin(); closeModal(); return; }
+  if (e.key.length !== 1) return;
+
+  secretBuf += e.key.toLowerCase();
+  if (secretBuf.length > ADMIN_CODE.length) {
+    secretBuf = secretBuf.slice(-ADMIN_CODE.length);
+  }
+  if (secretBuf === ADMIN_CODE.toLowerCase()) {
+    activateAdmin();
+    secretBuf = '';
+  }
+});
+
+// ─── Admin mode ────────────────────────────────────────
+function activateAdmin() {
+  if (!isConfigured()) {
+    toast('Uzupełnij firebaseConfig w pliku work.html!', 'err');
+    return;
+  }
+  adminMode = true;
+  document.body.classList.add('admin-active');
+  $('admin-bar').classList.add('visible');
+  toast('Tryb admina aktywny');
+}
+
+function exitAdmin() {
+  adminMode = false;
+  document.body.classList.remove('admin-active');
+  $('admin-bar').classList.remove('visible');
+  $('btn-save-order').style.display = 'none';
+  orderDirty = false;
+}
+
+// ─── Modal ─────────────────────────────────────────────
+function openModal(postId = null) {
+  editingId = postId;
+  $('modal-heading').textContent = postId ? 'Edytuj post' : 'Nowy post';
+
+  if (postId) {
+    const p = posts.find(x => x.id === postId);
+    if (!p) return;
+    setTemplate(p.kind || 'text');
+    $('f-type').value   = p.type   || '';
+    $('f-status').value = p.status || '';
+    $('f-title').value  = p.title  || '';
+    $('f-body').value   = p.body   || '';
+    $('f-date').value   = p.date   || '';
+    if (p.kind === 'image' || p.kind === 'video') {
+      $('f-img-url').value = p.imageUrl || '';
+      if (p.imageUrl) {
+        $('img-preview').src          = p.imageUrl;
+        $('img-preview').style.display = 'block';
+        $('img-upload-label').textContent = 'Zdjęcie ustawione';
+      }
+    }
+    if (p.kind === 'video') {
+      $('f-video-url').value = p.videoUrl || '';
+    }
+  } else {
+    resetForm();
+    $('f-date').value = nowDate();
+  }
+
+  $('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  $('modal-overlay').classList.remove('open');
+  editingId     = null;
+  pendingImgUrl = '';
+  resetForm();
+}
+
+function resetForm() {
+  ['f-type','f-title','f-body','f-date','f-img-url','f-video-url'].forEach(id => $(id).value = '');
+  $('f-status').value               = '';
+  $('img-preview').style.display    = 'none';
+  $('img-upload-label').textContent = 'Kliknij żeby wybrać zdjęcie';
+  $('img-bar').style.width          = '0%';
+  pendingImgUrl = '';
+  setTemplate('text');
+}
+
+function setTemplate(tpl, btn = null) {
+  currentTpl = tpl;
+  document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('active'));
+  const active = btn || document.querySelector(`[data-tpl="${tpl}"]`);
+  if (active) active.classList.add('active');
+
+  const showMedia = (tpl === 'image' || tpl === 'video');
+  $('row-image').style.display = showMedia ? '' : 'none';
+  $('row-video').style.display = tpl === 'video' ? '' : 'none';
+  $('row-image-label').textContent = tpl === 'video' ? 'Miniatura (opcjonalne)' : 'Zdjęcie';
+
+  // default type labels
+  if (!$('f-type').value) {
+    $('f-type').value = { text:'Update', image:'Photo', video:'Video' }[tpl] || 'Update';
+  }
+}
+
+// ─── Save post ─────────────────────────────────────────
+async function savePost() {
+  const title = $('f-title').value.trim();
+  if (!title) { toast('Wpisz tytuł!', 'err'); return; }
+
+  const maxOrder = posts.reduce((m,p) => Math.max(m, p.order||0), -1);
+
+  const data = {
+    kind:     currentTpl,
+    type:     $('f-type').value.trim()   || 'Update',
+    status:   $('f-status').value        || '',
+    title,
+    body:     $('f-body').value.trim()   || '',
+    date:     $('f-date').value.trim()   || '',
+  };
+
+  if (currentTpl === 'image' || currentTpl === 'video') {
+    data.imageUrl = pendingImgUrl || $('f-img-url').value.trim() || '';
+  }
+  if (currentTpl === 'video') {
+    data.videoUrl = $('f-video-url').value.trim() || '';
+  }
+
+  try {
+    if (editingId) {
+      await db.collection('posts').doc(editingId).update(data);
+      toast('Post zaktualizowany');
+    } else {
+      data.order     = maxOrder + 1;
+      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection('posts').add(data);
+      toast('Post dodany');
+    }
+    closeModal();
+  } catch (e) {
+    console.error(e);
+    toast('Błąd: ' + e.message, 'err');
+  }
+}
+
+// ─── Delete ────────────────────────────────────────────
+async function confirmDelete(id) {
+  const p = posts.find(x => x.id === id);
+  if (!confirm(`Usuń "${p?.title || 'ten post'}"?`)) return;
+  try {
+    await db.collection('posts').doc(id).delete();
+    toast('Post usunięty');
+  } catch (e) {
+    toast('Błąd usuwania: ' + e.message, 'err');
+  }
+}
+
+// ─── Reorder ───────────────────────────────────────────
+function movePost(id, dir) {
+  const sorted   = [...posts].sort((a,b) => (a.order||0)-(b.order||0));
+  const idx      = sorted.findIndex(p => p.id === id);
+  const swapIdx  = idx + dir;
+  if (swapIdx < 0 || swapIdx >= sorted.length) return;
+
+  const a = sorted[idx], b = sorted[swapIdx];
+  [a.order, b.order] = [b.order, a.order];
+
+  posts = posts.map(p => {
+    if (p.id === a.id) return { ...p, order: a.order };
+    if (p.id === b.id) return { ...p, order: b.order };
+    return p;
+  });
+
+  orderDirty = true;
+  $('btn-save-order').style.display = '';
+  renderPosts();
+}
+
+async function saveOrder() {
+  const batch = db.batch();
+  posts.forEach(p => batch.update(db.collection('posts').doc(p.id), { order: p.order }));
+  try {
+    await batch.commit();
+    orderDirty = false;
+    $('btn-save-order').style.display = 'none';
+    toast('Kolejność zapisana');
+  } catch (e) {
+    toast('Błąd zapisu kolejności: ' + e.message, 'err');
+  }
+}
+
+// ─── Image upload ──────────────────────────────────────
+function handleImagePick(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  // instant local preview
+  const reader = new FileReader();
+  reader.onload = e => {
+    $('img-preview').src          = e.target.result;
+    $('img-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+
+  if (!storage) { toast('Firebase Storage nie zainicjowany', 'err'); return; }
+
+  const path = `posts/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+  const ref  = storage.ref(path);
+  const task = ref.put(file);
+
+  $('img-upload-label').textContent = 'Przesyłam…';
+
+  task.on('state_changed',
+    snap => {
+      const pct = (snap.bytesTransferred / snap.totalBytes) * 100;
+      $('img-bar').style.width = pct + '%';
+    },
+    err => {
+      toast('Błąd uploadu: ' + err.message, 'err');
+      $('img-upload-label').textContent = 'Błąd — spróbuj ponownie';
+    },
+    async () => {
+      pendingImgUrl             = await ref.getDownloadURL();
+      $('f-img-url').value       = pendingImgUrl;
+      $('img-upload-label').textContent = 'Przesłano ✓';
+      toast('Zdjęcie przesłane');
+    }
+  );
+}
+
+function handleImageUrl(input) {
+  const url = input.value.trim();
+  if (url) {
+    $('img-preview').src          = url;
+    $('img-preview').style.display = 'block';
+    pendingImgUrl = '';
+  }
+}
+
+// ─── Close modal on backdrop click ─────────────────────
+$('modal-overlay').addEventListener('click', e => {
+  if (e.target === $('modal-overlay')) closeModal();
+});
+
+// ─── Nav scroll ────────────────────────────────────────
 window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('frosted', scrollY > 50);
-}, {passive:true});
+}, { passive: true });
+
+// ─── Init ──────────────────────────────────────────────
+loadPosts();
 </script>
 </body>
 </html>
