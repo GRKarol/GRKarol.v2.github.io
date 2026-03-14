@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progressio — Przestrzeń Projektu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4efe8;
+      --surface: #ffffff;
+      --surface2: #faf7f3;
+      --accent: #2d5a3d;
+      --accent-hover: #234a32;
+      --accent-light: #eaf2ec;
+      --gold: #b8912a;
+      --gold-light: #fdf6e3;
+      --text: #1c1c1c;
+      --text-muted: #7a7060;
+      --border: #e2d9cf;
+      --danger: #c0392b;
+      --danger-light: #fdf0ef;
+      --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────── */
+    .header {
+      background: var(--accent);
+      color: white;
+      padding: 18px 32px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-shrink: 0;
+      border-bottom: 3px solid var(--gold);
+    }
+    .header-left h1 {
+      font-size: 26px;
+      font-weight: normal;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    .header-left p {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 3px;
+      letter-spacing: 1px;
+    }
+    .header-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-export {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 7px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .btn-export:hover { background: rgba(255,255,255,0.25); }
+
+    /* ── LAYOUT ─────────────────────────────────────────── */
+    .layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ────────────────────────────────────────── */
+    .sidebar {
+      width: 210px;
+      background: #1e3d2b;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0 20px;
+    }
+    .sidebar-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.35);
+      padding: 0 20px 10px;
+      text-transform: uppercase;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 20px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.65);
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .sidebar-item:hover { color: white; background: rgba(255,255,255,0.06); }
+    .sidebar-item.active {
+      color: white;
+      background: rgba(255,255,255,0.1);
+      border-left-color: var(--gold);
+    }
+    .sidebar-icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-count {
+      margin-left: auto;
+      background: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      font-size: 10px;
+      border-radius: 10px;
+      padding: 1px 7px;
+      font-family: 'Arial', sans-serif;
+    }
+    .sidebar-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 12px 20px;
+    }
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px 0;
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      line-height: 1.5;
+    }
+
+    /* ── V2 PROPOSALS ────────────────────────────────────── */
+    .v2-section-notice {
+      background: #1e3d2b;
+      color: rgba(255,255,255,0.85);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      margin-bottom: 28px;
+      line-height: 1.6;
+      border-left: 4px solid var(--gold);
+    }
+    .v2-block {
+      margin-bottom: 36px;
+    }
+    .v2-block-title {
+      font-size: 18px;
+      font-weight: normal;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .v2-block-meta {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .v2-proposals-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .v2-prop-card {
+      border-radius: 8px;
+      padding: 18px 20px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      position: relative;
+    }
+    .v2-prop-card.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .v2-prop-card.rejected {
+      opacity: 0.45;
+      border-color: #ddd;
+    }
+    .v2-prop-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .v2-prop-label.gold { color: var(--gold); }
+    .v2-prop-label.green { color: var(--accent); }
+    .v2-prop-title {
+      font-size: 16px;
+      font-weight: normal;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .v2-prop-body {
+      font-family: 'Arial', sans-serif;
+      font-size: 12.5px;
+      color: #555;
+      line-height: 1.65;
+    }
+    .v2-prop-body b { color: var(--text); font-weight: 600; }
+    .v2-cover-preview {
+      width: 100%;
+      height: 140px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+      font-family: 'Georgia', serif;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    .v2-cover-preview .cv-title {
+      font-size: 18px;
+      font-weight: normal;
+    }
+    .v2-cover-preview .cv-sub {
+      font-size: 8px;
+      letter-spacing: 3px;
+      opacity: 0.7;
+    }
+    .v2-cover-preview .cv-line {
+      width: 60%;
+      height: 1px;
+      margin: 2px 0;
+    }
+    .cover-a { background: #1c1c1c; color: #c9a84c; }
+    .cover-a .cv-line { background: #c9a84c; }
+    .cover-b { background: #1b3a2f; color: #c9a84c; }
+    .cover-b .cv-line { background: #c9a84c; }
+    .cover-c { background: #f5f0e8; color: #1c1c1c; border: 1px solid #d4b96a; }
+    .cover-c .cv-title { color: #8a6d2a; }
+    .cover-c .cv-sub { color: #555; }
+    .cover-c .cv-line { background: #c9a84c; }
+    /* Extra covers D-J */
+    .cover-d { background: #2c0a10; color: #c9a84c; }
+    .cover-d .cv-line { background: #c9a84c; }
+    .cover-e { background: #0e1f3d; color: #a8b8d0; }
+    .cover-e .cv-title { color: #c8d8ec; }
+    .cover-e .cv-sub { color: #8899bb; }
+    .cover-e .cv-line { background: #a8b8d0; }
+    .cover-f { background: #180e06; color: #b07040; }
+    .cover-f .cv-line { background: #b07040; }
+    .cover-g { background: #060d18; color: #d4bc7a; }
+    .cover-g .cv-line { background: #d4bc7a; }
+    .cover-h { background: #08080a; color: #e8e8e8; }
+    .cover-h .cv-title { color: #ffffff; }
+    .cover-h .cv-sub { color: #aaaaaa; }
+    .cover-h .cv-line { background: #cccccc; }
+    .cover-i { background: #1a0a2e; color: #c9a84c; }
+    .cover-i .cv-line { background: #c9a84c; }
+    .cover-j { background: #2e2a24; color: #d4a84c; }
+    .cover-j .cv-line { background: #d4a84c; }
+    /* Font showcase */
+    .font-showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .font-card {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .font-card.recommended { border-color: var(--gold); }
+    .font-preview {
+      background: #1c1c1c;
+      padding: 24px 20px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-height: 120px;
+      justify-content: center;
+    }
+    .font-preview .fp-line {
+      width: 55%;
+      height: 1px;
+      background: #c9a84c;
+      margin: 4px 0;
+    }
+    .font-preview .fp-title {
+      color: #c9a84c;
+      font-size: 20px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+    }
+    .font-preview .fp-sub {
+      color: rgba(201,168,76,0.65);
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .font-info {
+      padding: 14px 16px;
+    }
+    .font-name {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .font-name .badge {
+      display: inline-block;
+      background: var(--gold);
+      color: white;
+      font-size: 9px;
+      padding: 1px 7px;
+      border-radius: 10px;
+      margin-left: 6px;
+      font-weight: normal;
+      letter-spacing: 0.5px;
+    }
+    .font-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .v2-prop-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .v2-btn {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .v2-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .v2-btn.v2-btn-reject:hover { background: var(--danger); border-color: var(--danger); }
+    .v2-decision-box {
+      background: var(--gold-light);
+      border: 1px solid #e0c97a;
+      border-left: 4px solid var(--gold);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .v2-decision-box strong { color: var(--accent); }
+    .v2-arch-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+    }
+    .v2-arch-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--accent);
+      color: white;
+      font-weight: normal;
+      letter-spacing: 0.5px;
+    }
+    .v2-arch-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .v2-arch-table tr:nth-child(even) td { background: var(--surface2); }
+    .v2-arch-table .akt-label {
+      font-weight: bold;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .v2-arch-table .pages { color: var(--gold); font-weight: bold; white-space: nowrap; }
+    .v2-versions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .v2-ver-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: var(--surface);
+      font-family: 'Arial', sans-serif;
+    }
+    .v2-ver-card .ver-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .v2-ver-card .ver-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .v2-ver-card .ver-priority {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--accent-light);
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+    .v2-ver-card .ver-priority.later {
+      background: #f0f0f0;
+      color: #999;
+    }
+
+    /* ── MAIN ────────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 36px;
+    }
+
+    /* ── SECTION HEADER ─────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: normal;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+    .section-subtitle {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-style: normal;
+    }
+    .btn-add {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn-add:hover { background: var(--accent-hover); }
+
+    /* ── NOTES / OVERVIEW ───────────────────────────────── */
+    .overview-note {
+      background: var(--gold-light);
+      border: 1px solid #e0c97a;
+      border-left: 4px solid var(--gold);
+      border-radius: 6px;
+      padding: 16px 20px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: #5a4a15;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .overview-note strong { font-weight: 600; }
+
+    /* ── CARDS GRID ─────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── CARD ────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.11); }
+    .card-accent-bar {
+      height: 3px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .card.tag-pomysł .card-accent-bar { background: #3b82f6; }
+    .card.tag-zadanie .card-accent-bar { background: #f59e0b; }
+    .card.tag-treść .card-accent-bar { background: #8b5cf6; }
+    .card.tag-struktura .card-accent-bar { background: #ef4444; }
+    .card.tag-wizja .card-accent-bar { background: var(--accent); }
+    .card.tag-done .card-accent-bar { background: #9ca3af; }
+
+    .card-body {
+      padding: 16px 18px;
+      flex: 1;
+      cursor: pointer;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: normal;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .card-footer {
+      padding: 10px 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+    }
+    .tag {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 3px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .tag.tag-pomysł { background: #eff6ff; color: #2563eb; }
+    .tag.tag-zadanie { background: #fffbeb; color: #b45309; }
+    .tag.tag-treść { background: #f5f3ff; color: #6d28d9; }
+    .tag.tag-struktura { background: #fef2f2; color: #b91c1c; }
+    .tag.tag-wizja { background: var(--accent-light); color: var(--accent); }
+    .tag.tag-done { background: #f3f4f6; color: #6b7280; }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-icon {
+      background: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      padding: 4px 7px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .btn-icon:hover { background: var(--border); color: var(--text); }
+    .btn-icon.btn-delete:hover { background: var(--danger-light); color: var(--danger); border-color: #fca5a5; }
+
+    /* ── TASK LIST (dla Zadań) ──────────────────────────── */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .task-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: var(--shadow);
+      transition: all 0.15s;
+    }
+    .task-item:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.10); }
+    .task-item.done { opacity: 0.55; }
+    .task-checkbox {
+      width: 19px;
+      height: 19px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--accent);
+      transition: all 0.15s;
+    }
+    .task-checkbox.checked { background: var(--accent); border-color: var(--accent); color: white; }
+    .task-content { flex: 1; }
+    .task-title {
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 3px;
+    }
+    .task-item.done .task-title { text-decoration: line-through; color: var(--text-muted); }
+    .task-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .task-right {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    /* ── MODAL ───────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .modal-header {
+      background: var(--accent);
+      color: white;
+      padding: 16px 22px;
+      font-size: 15px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      padding: 0 3px;
+    }
+    .modal-close:hover { color: white; }
+    .modal-body { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+    .modal-body label {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 5px;
+    }
+    .modal-body input, .modal-body textarea, .modal-body select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-family: 'Georgia', serif;
+      color: var(--text);
+      background: var(--surface2);
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.15s;
+    }
+    .modal-body input:focus, .modal-body textarea:focus, .modal-body select:focus {
+      border-color: var(--accent);
+    }
+    .modal-body textarea { min-height: 120px; }
+    .modal-footer {
+      padding: 16px 22px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: var(--surface2);
+    }
+    .btn-cancel {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 9px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-cancel:hover { background: var(--bg); }
+    .btn-save {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-save:hover { background: var(--accent-hover); }
+
+    /* ── VIEW MODAL ──────────────────────────────────────── */
+    .view-modal { max-width: 600px; }
+    .view-modal-title {
+      font-size: 20px;
+      font-weight: normal;
+      margin-bottom: 14px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .view-modal-desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 30px;
+      color: var(--text-muted);
+      font-family: 'Arial', sans-serif;
+    }
+    .empty-state .empty-icon { font-size: 42px; margin-bottom: 14px; }
+    .empty-state p { font-size: 14px; line-height: 1.6; }
+    .empty-state button {
+      margin-top: 18px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid #c5dcca;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    .empty-state button:hover { background: #d8edd9; }
+
+    /* ── DASHBOARD ───────────────────────────────────────── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .stat-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.12); transform: translateY(-1px); }
+    .stat-num {
+      font-size: 32px;
+      font-weight: normal;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .recent-section { margin-top: 8px; }
+    .recent-title {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .recent-list { display: flex; flex-direction: column; gap: 8px; }
+    .recent-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .recent-item:hover { background: var(--surface2); }
+    .recent-item-section {
+      font-size: 10px;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 2px 7px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── SECTION: hidden / visible ───────────────────────── */
+    .section-view { display: none; }
+    .section-view.active { display: block; }
+
+    /* ── FILTERS ─────────────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* ── SCROLLBAR ───────────────────────────────────────── */
+    .main::-webkit-scrollbar { width: 6px; }
+    .main::-webkit-scrollbar-track { background: transparent; }
+    .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; flex-direction: row; padding: 10px 12px; overflow-x: auto; }
+      .sidebar-item { flex-direction: column; gap: 4px; padding: 8px 12px; font-size: 11px; }
+      .sidebar-count, .sidebar-label, .sidebar-divider, .sidebar-footer { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>Progressio</h1>
+    <p>Przestrzeń projektu · dziennik do druku</p>
+  </div>
+  <div class="header-right">
+    <button class="btn-export" onclick="exportData()">⬇ Eksportuj dane</button>
+    <button class="btn-export" onclick="importData()">⬆ Importuj dane</button>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-label">Nawigacja</div>
+    <div class="sidebar-item active" onclick="showSection('dashboard')" id="nav-dashboard">
+      <span class="sidebar-icon">🏠</span> Przegląd
+    </div>
+    <div class="sidebar-item" onclick="showSection('wizja')" id="nav-wizja">
+      <span class="sidebar-icon">🎯</span> Wizja
+      <span class="sidebar-count" id="count-wizja">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showSection('pomysly')" id="nav-pomysly">
+      <span class="sidebar-icon">💡</span> Pomysły
+      <span class="sidebar-count" id="count-pomysly">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showSection('struktura')" id="nav-struktura">
+      <span class="sidebar-icon">📖</span> Struktura
+      <span class="sidebar-count" id="count-struktura">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showSection('tresci')" id="nav-tresci">
+      <span class="sidebar-icon">✍️</span> Treści
+      <span class="sidebar-count" id="count-tresci">0</span>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-item" onclick="showSection('zadania')" id="nav-zadania">
+      <span class="sidebar-icon">✅</span> Zadania
+      <span class="sidebar-count" id="count-zadania">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showSection('notatki')" id="nav-notatki">
+      <span class="sidebar-icon">📝</span> Notatki
+      <span class="sidebar-count" id="count-notatki">0</span>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-item" onclick="showSection('v2')" id="nav-v2">
+      <span class="sidebar-icon">🚀</span> v2 Propozycje
+    </div>
+    <div class="sidebar-footer">
+      Dane zapisywane<br>lokalnie w przeglądarce
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="section-view active" id="section-dashboard">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Przegląd projektu</div>
+          <div class="section-subtitle">Wszystkie elementy Progressio w jednym miejscu</div>
+        </div>
+      </div>
+      <div class="overview-note">
+        <strong>Wróciłeś do Progressio.</strong> Użyj sekcji w menu po lewej, aby dodawać pomysły,
+        planować strukturę dziennika, pisać treści i zarządzać zadaniami. Wszystko zapisuje się
+        automatycznie w tej przeglądarce.
+      </div>
+      <div class="dashboard-grid">
+        <div class="stat-card" onclick="showSection('wizja')">
+          <div class="stat-num" id="stat-wizja">0</div>
+          <div class="stat-label">🎯 Wizja</div>
+        </div>
+        <div class="stat-card" onclick="showSection('pomysly')">
+          <div class="stat-num" id="stat-pomysly">0</div>
+          <div class="stat-label">💡 Pomysły</div>
+        </div>
+        <div class="stat-card" onclick="showSection('struktura')">
+          <div class="stat-num" id="stat-struktura">0</div>
+          <div class="stat-label">📖 Struktura</div>
+        </div>
+        <div class="stat-card" onclick="showSection('tresci')">
+          <div class="stat-num" id="stat-tresci">0</div>
+          <div class="stat-label">✍️ Treści</div>
+        </div>
+        <div class="stat-card" onclick="showSection('zadania')">
+          <div class="stat-num" id="stat-zadania">0</div>
+          <div class="stat-label">✅ Zadania</div>
+        </div>
+        <div class="stat-card" onclick="showSection('notatki')">
+          <div class="stat-num" id="stat-notatki">0</div>
+          <div class="stat-label">📝 Notatki</div>
+        </div>
+      </div>
+      <div class="recent-section">
+        <div class="recent-title">Ostatnio dodane</div>
+        <div class="recent-list" id="recent-list">
+          <div style="font-family:Arial,sans-serif;font-size:13px;color:var(--text-muted);padding:10px 0;">
+            Brak wpisów — zacznij dodawać elementy projektu ✦
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WIZJA -->
+    <div class="section-view" id="section-wizja">
+      <div class="section-header">
+        <div>
+          <div class="section-title">🎯 Wizja</div>
+          <div class="section-subtitle">Cel i sens dziennika Progressio — dlaczego go tworzysz i dla kogo</div>
+        </div>
+        <button class="btn-add" onclick="openAddModal('wizja')">+ Dodaj</button>
+      </div>
+      <div class="cards-grid" id="cards-wizja"></div>
+    </div>
+
+    <!-- POMYSŁY -->
+    <div class="section-view" id="section-pomysly">
+      <div class="section-header">
+        <div>
+          <div class="section-title">💡 Pomysły</div>
+          <div class="section-subtitle">Wszystkie luźne myśli, inspiracje i koncepcje produktowe</div>
+        </div>
+        <button class="btn-add" onclick="openAddModal('pomysly')">+ Dodaj</button>
+      </div>
+      <div class="filter-bar" id="filters-pomysly"></div>
+      <div class="cards-grid" id="cards-pomysly"></div>
+    </div>
+
+    <!-- STRUKTURA -->
+    <div class="section-view" id="section-struktura">
+      <div class="section-header">
+        <div>
+          <div class="section-title">📖 Struktura dziennika</div>
+          <div class="section-subtitle">Sekcje, rozdziały, układ stron — architektura Progressio</div>
+        </div>
+        <button class="btn-add" onclick="openAddModal('struktura')">+ Dodaj</button>
+      </div>
+      <div class="cards-grid" id="cards-struktura"></div>
+    </div>
+
+    <!-- TREŚCI -->
+    <div class="section-view" id="section-tresci">
+      <div class="section-header">
+        <div>
+          <div class="section-title">✍️ Treści</div>
+          <div class="section-subtitle">Konkretne teksty, pytania, ćwiczenia i copy do dziennika</div>
+        </div>
+        <button class="btn-add" onclick="openAddModal('tresci')">+ Dodaj</button>
+      </div>
+      <div class="cards-grid" id="cards-tresci"></div>
+    </div>
+
+    <!-- ZADANIA -->
+    <div class="section-view" id="section-zadania">
+      <div class="section-header">
+        <div>
+          <div class="section-title">✅ Zadania</div>
+          <div class="section-subtitle">Lista rzeczy do zrobienia przy projekcie Progressio</div>
+        </div>
+        <button class="btn-add" onclick="openAddModal('zadania')">+ Dodaj</button>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" id="task-filter-all" onclick="filterTasks('all')">Wszystkie</button>
+        <button class="filter-btn" id="task-filter-todo" onclick="filterTasks('todo')">Do zrobienia</button>
+        <button class="filter-btn" id="task-filter-done" onclick="filterTasks('done')">Zrobione</button>
+      </div>
+      <div class="task-list" id="tasks-list"></div>
+    </div>
+
+    <!-- NOTATKI -->
+    <div class="section-view" id="section-notatki">
+      <div class="section-header">
+        <div>
+          <div class="section-title">📝 Notatki</div>
+          <div class="section-subtitle">Szybkie notatki i luźne przemyślenia o projekcie</div>
+        </div>
+        <button class="btn-add" onclick="openAddModal('notatki')">+ Dodaj</button>
+      </div>
+      <div class="cards-grid" id="cards-notatki"></div>
+    </div>
+
+    <!-- V2 PROPOSALS -->
+    <div class="section-view" id="section-v2">
+      <div class="section-header">
+        <div>
+          <div class="section-title">🚀 Progressio v2 — Propozycje</div>
+          <div class="section-subtitle">Decyzje projektowe na podstawie analizy v1 i notatek. Zaznacz co wybierasz.</div>
+        </div>
+      </div>
+      <div class="v2-section-notice">
+        <strong>Jak używać tej karty:</strong> Każda sekcja poniżej zawiera konkretne propozycje lub decyzje do podjęcia.
+        Kliknij „Wybieram" przy opcji która Ci odpowiada, „Odrzucam" przy tej która nie pasuje.
+        Możesz tu wracać i edytować stan w miarę jak projekt się rozwija.
+      </div>
+
+      <!-- OKŁADKA -->
+      <div class="v2-block">
+        <div class="v2-block-title">1. Okładka — 10 wariantów kolorystycznych</div>
+        <div class="v2-block-meta">Propozycja eksperta · kliknij "Wybieram" przy wybranej · możesz zmienić zdanie w każdej chwili</div>
+        <div class="v2-proposals-row" style="grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));">
+
+          <div class="v2-prop-card" id="cover-a-card">
+            <div class="v2-cover-preview cover-a">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label gold">✓ WYBRANY — "Obsydian"</div>
+            <div class="v2-prop-title">Antracyt #1c1c1c + złoto</div>
+            <div class="v2-prop-body">Matowy ciemny antracyt, złote litery, jedna złota linia. Brak ornamentów. Maksymalny prestiż przez minimalizm.<br><i>Feel: Rolex, luxury magazine</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('a')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-a-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-b-card">
+            <div class="v2-cover-preview cover-b">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label green">B — "Malachit"</div>
+            <div class="v2-prop-title">Butelkowa zieleń #1b3a2f + złoto</div>
+            <div class="v2-prop-body">Zieleń wzrostu i natury. Spójna z paletą workspace. Zarezerwowana dla Progressio Business / przyszłych wersji.<br><i>Feel: Rolls-Royce, Breguet</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('b')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-b-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-c-card">
+            <div class="v2-cover-preview cover-c">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">C — "Blanc de Luxe"</div>
+            <div class="v2-prop-title">Kość słoniowa #f5f0e8 + złoto</div>
+            <div class="v2-prop-body">Odwrócona estetyka — jasne zamiast ciemnego. Zarezerwowana dla Progressio Woman.<br><i>Feel: Hermès, Moleskine Édition</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('c')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-c-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-d-card">
+            <div class="v2-cover-preview cover-d">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">D — "Burgund"</div>
+            <div class="v2-prop-title">Głęboka burgundia #2c0a10 + złoto</div>
+            <div class="v2-prop-body">Kolor wina i władzy. Bardzo premium, ciepły, dramatyczny. Pasuje bardziej do Progressio Woman lub edycji specjalnej.<br><i>Feel: Opus One, Cartier</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('d')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-d-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-e-card">
+            <div class="v2-cover-preview cover-e">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">E — "Granat"</div>
+            <div class="v2-prop-title">Głęboki granat #0e1f3d + srebro</div>
+            <div class="v2-prop-body">Zamiast złota — srebro/platyna. Chłodniejszy, bardziej korporacyjny prestiż. Pasuje pod Progressio Business.<br><i>Feel: Montblanc, American Express Platinum</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('e')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-e-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-f-card">
+            <div class="v2-cover-preview cover-f">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">F — "Tabacco"</div>
+            <div class="v2-prop-title">Ciemny orzech #180e06 + miedź</div>
+            <div class="v2-prop-body">Zamiast złota — miedź/bronze. Cieplej, bardziej rzemieślniczo. Jeden z bardziej oryginalnych na rynku dzienników.<br><i>Feel: whisky, leather-bound journal</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('f')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-f-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-g-card">
+            <div class="v2-cover-preview cover-g">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">G — "Północ"</div>
+            <div class="v2-prop-title">Północny granat #060d18 + blade złoto</div>
+            <div class="v2-prop-body">Prawie czarny, ale z niebieskim podtonem. Blade, matowe złoto. Bardzo elegancki, mniej oczywisty niż Obsydian.<br><i>Feel: high-end watch, midnight sky</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('g')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-g-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-h-card">
+            <div class="v2-cover-preview cover-h">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">H — "Onyx"</div>
+            <div class="v2-prop-title">Absolutna czerń #08080a + platyna/biel</div>
+            <div class="v2-prop-body">Zamiast złota — biały lub platynowy. Czystszy, bardziej nowoczesny minimalizm. Mniej ciepły, bardziej lodowaty prestiż.<br><i>Feel: Apple, Bang &amp; Olufsen</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('h')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-h-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-i-card">
+            <div class="v2-cover-preview cover-i">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">I — "Porfir"</div>
+            <div class="v2-prop-title">Głęboki fiolet #1a0a2e + złoto</div>
+            <div class="v2-prop-body">Królewska purpura. Historycznie kolor władzy i arystokracji. Bardzo wyróżnia się na tle rynku. Odważny wybór.<br><i>Feel: royal, Cleopatra, signet ring</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('i')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-i-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="cover-j-card">
+            <div class="v2-cover-preview cover-j">
+              <div class="cv-title">PROGRESSIO</div>
+              <div class="cv-line"></div>
+              <div class="cv-sub">Dziennik Transformacji</div>
+            </div>
+            <div class="v2-prop-label">J — "Tabako"</div>
+            <div class="v2-prop-title">Ciepły grafit #2e2a24 + złoto</div>
+            <div class="v2-prop-body">Ciemny szaro-brązowy. Cieplejszy niż Obsydian, bardziej organiczny. Unikalna estetyka — mniej "zimna" premium niż czerń.<br><i>Feel: aged leather, cigar box</i></div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectCover('j')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('cover-j-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FONTY -->
+      <div class="v2-block">
+        <div class="v2-block-title">1b. Typografia — 6 propozycji dla PROGRESSIO</div>
+        <div class="v2-block-meta">Ocena eksperta · obecny font w v1 był zbyt dekoracyjny i casualowy dla premium</div>
+        <div class="v2-decision-box" style="margin-bottom:16px;">
+          <strong>Problem z v1:</strong> Użyty font (dekoracyjny script/cursive) daje wrażenie "ładne" ale nie "prestiżowe". Dla dziennika premium, który ma <em>zmieniać życie</em>, font tytułowy powinien być architektoniczny, silny i timeless — nie ozdobny. Poniżej 6 opcji, każda pokazana tak jak wyglądałoby PROGRESSIO na okładce.
+        </div>
+        <div class="font-showcase-grid">
+
+          <div class="font-card recommended">
+            <div class="font-preview">
+              <div class="fp-title" style="font-family:'Cinzel',serif; letter-spacing:6px;">PROGRESSIO</div>
+              <div class="fp-line"></div>
+              <div class="fp-sub" style="font-family:'Cormorant Garamond',serif; letter-spacing:3px; font-style:italic;">Dziennik Transformacji</div>
+            </div>
+            <div class="font-info">
+              <div class="font-name">Cinzel + Cormorant Garamond <span class="badge">REKOMENDACJA</span></div>
+              <div class="font-desc">Cinzel to cyfrowy Trajan — font używany w luxury branding, filmach epickich, prestiżowych produktach. Cormorant do podtytułu dodaje elegancji i miękkości. Kontrast między nimi jest idealny.</div>
+            </div>
+          </div>
+
+          <div class="font-card">
+            <div class="font-preview">
+              <div class="fp-title" style="font-family:'Playfair Display',serif; letter-spacing:4px;">PROGRESSIO</div>
+              <div class="fp-line"></div>
+              <div class="fp-sub" style="font-family:'EB Garamond',serif; letter-spacing:2px; font-style:italic;">Dziennik Transformacji</div>
+            </div>
+            <div class="font-info">
+              <div class="font-name">Playfair Display + EB Garamond</div>
+              <div class="font-desc">Playfair to "fashion editorial" serif — duży kontrast kresek, bardzo elegancki. EB Garamond jest klasyczny i czytelny. Razem: piękne, ale bardziej "magazynowe" niż "architektoniczne".</div>
+            </div>
+          </div>
+
+          <div class="font-card">
+            <div class="font-preview">
+              <div class="fp-title" style="font-family:'Cinzel',serif; font-weight:600; letter-spacing:8px; font-size:16px;">PROGRESSIO</div>
+              <div class="fp-line"></div>
+              <div class="fp-sub" style="font-family:'Cinzel',serif; letter-spacing:4px; font-size:7px;">DZIENNIK TRANSFORMACJI</div>
+            </div>
+            <div class="font-info">
+              <div class="font-name">Cinzel Bold (tylko jeden font)</div>
+              <div class="font-desc">Cinzel użyty dla tytułu i podtytułu — oba w wersalach, różny letter-spacing i rozmiar. Maximalna architektoniczność. Bardzo spójne. Trochę zimniejsze, ale bardzo silne.</div>
+            </div>
+          </div>
+
+          <div class="font-card">
+            <div class="font-preview">
+              <div class="fp-title" style="font-family:'EB Garamond',serif; letter-spacing:5px; font-weight:600;">PROGRESSIO</div>
+              <div class="fp-line"></div>
+              <div class="fp-sub" style="font-family:'EB Garamond',serif; letter-spacing:3px; font-style:italic;">Dziennik Transformacji</div>
+            </div>
+            <div class="font-info">
+              <div class="font-name">EB Garamond (klasyk)</div>
+              <div class="font-desc">Timeless, akademicki, szlachetny. Garamond był ulubiony przez prestiżowe domy wydawnicze od XVI wieku. Spokojniejszy i mniej dramatyczny niż Cinzel — łagodniejsza siła.</div>
+            </div>
+          </div>
+
+          <div class="font-card">
+            <div class="font-preview">
+              <div class="fp-title" style="font-family:'Cormorant Garamond',serif; letter-spacing:5px; font-weight:600; font-size:22px;">PROGRESSIO</div>
+              <div class="fp-line"></div>
+              <div class="fp-sub" style="font-family:'Cormorant Garamond',serif; letter-spacing:3px; font-style:italic;">Dziennik Transformacji</div>
+            </div>
+            <div class="font-info">
+              <div class="font-name">Cormorant Garamond (high fashion)</div>
+              <div class="font-desc">Bardzo wysoki kontrast między cienkimi a grubymi kreskami. Naprawdę piękny font — ale może zbyt subtelny dla mocnego tytułu PROGRESSIO. Lepiej sprawdzi się w środku dziennika niż na okładce.</div>
+            </div>
+          </div>
+
+          <div class="font-card">
+            <div class="font-preview">
+              <div class="fp-title" style="font-family:'Libre Baskerville',serif; letter-spacing:4px; font-size:18px;">PROGRESSIO</div>
+              <div class="fp-line"></div>
+              <div class="fp-sub" style="font-family:'Libre Baskerville',serif; letter-spacing:2px; font-size:7.5px; font-style:italic;">Dziennik Transformacji</div>
+            </div>
+            <div class="font-info">
+              <div class="font-name">Libre Baskerville (solidny klasyk)</div>
+              <div class="font-desc">Sturdy, solidny, bardzo czytelny. Baskerville jest używany przez Oxford University Press i inne prestiżowe instytucje. Mniej dramatyczny niż Cinzel, bardziej "poważny instytut" niż "luxury brand".</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- QR CODE ALTERNATIVE -->
+      <div class="v2-block">
+        <div class="v2-block-title">2. Alternatywa dla QR kodu</div>
+        <div class="v2-block-meta">Propozycja eksperta · <span style="color:#c0392b;font-weight:bold;">DECYZJA PODJĘTA: zostawiamy QR kod</span></div>
+        <div class="v2-decision-box" style="margin-bottom:14px;">
+          <strong>✓ Decyzja:</strong> QR kod zostaje. Powody: brak obciążenia generowaniem unikalnych kodów, wygodniejszy skan niż wpisywanie URL, strona internetowa pisana ręcznie — brak systemu do zarządzania kodami. Poniższe propozycje odrzucone.
+        </div>
+        <div class="v2-proposals-row">
+
+          <div class="v2-prop-card" id="qr-a-card">
+            <div class="v2-prop-label gold">Opcja A — Kod Dostępu</div>
+            <div class="v2-prop-title">Unikalny kod drukowany w środku</div>
+            <div class="v2-prop-body">
+              Na elegantckiej stronie wewnątrz dziennika (np. str. 3 lub tylna okładka): <br><br>
+              <i>"Aby odblokować Bibliotekę Progressio, odwiedź <b>progressio.pl/biblioteka</b> i wprowadź swój kod."</i>
+              <br><br>
+              Kod unikalny per edycja (np. PRG-2026-####). Wpisujesz go na stronie → dostęp do materiałów PDF, audio, itp.
+              <br><br><b>Zaleta:</b> Prestiżowe, jak serial game key. <b>Koszt:</b> Znikomy.
+            </div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectQR('a')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('qr-a-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="qr-b-card">
+            <div class="v2-prop-label">Opcja B — Zintegruj w dziennik</div>
+            <div class="v2-prop-title">Materiały "bonusowe" jako część v2</div>
+            <div class="v2-prop-body">
+              Zamiast osobnego PDF-a — przenieś wartościowe treści (Ikigai → Internal Compass, medytacja → Forteca Umysłu) bezpośrednio do Aktu I i III dziennika.
+              <br><br>
+              Rezultat: <b>brak potrzeby QR kodu</b>, bo wszystko czego użytkownik potrzebuje jest już w dzienniku. To jest też silniejszy argument sprzedażowy — "wszystko w jednym".
+              <br><br><b>Wada:</b> Więcej stron → wyższy koszt druku.
+            </div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectQR('b')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('qr-b-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+          <div class="v2-prop-card" id="qr-c-card">
+            <div class="v2-prop-label">Opcja C — Zakładka z Kodem</div>
+            <div class="v2-prop-title">Dołączona zakładka / karta dostępu</div>
+            <div class="v2-prop-body">
+              Do każdego egzemplarza fizycznie dołączona elegancka zakładka (jak w luxury books) z kodem dostępu i adresem strony. Drukowana na grubym papierze, złote logo.
+              <br><br>
+              <b>Zaleta:</b> Super premium feel, wyróżnik na rynku. <b>Koszt:</b> Kilka zł per sztuka.
+            </div>
+            <div class="v2-prop-actions">
+              <button class="v2-btn" onclick="selectQR('c')">✓ Wybieram</button>
+              <button class="v2-btn v2-btn-reject" onclick="rejectCard('qr-c-card')">✕ Odrzucam</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BETA TESTING -->
+      <div class="v2-block">
+        <div class="v2-block-title">3. Beta — Digital PDF przed produkcją fizyczną</div>
+        <div class="v2-block-meta">Strategia · do zatwierdzenia</div>
+        <div class="v2-decision-box">
+          <strong>Proponowany plan:</strong><br>
+          1. Tworzysz wersję PDF dziennika (Canva → PDF) — bez druku, bez kosztów.<br>
+          2. Na stronie / social media: prosty formularz zapisów dla "Founding Members" — max 20–50 osób.<br>
+          3. Każdy tester dostaje PDF na e-mail + formularz feedbacku (Google Forms).<br>
+          4. Zbierasz odpowiedzi przez 30–45 dni używania. Pytasz co działa, co nie, czego brakuje.<br>
+          5. Na podstawie feedbacku robisz ostateczne poprawki → idziesz do druku.<br><br>
+          <strong>Bonus dla testerów:</strong> Kiedy wyjdzie fizyczna wersja, testerzy dostają 20–30% zniżki lub podpisany egzemplarz "Edycja Fundatorów". To buduje lojalność i pierwsze recenzje.
+        </div>
+      </div>
+
+      <!-- V2 ARCHITEKTURA -->
+      <div class="v2-block">
+        <div class="v2-block-title">4. Architektura v2 — Propozycja stron</div>
+        <div class="v2-block-meta">Projekt struktury · do zatwierdzenia i rozbudowania</div>
+        <table class="v2-arch-table">
+          <tr>
+            <th>Sekcja</th>
+            <th>Zawartość</th>
+            <th>Str.</th>
+          </tr>
+          <tr>
+            <td><span class="akt-label">OKŁADKA / WSTĘP</span></td>
+            <td>Okładka, strona tytułowa wewnętrzna, Pactum Progressio (kontrakt z sobą)</td>
+            <td class="pages">3</td>
+          </tr>
+          <tr>
+            <td><span class="akt-label">AKT I — Fundament</span></td>
+            <td>Kim jestem? (Misja) · Internal Compass (Ikigai) · Moje Sojusze (intro do 12 Wielkich Ludzi) · Roczne cele i harmonogram</td>
+            <td class="pages">8–10</td>
+          </tr>
+          <tr>
+            <td><span class="akt-label">AKT II — Bitwy (×12)</span></td>
+            <td>Na każdy miesiąc: Historia Wielkiego Człowieka + pytanie refleksyjne · Miesięczne cele · Battle Log (codzienne 2 str.) · Raport z Pola Bitwy (podsumowanie miesiąca)</td>
+            <td class="pages">~96</td>
+          </tr>
+          <tr>
+            <td><span class="akt-label">AKT III — Forteca</span></td>
+            <td>Zarządzanie Energią (4 filary) · Forteca Umysłu (praktyki) · System afirmacji · Dług Honorowy (tabela zobowiązań)</td>
+            <td class="pages">10–12</td>
+          </tr>
+          <tr>
+            <td><span class="akt-label">AKT IV — Zamknięcie</span></td>
+            <td>Roczny Raport z Pola Bitwy · Tabela Długu Honorowego (podsumowanie roku) · List do siebie z przyszłości · Biblioteka pomysłów · Pożegnanie</td>
+            <td class="pages">8–10</td>
+          </tr>
+          <tr>
+            <td><span class="akt-label">RAZEM</span></td>
+            <td>Format: B5 lub A5. Papier: min. 90g offset lub 80g kremowy. Oprawa: klejona lub szyta.</td>
+            <td class="pages">~130–140</td>
+          </tr>
+        </table>
+        <div class="v2-decision-box" style="margin-top: 16px;">
+          <strong>Otwarta decyzja — Format i grubość:</strong> 130–140 stron to ok. 7–9 mm grubości przy 90g papierze. Dla porównania — Moleskine klasyczny ma ~120 str.
+          Alternatywa: wersja na <b>90 dni</b> (jeden kwartał) ~80 stron — cieńsza, tańsza w druku, użytkownik kupuje 4x w roku.
+          Twoja decyzja: <b>roczny czy kwartalny?</b>
+        </div>
+      </div>
+
+      <!-- PRZYSZŁE WERSJE -->
+      <div class="v2-block">
+        <div class="v2-block-title">5. Przyszłe wersje — Roadmap</div>
+        <div class="v2-block-meta">Długoterminowa wizja · na później</div>
+        <div class="v2-versions-grid">
+          <div class="v2-ver-card">
+            <div class="ver-title">Progressio Classic</div>
+            <div class="ver-desc">Wersja obecna — pełna, uniwersalna. Baza całej linii.</div>
+            <span class="ver-priority">TERAZ</span>
+          </div>
+          <div class="v2-ver-card">
+            <div class="ver-title">Progressio Woman</div>
+            <div class="ver-desc">Tematyka + estetyka dostosowana. Ten sam system, inne language.</div>
+            <span class="ver-priority later">Po sukcesie v1</span>
+          </div>
+          <div class="v2-ver-card">
+            <div class="ver-title">Progressio Business</div>
+            <div class="ver-desc">Battle Log → quarterly reviews, OKRy, skalowanie firmy.</div>
+            <span class="ver-priority later">Po sukcesie v1</span>
+          </div>
+          <div class="v2-ver-card">
+            <div class="ver-title">Progressio Triathlon</div>
+            <div class="ver-desc">Forteca → trening, odżywianie, regeneracja. Niszowy, lojalny buyer.</div>
+            <span class="ver-priority later">Po sukcesie v1</span>
+          </div>
+          <div class="v2-ver-card">
+            <div class="ver-title">Progressio Knowledge</div>
+            <div class="ver-desc">Skupiony na nauce, lekturach, wiedzy. Dla studentów i self-learnerów.</div>
+            <span class="ver-priority later">Po sukcesie v1</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- #section-v2 -->
+
+  </div><!-- .main -->
+</div><!-- .layout -->
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-title">Dodaj wpis</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <label>Tytuł *</label>
+        <input type="text" id="modal-input-title" placeholder="Wpisz tytuł…" />
+      </div>
+      <div>
+        <label>Opis / treść</label>
+        <textarea id="modal-input-desc" placeholder="Szczegóły, myśli, tekst…"></textarea>
+      </div>
+      <div id="modal-tag-wrapper">
+        <label>Etykieta</label>
+        <select id="modal-input-tag">
+          <option value="wizja">🎯 Wizja</option>
+          <option value="pomysł">💡 Pomysł</option>
+          <option value="struktura">📖 Struktura</option>
+          <option value="treść">✍️ Treść</option>
+          <option value="notatka">📝 Notatka</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Anuluj</button>
+      <button class="btn-save" onclick="saveItem()">Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="modal-overlay" id="view-overlay">
+  <div class="modal view-modal">
+    <div class="modal-header">
+      <span id="view-section-label">Wpis</span>
+      <button class="modal-close" onclick="closeViewModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="view-modal-title" id="view-title"></div>
+      <div class="view-modal-desc" id="view-desc"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeViewModal()">Zamknij</button>
+      <button class="btn-save" id="view-edit-btn">Edytuj</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT TEXTAREA MODAL -->
+<div class="modal-overlay" id="import-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Importuj dane</span>
+      <button class="modal-close" onclick="closeImportModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <label>Wklej dane JSON (skopiowane z eksportu)</label>
+        <textarea id="import-json" style="min-height:160px;font-family:monospace;font-size:12px;"
+          placeholder='{"items":[...]}'></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeImportModal()">Anuluj</button>
+      <button class="btn-save" onclick="doImport()">Importuj</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── DATA ─────────────────────────────────────────────────
+  const STORE_KEY = 'progressio_v1';
+  let data = loadData();
+  let currentSection = 'dashboard';
+  let editingId = null;
+  let modalSection = null;
+  let taskFilter = 'all';
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.items && parsed.items.length > 0) return parsed;
+      }
+    } catch(e) {}
+    return getDefaultData();
+  }
+
+  function getDefaultData() {
+    const b = Date.now();
+    return { items: [
+      // ─── WIZJA ────────────────────────────────────────────────────
+      { id:'w1', tag:'wizja', done:false, ts:b-1e6,
+        title:'Czym jest Progressio?',
+        desc:'Progressio to nie kolejny planner. To system transformacji — partner w podróży od prokrastynacji, przypadkowości i poddawania się → do planu, procesu i progresu.\n\nZaprojektowany jak Google: prosty i czysty z zewnątrz, złożony i potężny w środku. Daje przewagę, a nie tylko motywację. Wypełnia lukę duchową w świecie rosnącego braku poczucia sensu.\n\nNarracja przewodnia: "Nie piszesz o diecie. Piszesz o budowaniu siły."'},
+      { id:'w2', tag:'wizja', done:false, ts:b-9e5,
+        title:'Filozofia core — trzy zasady',
+        desc:'1. DYSCYPLINA > MOTYWACJA — system i rutyna zamiast chwilowej chęci. Lepsza dyscyplina wymaga lepszej samokontroli.\n\n2. ZMIENIASZ SYSTEM, NIE CEL — porażka to dana, nie dramat. "Nie klep się po plecach. Po plecach klepie się osła. Lwa się nie klepie."\n\n3. ZAUFAJ PROCESOWI — zmiana trwa, użytkownik nie może się zniechęcić po miesiącu.\n\nHasło: prokrastynacja, przypadkowość, poddawanie się → plan, proces, progres → samokontrola, system, sukces'},
+      { id:'w3', tag:'wizja', done:false, ts:b-8e5,
+        title:'Target i pozycjonowanie premium',
+        desc:'TARGET: Osoby z górnej części klasy średniej — ceniące jakość, ekskluzywność i inwestujące w swój rozwój. Wiek 20-40 lat.\n\nPOZYCJONOWANIE: Brand premium. Nie jesteśmy najtańsi — jesteśmy najlepsi. Skórzana okładka, gruby papier, tasiemki, złoty napis.\n\nWYRÓŻNIENIE: System 3 faz wdrożenia nawyku + narracja jako podróż bohatera + filozofia dyscypliny zamiast motywacji. Tego nie ma żaden inny dziennik na rynku.'},
+      { id:'w4', tag:'wizja', done:false, ts:b-7e5,
+        title:'Cel biznesowy — zrewidowany i realistyczny',
+        desc:'UWAGA: Cel "1 milion do 13.05.2026" wymaga rewizji. Zostało 75 dni, dziennik nie jest gotowy, nie jest wydrukowany, marketingu brak.\n\nREALISTYCZNY CEL 2026:\n→ Marzec: Ukończyć projekt w Canvie\n→ Kwiecień: Druk próbny ~20 egz. + beta test\n→ Maj-Czerwiec: Landing page, social media, pierwsze sprzedaże\n→ Do końca 2026: 50-100 sprzedanych egzemplarzy\n\nCEL 2027: skalowanie, wydawnictwo, rynki zagraniczne, realny przychód.'},
+      { id:'w5', tag:'wizja', done:false, ts:b-6e5,
+        title:'Manifest — dlaczego ten projekt istnieje',
+        desc:'"Ten dziennik zrodził się nie z chęci pieniądza, tylko z myśli, że umiem lepiej. Pracuję nad nim, bo widzę, że on będzie czymś, co odpowie na pytania ludzi. Niezadawane pytania.\n\nTo droga duchowa dla tych, którzy nie potrafią sami uwierzyć, i dla tych, którzy chcą działać, ale zawsze gdy zaczynają i odpuszczają, zastanawiają się: dlaczego znowu odpuściłem?\n\nWiedza od Platona i Sokratesa aż po Hilla czy Muska. Ci wszyscy zapamiętani."'},
+      // ─── POMYSŁY ──────────────────────────────────────────────────
+      { id:'p1', tag:'pomysł', done:false, ts:b-55e4,
+        title:'Battle Log — spis myśli i działań przy celu',
+        desc:'Nowy element: dziennik prowadzi "Battle Log" — spis myśli i działań podjętych w trakcie realizacji celu.\n\nCel: analiza nie tylko zwycięstw, ale i porażek. Porażki to najbardziej nierozłączna a zarazem niedoceniana część każdego sukcesu.\n\nFormat: data | działanie | obserwacja | lekcja\n\nTo odróżnia Progressio od zwykłego planera — tu analizujesz swoją wojnę, nie tylko listy zadań.'},
+      { id:'p2', tag:'pomysł', done:false, ts:b-5e5,
+        title:'Internal Compass — Twój Wewnętrzny Kompas',
+        desc:'Miniatura systemu planowania. 6 pytań przy każdym ważnym celu:\n\n• CEL: Co dokładnie chcę osiągnąć?\n• CHALLENGER: Kto rzuci mi wyzwanie?\n• CHEERLEADER: Kto będzie we mnie wierzył?\n• MENTOR: Kto mnie poprowadzi?\n• GRANICE: Jak ochronię swój cel?\n• DZIENNIK: Jak będę mierzyć postęp?\n\nDlaczego to działa: pytania zmuszają mózg do natychmiastowej odpowiedzi i uczą wewnętrznego dialogu coachingowego. Po kilku cyklach stają się automatycznym myśleniem.'},
+      { id:'p3', tag:'pomysł', done:false, ts:b-45e4,
+        title:'12 Wielkich Ludzi — patron miesiąca',
+        desc:'Każdy miesiąc ma swojego patrona — postać historyczną lub współczesną, której filozofia jest tematem miesiąca.\n\nJej historia i cytaty przewijają się przez cały miesiąc (cytaty dnia, tygodniowe podsumowanie), tworząc spójność tematyczną.\n\nPrzykładowi patroni:\nStyczeń: Marek Aureliusz (stoicyzm, samokontrola)\nLuty: James Clear (nawyki)\nMarzec: Napoleon Hill (obsesja i wiara)\nKwiecień: Kobe Bryant (praca)\nMaj: Epiktet (wolność wewnętrzna)\n...'},
+      { id:'p4', tag:'pomysł', done:false, ts:b-4e5,
+        title:'Forteca Umysłu — model przeprogramowania',
+        desc:'4-krokowy model codziennej pracy z ograniczającymi przekonaniami:\n\n1. IDENTYFIKACJA: "Zapisz ograniczającą myśl, która dziś się pojawiła (np. Nie nadaję się do tego)"\n2. PRZESŁUCHANIE: "Czy to 100% prawda? Skąd to wiem? Kto zasiał we mnie tę myśl?"\n3. ANTY-DOWODY: "Znajdź JEDEN dowód z przeszłości, który przeczy tej myśli"\n4. BUDOWA: "Stwórz nowe, konstruktywne zdanie i zapisz je (np. Uczę się tego i z każdym dniem jestem lepszy)"\n\nTo czyni przeprogramowanie umysłu PROCESEM, nie serią filozoficznych pytań.'},
+      { id:'p5', tag:'pomysł', done:false, ts:b-35e4,
+        title:'Komunikat Zmiany — skrypt dla rodziny i otoczenia',
+        desc:'Jeden z najczęściej pomijanych elementów zmiany: środowisko. Progressio daje gotowy skrypt:\n\n"Chciałbym/chciałabym, żebyście wiedzieli, że zaczynam ważny dla mnie proces zmiany. Moim celem jest [cel]. Dlatego od jutra będę [nowy nawyk]. Robię to dla siebie, ale Wasze wsparcie będzie dla mnie ogromną pomocą. To moja podróż, ale jesteście jej ważną częścią."\n\nEfekt: zamienia potencjalnych sabotażystów w sojuszników. Rozbraja opór środowiska.'},
+      { id:'p6', tag:'pomysł', done:false, ts:b-3e5,
+        title:'Dług Honorowy — system bez kar',
+        desc:'Nie karz użytkownika za opuszczony nawyk — kary budują niechęć do dziennika.\n\nZAMIAST KARY → DŁUG HONOROWY:\nJeśli we wtorek nie biegałeś — w środę nie biegasz podwójnie. Zamiast tego, jeśli opuściłeś nawyk bez ważnego powodu, następnego dnia wykonujesz go z 10% premią (11 min biegu zamiast 10) jako dowód, że traktujesz zobowiązanie poważnie.\n\nMetafora taty: musisz dostać się do Warszawy. Kara to jazda tramwajem do Częstochowy — nie zbliża cię do celu, tylko obciąża.'},
+      { id:'p7', tag:'pomysł', done:false, ts:b-25e4,
+        title:'Zarządzanie Energią — brakujący filar systemu',
+        desc:'KRYTYCZNY ELEMENT, którego brakowało. Bez niego użytkownik się wypali.\n\n4 filary:\n1. FIZJOLOGIA: Sen, nawodnienie, ruch jako "koszt operacyjny" działania — nie opcjonalny bonus\n2. STRATEGICZNY DELOAD: "Lew nie poluje 24/7. Odpoczynek to nie słabość, to strategia." — planowany tydzień deloadu co kwartał\n3. TOŻSAMOŚĆ > DZIAŁANIE: Nie "robię" nawyki — "jestem" kimś. Biegam → Jestem Biegaczem. Zmienia motywację na głębszym poziomie\n4. LISTA DO PORZUCENIA: Co muszę PRZESTAĆ robić, by zwolnić energię? (odejmowanie, nie tylko dodawanie)'},
+      { id:'p8', tag:'pomysł', done:false, ts:b-2e5,
+        title:'System afirmacji i budowania obsesji',
+        desc:'Po kilku miesiącach użytkownik ma zacząć myśleć jak "wymiatacz". System budowania obsesji:\n\n→ Codzienne czytanie oświadczenia (6 kroków Hilla) rano i wieczorem\n→ Cytaty dnia powiązane z patronem miesiąca\n→ Pytanie tożsamości: "Jaki dzisiejszy czyn był głosem na rzecz Twojej nowej tożsamości?"\n→ Forteca Umysłu — codzienna praca z ograniczającymi myślami\n→ Kwestionowanie: "Czy to w 100% prawda? Skąd to wiem?"\n\nCel: obsesja stawania się lepszym jako naturalny stan umysłu — nie wysiłek.'},
+      // ─── STRUKTURA ────────────────────────────────────────────────
+      { id:'s1', tag:'struktura', done:false, ts:b-18e4,
+        title:'AKT I — Fundament: Pakt i Mapa (tydz. 1-2)',
+        desc:'CEL: Zbudowanie zobowiązania i zrozumienie zasad gry.\n\nELEMENTY:\n• Pactum Progressio — jedna piękna strona, podpis jako akt psychologiczny\n• Filozofia Progressio — krótki manifest z 3 zasadami\n• Prezentacja patrona roku i systemu\n• Faza 1: Silnik Pędu — jasne zasady: "Twoim JEDYNYM zadaniem przez 14 dni jest napisać JEDNO zdanie"\n• Licznik dni od dnia 1\n\nNIE: długie ćwiczenia ani obszerne pytania w Akcie I — tylko ogień i zobowiązanie.'},
+      { id:'s2', tag:'struktura', done:false, ts:b-17e4,
+        title:'AKT II — Arsenał: Samopoznanie i Plan (tydz. 3-4)',
+        desc:'CEL: Wyposażenie użytkownika w narzędzia samoświadomości i planowania.\n\nELEMENTY:\n• Poznaj Siebie — pytania zrewidowane (skala 1-5, konkretne przykłady)\n• Architektura Celu Głównego — szablon 6 kroków Hilla\n• Planowanie nawyków — JEDEN nawyk na start, powiązany z celem\n• Sojusz Umysłów — Komunikat Zmiany + plan aktywacji (Mentor/Challenger/Cheerleader)\n• Internal Compass — 6 pytań\n• Cel #1 — szablon z miarami, harmonogramem, pierwszym krokiem na 24h'},
+      { id:'s3', tag:'struktura', done:false, ts:b-16e4,
+        title:'AKT III — Codzienna Walka (mies. 2-12)',
+        desc:'CEL: Konsekwentna codzienna praca bez wypalenia.\n\nSTRUKTURA STRONY DZIENNEJ (max 2-3 min):\n• Licznik dni\n• Tabela nawyków (checkboxy: Zrobione/Niezrobione)\n• Checklista energetyczna (Sen/Paliwo/Ruch)\n• Jedno zdanie postępu: "Co zrobiłem dziś, by przybliżyć się do celu?"\n• Spis wdzięczności (1 rzecz)\n• Cytat dnia (powiązany z patronem miesiąca)\n• Opcjonalnie: Chwile ulotne\n\nKAŻDA 7. STRONA → Tygodniowy Raport z Pola Bitwy'},
+      { id:'s4', tag:'struktura', done:false, ts:b-15e4,
+        title:'AKT IV — Kamienie Milowe (co 3 mies.)',
+        desc:'CEL: Ocena postępów, nauka z porażek, dostosowanie systemu.\n\nELEMENTY:\n• Raport Spójności — co zadziałało i dlaczego\n• Analiza Porażek: "Jak zmodyfikować SYSTEM, by następnym razem się udało?"\n• List do Siebie z Przyszłości — pisany na początku kwartału, czytany na końcu\n• Ocena 10 cech przywódcy (skala 1-5) — wybierz jedną do pracy w kolejnym kwartale\n• Lista do Porzucenia: "Co muszę przestać robić, by zwolnić energię?"\n• Cel #2 — szablon (skrócony, bez przykładów — zakłada samodzielność)'},
+      { id:'s5', tag:'struktura', done:false, ts:b-14e4,
+        title:'Faza 1 — Silnik Pędu (dni 1-14)',
+        desc:'CEL: Zredukować opór do zera. Zbudować mikro-nawyk pisania.\n\nZASADA: Entuzjazm na początku jest NAJWYŻSZY — nie wolno go zmarnować na nudne ćwiczenia. Musi być PROSTE, PROSTE i PRZYJEMNE.\n\nW praktyce:\n→ Max 2 minuty pisania dziennie\n→ Jedno zdanie zamiast strony\n→ Jasne, proste pytania z jedną odpowiedzią\n→ Tygodniowe podsumowanie silnie okrojone (1-2 pytania)\n→ Cytaty i krótkie manifesty zamiast ćwiczeń\n→ Licznik dni już od dnia 1'},
+      { id:'s6', tag:'struktura', done:false, ts:b-13e4,
+        title:'Faza 2 — Przeprogramowanie Behawioralne (dni 15-45)',
+        desc:'CEL: Łączyć podstawy pisania z głębszymi uczuciami i motywacją.\n\nCo się dodaje:\n→ Pytania o wartości i tożsamość\n→ Pierwsze ćwiczenie Fortecy Umysłu\n→ Planowanie nawyku i celu (Akt II)\n→ Dłuższe tygodniowe podsumowania (3 pytania)\n→ Komunikat Zmiany — informowanie otoczenia\n\nCo zostaje jak było:\n→ Krótki wpis dzienny (max 3 min)\n→ Checkboxy nawyków'},
+      { id:'s7', tag:'struktura', done:false, ts:b-12e4,
+        title:'Faza 3 — Przejście do Własności (dzień 45+)',
+        desc:'CEL: Pełna swoboda, dostęp do wszystkich zasobów, prawdziwy nawyk.\n\nCo się dodaje:\n→ Pełne strony dzienne ze wszystkimi elementami\n→ Kwestionowanie założeń codziennie\n→ Battle Log aktywny\n→ Tygodniowy Raport z Pola Bitwy w pełnej formie\n→ Forteca Umysłu jako codzienna praktyka\n\nKoniec roku:\n→ Analiza roczna i odznaczenie zrealizowanych celów\n→ List do siebie z przyszłości (do przeczytania)\n→ Informacja o kolejnym dzienniku (rabat)'},
+      { id:'s8', tag:'struktura', done:false, ts:b-11e4,
+        title:'Sekcje szablonowe na końcu dziennika',
+        desc:'Dodatkowe sekcje na końcu, poza codziennymi stronami:\n\n• Spis treści — na początku, z numerami stron\n• Battle Log — spis działań i analiza porażek\n• Szablon tworzenia pomysłów\n• Chwile ulotne — notatki o ważnych momentach\n• Spostrzeżenia i obserwacje\n• List do siebie z przyszłości\n• Podsumowanie roku — analiza + miejsce na odznaczenie celów\n• Pożegnanie i informacja o kolejnym Progressio'},
+      { id:'s9', tag:'struktura', done:false, ts:b-1e4,
+        title:'Typografia — stary vs. nowy system',
+        desc:'STARY → NOWY:\n\nGłówny Tytuł (okładka): Dancing Script Bold → BODONI FLF\nPodtytuł: Dancing Script → Crimson Pro Italic\nTytuły rozdziałów: Pacifico → Georgia Pro Bold\nTekst główny: Marta → Crimson Pro\nCytaty: Sanchez → Georgia Pro Condensed Italic\nOdręczne/przykłady: Apple Juice → Caveat Bold\n\nDlaczego zmiana: bardziej premium, spójne z estetyką luksusowego dziennika, czytelniejsze w druku.'},
+      // ─── TREŚCI ───────────────────────────────────────────────────
+      { id:'t1', tag:'treść', done:false, ts:b-9e4,
+        title:'Pactum Progressio — rytuał zobowiązania',
+        desc:'Nie umowa — rytuał. Jedna, pięknie zaprojektowana strona.\n\nElementy:\n→ "Ja, [imię], dnia [data] podejmuję zobowiązanie wobec siebie..."\n→ 3 zasady Progressio (krótko)\n→ Podpis — akt psychologiczny, nie formalność\n\nNie potrzeba więcej oficjalnych kartek z podpisami — siła leży w tym jednym, kluczowym momencie. Uczyń go doniosłym.'},
+      { id:'t2', tag:'treść', done:false, ts:b-8e4,
+        title:'Architektura Celu — 6 kroków Hilla (adaptacja)',
+        desc:'Szablon do wypełnienia przy każdym nowym celu:\n\n1. Co DOKŁADNIE chcę osiągnąć? (z liczbami, konkretnie)\n2. Co jestem gotów dać w zamian? (czas, wyrzeczenia, energia)\n3. Mój DEADLINE: ________\n4. Plan — pierwsze 3 kroki na jutro:\n5. Moje OŚWIADCZENIE (1 zdanie do codziennego czytania):\n6. Moja TOŻSAMOŚĆ w tym celu — Kim się staję: "Jestem ________"\n\nCzytaj oświadczenie rano i wieczorem. Wizualizuj siebie w posiadaniu tego celu.'},
+      { id:'t3', tag:'treść', done:false, ts:b-7e4,
+        title:'Pytania "Poznaj Siebie" — wersja finalna',
+        desc:'Feedback taty: "Kim jestem?" → "Za jaką osobę się uważasz?" (łatwiej, bo wymaga samoobserwacji a nie filozofii).\nSkala 1-5, nie 1-10 (łatwiejsze decyzje).\n\nPytania:\n1. Za jaką osobę się uważasz? (3 cechy)\n2. Jakie 3 wartości są dla Ciebie absolutnie nienegocjowalne?\n3. Opisz osobę, którą podziwiasz. Jakie jej cechy chciałbyś mieć?\n4. Gdyby pieniądze nie grały roli, co robiłbyś każdego dnia?\n5. [Ból przyszłości] Jak wyglądał będzie Twój dzień za 5 lat, jeśli NIC nie zmienisz?'},
+      { id:'t4', tag:'treść', done:false, ts:b-6e4,
+        title:'Narracja — kluczowe frazy które MUSZĄ być w dzienniku',
+        desc:'Frazy do wplecionice w cały dziennik:\n\n• "Nie piszesz o diecie. Piszesz o budowaniu siły."\n• "Codzienna praca nie musi być wielka, ale musi być codzienna."\n• "Jeśli nie masz ochoty, napisz: Nie mam ochoty. To też jest początek."\n• "Dyscyplina to umiejętność tolerowania dyskomfortu."\n• "Nie klep się po plecach. Po plecach klepie się osła. Lwa się nie klepie."\n• "Lew nie poluje 24/7. Odpoczynek to strategia."\n• "Sukces nie wymaga wyjaśnień, porażka nie dopuszcza usprawiedliwień." (Hill)\n• "Zwycięzca nigdy nie rezygnuje." (Hill)'},
+      { id:'t5', tag:'treść', done:false, ts:b-5e4,
+        title:'Tygodniowy Raport z Pola Bitwy — szablon',
+        desc:'Format (1 strona, co 7. strona dzienna):\n\nTYGODNIOWY RAPORT Z POLA BITWY\nData: _________ | Tydzień nr: _____\n\n1. Gdzie w tym tygodniu WYGRAŁEM walkę z ucieczką? Gdzie PRZEGRAŁEM?\n(telefon, jedzenie, rozrywka — bądź brutalnie szczery)\n[2-3 zdania]\n\n2. Jaki był mój JEDEN, najważniejszy krok do przodu w realizacji celu?\n[1 zdanie — konkretny, namacalny postęp]\n\n3. Jaki jest mój JEDEN cel na nadchodzący tydzień?\n[1 zdanie — co muszę zrobić, żeby odpowiedź na pyt. 2 była za tydzień potężna?]'},
+      { id:'t6', tag:'treść', done:false, ts:b-4e4,
+        title:'Checklista energetyczna — Fizjologia jako Fundament',
+        desc:'Krótki dzienny check-in (nie śledzenie, a świadomość):\n\n☐ SEN: Czy spałem wystarczająco, by dziś walczyć? (Tak / Nie)\n☐ PALIWO: Czy dałem ciału dobrą energię? (Dobrze / Źle)\n☐ RUCH: Czy moje ciało dziś zastygnęło w bezruchu? (Tak / Nie)\n\nJeśli 3 dni z rzędu odpowiedź brzmi "nie" — sam rozumiesz, dlaczego brakuje Ci sił na realizację celów.\n\nTo nie jest kolejny nawyk do śledzenia. To warunek konieczny do podjęcia gry.'},
+      // ─── ZADANIA ──────────────────────────────────────────────────
+      { id:'z1', tag:'zadanie', done:false, ts:b-3e4,
+        title:'Ukończyć projekt graficzny w Canvie',
+        desc:'Zamknąć ostateczny projekt dziennika. Wszystkie strony gotowe do eksportu jako PDF. Priorytet: do końca marca 2026.'},
+      { id:'z2', tag:'zadanie', done:false, ts:b-29e3,
+        title:'Zdefiniować ostateczną strukturę i układ stron',
+        desc:'Na podstawie Akt I-IV i 3 faz — zdecydować ile stron każdy element zajmuje. Cel: ~370-400 stron łącznie. Spisać spis treści z numerami stron przed finalizacją w Canvie.'},
+      { id:'z3', tag:'zadanie', done:false, ts:b-28e3,
+        title:'Zamówić wycenę w drukarni (lista pytań w Notatkach)',
+        desc:'Zadzwonić do 2-3 drukarni. Pytać o: okładkę skórzaną, złoty napis, tasiemki, gumkę na długopis, gumkę zamykającą, narożniki, papier do pisania, nakład próbny, cenę za egzemplarz.'},
+      { id:'z4', tag:'zadanie', done:false, ts:b-27e3,
+        title:'Odpowiedzieć na kluczowe pytania finansowe',
+        desc:'Bez tych liczb cel finansowy to poezja:\n\n→ Koszt druku 1 egz. przy nakładzie 50 / 100 / 500?\n→ Cena sprzedaży (30 / 50 / 80 / 120 zł?)\n→ Kanał dystrybucji: własna strona / Allegro / Amazon KDP / wydawnictwo\n→ Gdzie jest próg opłacalności?\n→ Ile egzemplarzy muszę sprzedać, by zarobić X zł?\n\nOdpowiedz na każde pytanie z liczbami, nie przeczuciami.'},
+      { id:'z5', tag:'zadanie', done:false, ts:b-26e3,
+        title:'Beta test z 5-10 osobami z targetu',
+        desc:'Wydrukować prototyp lub PDF i dać 5-10 osobom z targetu. Pytania:\n→ Czy struktura jest zrozumiała?\n→ Czy filozofia trafia?\n→ Czy chciałbyś to kupić? Po ile?\n→ Co byś usunął / co brakuje?\n\nTo ważniejsze niż tysiąc godzin pracy w samotności. Zrób to przed zamówieniem większego nakładu.'},
+      { id:'z6', tag:'zadanie', done:false, ts:b-25e3,
+        title:'Stworzyć social media i landing page',
+        desc:'Kanały do uruchomienia (po beta teście):\n→ TikTok @progressio — krótkie wideo o dyscyplinie, nawyku, zmianie\n→ Instagram — estetyka premium, cytaty, behind the scenes\n→ Prosta strona www z formularzem pre-orderu\n\nKiedy: po beta teście i poprawkach, przed zamówieniem większego nakładu.'},
+      { id:'z7', tag:'zadanie', done:false, ts:b-24e3,
+        title:'Ustalić identyfikację wizualną marki',
+        desc:'Do zdecydowania:\n→ Logo Progressio\n→ Kolory marki (propozycja: głęboka zieleń + złoto + krem)\n→ Typografia — zatwierdzić nowy system (Bodoni, Crimson Pro, Caveat)\n→ Styl zdjęć i estetyki social media\n\nSpójność: strona www, social media i fizyczny produkt muszą mówić to samo.'},
+      { id:'z8', tag:'zadanie', done:false, ts:b-23e3,
+        title:'Eksploracja Amazon KDP — plan awaryjny',
+        desc:'Jeśli sprzedaż fizyczna okaże się zbyt kosztowna — Amazon KDP umożliwia self-publishing bez własnego druku.\n\nSprawdzić:\n→ Dostępność w Polsce\n→ Marża na egzemplarzu vs. własny druk\n→ Kontrola jakości druku\n→ Czy dziennik można sprzedać jako PDF / eBook?\n\nTo plan awaryjny. Ale warto go znać zanim zainwestujesz w duży nakład.'},
+      // ─── NOTATKI ──────────────────────────────────────────────────
+      { id:'n1', tag:'notatka', done:false, ts:b-15e3,
+        title:'Pytania do drukarni — pełna lista',
+        desc:'Lista pytań na rozmowę telefoniczną:\n\n1. Czy zajmują się drukiem książek ~400 stron?\n2. Czy mają w ofercie okładkę skórzaną?\n3. Dekoracja okładki (złoty napis z obu stron) — na czym polega i ile kosztuje?\n4. Czcionki w PDF: Pacifico, Marta, Sanchez — czy to problem? Jak je podpiąć?\n5. W pliku będą 2 dwukolorowe strony — czy ma to znaczenie dla wyceny?\n6. Dodatki: 2 tasiemki, gumka na długopis, gumka zamykająca, narożniki introligatorskie — cena każdego?\n7. Czy drukujecie w nakładzie 2-3 egzemplarzy (do testów)?\n8. Jaki papier do dziennika do codziennego pisania?\n9. Czy kartony okładki są robione na wymiar i ile kosztuje?\n10. Czy na tej podstawie mogą podać orientacyjną wycenę przy nakładzie 50-100 egz.?'},
+      { id:'n2', tag:'notatka', done:false, ts:b-12e3,
+        title:'Narzędzia PDF i druk — porównanie opcji',
+        desc:'DARMOWE:\n→ Scribus — profesjonalny DTP, wymaga nauki, najlepsza kontrola\n→ LibreOffice Writer — prostszy, wystarczy do tekstu\n\nPŁATNE (rekomendowane):\n→ Affinity Publisher — silna alternatywa dla InDesign, jednorazowy koszt, warto\n→ Adobe InDesign — branżowy standard, drogi\n\nJEŚLI ZOSTAJE CANVA — łączenie PDF:\n→ PDFsam Basic (do pobrania, bezpieczny — nie wysyła danych na zewn.)\n→ iLovePDF / SmallPDF (online, wygodne ale dane idą na zewn. serwery)'},
+      { id:'n3', tag:'notatka', done:false, ts:b-1e4,
+        title:'Kluczowe uwagi eksperta — co zostawić, co wyrzucić',
+        desc:'ZŁOTO (zachowaj i rozwijaj):\n✓ Architektura Akt I-IV\n✓ System 3 faz nawyków\n✓ Narracja jako podróż bohatera\n✓ Zarządzanie Energią (4 filary)\n✓ Forteca Umysłu (konkretne ćwiczenie)\n✓ Dług Honorowy (bez kar)\n✓ Battle Log\n✓ Feedback taty o środowisku i motywacji\n\nŚMIECI (usuń duplikaty):\n✗ Checklista elementów pojawia się 3x → jedno miejsce\n✗ Notatki z Hilla pojawiają się 2x → jedno miejsce\n✗ Cel 1mln/75dni → wymaga rewizji na realistyczny\n\nDO WYJAŚNIENIA:\n? "Zakochaśki" — pojawia się 3x, nigdy niewyjaśnione'},
+      { id:'n4', tag:'notatka', done:false, ts:b-8e3,
+        title:'Zakochaśki — do wyjaśnienia!',
+        desc:'TEN ELEMENT POJAWIA SIĘ 3 RAZY W NOTATKACH I NIGDY NIE JEST WYJAŚNIONY.\n\nCo to jest "zakochaśki" w kontekście dziennika Progressio?\n\nMożliwe interpretacje:\n→ Sekcja o relacjach i bliskich osobach?\n→ Ćwiczenie wdzięczności za ludzi w życiu?\n→ Coś związanego z miłością jako motywatorem?\n\nUprzyj się i opisz to zanim zapomnisz. Dodaj wyjaśnienie do tej notatki.'},
+      { id:'n5', tag:'notatka', done:false, ts:b-5e3,
+        title:'Sojusz Umysłów — plan aktywacji (nie tylko lista)',
+        desc:'Pułapka: wypisałeś że potrzebujesz Mentora, Challengera i Cheerleadera. To tylko lista. Bez planu są bezużyteczni.\n\nPlan aktywacji (konkretny "punkt styku"):\n\nMENTOR: Raz w miesiącu, 30 min. Pierwsze pytanie: "Jak zweryfikować mój pomysł?"\n\nCHALLENGER: Co niedzielę wysyłam mu raport tygodniowy. Jego zadanie: "Co mogłeś zrobić lepiej?"\n\nCHEERLEADER: Dzwonię przy kryzysie lub po małym zwycięstwie.\n\nBEZ AKTYWACJI ta lista jest dekoracją. Zaplanuj konkretne "pierwsze spotkanie" z każdą osobą.'},
+      { id:'n6', tag:'notatka', done:false, ts:b-2e3,
+        title:'Realistyczny harmonogram — od teraz (luty 2026)',
+        desc:'STAN AKTUALNY:\n→ Dziennik zatrzymany ~5 miesięcy temu\n→ Do 13.05.2026 zostało 75 dni\n→ 1 milion PLN w 75 dni: niemożliwe przy braku gotowego produktu\n\nREALISTYCZNY PLAN 2026:\nMarzec: Ukończyć projekt w Canvie\nKwiecień: Druk próbny 5-20 egz. + beta test\nMaj: Poprawki + landing page + social media start\nCzerwiec-Sierpień: Pierwsze regularne sprzedaże, zbieranie opinii\nWrzesień-Grudzień: Skalowanie, rozmowy z wydawnictwem\n\nCEL 2026: 50-100 sprzedanych egz. + społeczność + weryfikacja rynkowa\nCEL 2027: skala, rynki zagraniczne, wydawnictwo'}
+    ]};
+  }
+
+  function saveData() {
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  // ── NAVIGATION ───────────────────────────────────────────
+  function showSection(id) {
+    document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    const navEl = document.getElementById('nav-' + id);
+    if (navEl) navEl.classList.add('active');
+    currentSection = id;
+    renderAll();
+    if (id === 'v2') restoreV2State();
+  }
+
+  // ── V2 PROPOSALS ─────────────────────────────────────────
+  function rejectCard(cardId) {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    card.classList.toggle('rejected');
+    card.classList.remove('selected');
+    saveV2State();
+  }
+  function selectCover(opt) {
+    ['a','b','c','d','e','f','g','h','i','j'].forEach(o => {
+      const c = document.getElementById('cover-' + o + '-card');
+      if (!c) return;
+      c.classList.remove('selected', 'rejected');
+      if (o === opt) c.classList.add('selected');
+    });
+    saveV2State();
+  }
+  function selectQR(opt) {
+    ['a','b','c'].forEach(o => {
+      const c = document.getElementById('qr-' + o + '-card');
+      if (!c) return;
+      c.classList.remove('selected', 'rejected');
+      if (o === opt) c.classList.add('selected');
+    });
+    saveV2State();
+  }
+  function saveV2State() {
+    const allCards = document.querySelectorAll('.v2-prop-card');
+    const state = {};
+    allCards.forEach(card => {
+      state[card.id] = card.classList.contains('selected') ? 'selected'
+                     : card.classList.contains('rejected') ? 'rejected' : 'neutral';
+    });
+    try { localStorage.setItem('progressio_v2_state', JSON.stringify(state)); } catch(e) {}
+  }
+  function restoreV2State() {
+    try {
+      const raw = localStorage.getItem('progressio_v2_state');
+      if (raw) {
+        const state = JSON.parse(raw);
+        // If user already made choices — respect them
+        if (Object.values(state).some(v => v !== 'neutral')) {
+          Object.entries(state).forEach(([id, cls]) => {
+            const card = document.getElementById(id);
+            if (!card) return;
+            card.classList.remove('selected', 'rejected');
+            if (cls === 'selected') card.classList.add('selected');
+            if (cls === 'rejected') card.classList.add('rejected');
+          });
+          return;
+        }
+      }
+    } catch(e) {}
+    // First open — apply confirmed decisions from conversation
+    // Cover A = SELECTED (confirmed), B = reserved (future), C = reserved (future), D-J = neutral (explore)
+    const ca = document.getElementById('cover-a-card');
+    if (ca) ca.classList.add('selected');
+    // B and C stay neutral — reserved, not rejected
+    // QR — user keeps QR code (all alternatives rejected)
+    ['a','b','c'].forEach(o => {
+      const c = document.getElementById('qr-' + o + '-card');
+      if (c) c.classList.add('rejected');
+    });
+    saveV2State();
+  }
+
+  // ── RENDER ───────────────────────────────────────────────
+  function renderAll() {
+    renderCards('wizja');
+    renderCards('pomysly');
+    renderCards('struktura');
+    renderCards('tresci');
+    renderCards('notatki');
+    renderTasks();
+    renderDashboard();
+    updateCounts();
+  }
+
+  function itemsForSection(section) {
+    const map = {
+      wizja: ['wizja'],
+      pomysly: ['pomysł'],
+      struktura: ['struktura'],
+      tresci: ['treść'],
+      notatki: ['notatka'],
+    };
+    const tags = map[section] || [];
+    return data.items.filter(i => tags.includes(i.tag));
+  }
+
+  function renderCards(section) {
+    const container = document.getElementById('cards-' + section);
+    if (!container) return;
+    const items = itemsForSection(section);
+    if (items.length === 0) {
+      container.innerHTML = emptyStateHTML(section);
+      return;
+    }
+    container.innerHTML = items.map(item => `
+      <div class="card tag-${item.tag}" id="card-${item.id}">
+        <div class="card-accent-bar"></div>
+        <div class="card-body" onclick="viewItem('${item.id}')">
+          <div class="card-title">${escHTML(item.title)}</div>
+          ${item.desc ? `<div class="card-desc">${escHTML(truncate(item.desc, 180))}</div>` : ''}
+        </div>
+        <div class="card-footer">
+          <span class="tag tag-${item.tag}">${item.tag}</span>
+          <div class="card-actions">
+            <button class="btn-icon" onclick="openEditModal('${item.id}')">✏️</button>
+            <button class="btn-icon btn-delete" onclick="deleteItem('${item.id}')">🗑</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderTasks() {
+    const container = document.getElementById('tasks-list');
+    if (!container) return;
+    let tasks = data.items.filter(i => i.tag === 'zadanie');
+    if (taskFilter === 'todo') tasks = tasks.filter(t => !t.done);
+    if (taskFilter === 'done') tasks = tasks.filter(t => t.done);
+    if (tasks.length === 0) {
+      container.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">✅</div>
+        <p>Brak zadań ${taskFilter === 'done' ? 'ukończonych' : taskFilter === 'todo' ? 'do zrobienia' : ''}.<br>Dodaj pierwsze zadanie do projektu.</p>
+        <button onclick="openAddModal('zadania')">+ Dodaj zadanie</button>
+      </div>`;
+      return;
+    }
+    container.innerHTML = tasks.map(task => `
+      <div class="task-item ${task.done ? 'done' : ''}" id="task-${task.id}">
+        <div class="task-checkbox ${task.done ? 'checked' : ''}" onclick="toggleTask('${task.id}')">
+          ${task.done ? '✓' : ''}
+        </div>
+        <div class="task-content">
+          <div class="task-title">${escHTML(task.title)}</div>
+          ${task.desc ? `<div class="task-desc">${escHTML(task.desc)}</div>` : ''}
+        </div>
+        <div class="task-right">
+          <button class="btn-icon" onclick="openEditModal('${task.id}')">✏️</button>
+          <button class="btn-icon btn-delete" onclick="deleteItem('${task.id}')">🗑</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderDashboard() {
+    const sections = ['wizja','pomysly','struktura','tresci','zadania','notatki'];
+    const tagMap = {
+      wizja: ['wizja'], pomysly: ['pomysł'], struktura: ['struktura'],
+      tresci: ['treść'], zadania: ['zadanie'], notatki: ['notatka']
+    };
+    sections.forEach(s => {
+      const count = data.items.filter(i => (tagMap[s]||[]).includes(i.tag)).length;
+      const el = document.getElementById('stat-' + s);
+      if (el) el.textContent = count;
+    });
+
+    // Recent
+    const recent = [...data.items].sort((a,b) => (b.ts||0) - (a.ts||0)).slice(0, 7);
+    const rl = document.getElementById('recent-list');
+    if (recent.length === 0) {
+      rl.innerHTML = `<div style="font-family:Arial,sans-serif;font-size:13px;color:var(--text-muted);padding:10px 0;">
+        Brak wpisów — zacznij dodawać elementy projektu ✦</div>`;
+      return;
+    }
+    const sectionName = tag => ({
+      wizja:'Wizja', pomysł:'Pomysły', struktura:'Struktura',
+      treść:'Treści', zadanie:'Zadania', notatka:'Notatki'
+    }[tag] || tag);
+    rl.innerHTML = recent.map(item => `
+      <div class="recent-item" onclick="viewItem('${item.id}')">
+        <span class="recent-item-section">${sectionName(item.tag)}</span>
+        ${escHTML(truncate(item.title, 70))}
+      </div>
+    `).join('');
+  }
+
+  function updateCounts() {
+    const tagMap = {
+      wizja: ['wizja'], pomysly: ['pomysł'], struktura: ['struktura'],
+      tresci: ['treść'], zadania: ['zadanie'], notatki: ['notatka']
+    };
+    Object.entries(tagMap).forEach(([sec, tags]) => {
+      const el = document.getElementById('count-' + sec);
+      if (el) el.textContent = data.items.filter(i => tags.includes(i.tag)).length;
+    });
+  }
+
+  function emptyStateHTML(section) {
+    const msgs = {
+      wizja: ['🎯', 'Dodaj wizję projektu', 'Opisz cel, misję i odbiorcę dziennika Progressio.'],
+      pomysly: ['💡', 'Brak pomysłów', 'Wrzuć tutaj każdą myśl — bez filtrowania. Możesz je potem poukładać.'],
+      struktura: ['📖', 'Struktura jest pusta', 'Dodaj sekcje, rozdziały lub układ stron dziennika.'],
+      tresci: ['✍️', 'Brak treści', 'Tutaj trafiają konkretne teksty, pytania i ćwiczenia do dziennika.'],
+      notatki: ['📝', 'Brak notatek', 'Szybkie przemyślenia, linki, referencje — wszystko trafia tutaj.'],
+    };
+    const [ico, h, p] = msgs[section] || ['📌', 'Brak wpisów', 'Dodaj pierwszy wpis.'];
+    return `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-icon">${ico}</div>
+      <p><strong>${h}</strong><br>${p}</p>
+      <button onclick="openAddModal('${section}')">+ Dodaj pierwszy</button>
+    </div>`;
+  }
+
+  // ── MODAL: ADD / EDIT ─────────────────────────────────────
+  const SECTION_TAG = {
+    wizja: 'wizja', pomysly: 'pomysł', struktura: 'struktura',
+    tresci: 'treść', zadania: 'zadanie', notatki: 'notatka'
+  };
+
+  function openAddModal(section) {
+    editingId = null;
+    modalSection = section;
+    document.getElementById('modal-title').textContent = 'Dodaj wpis';
+    document.getElementById('modal-input-title').value = '';
+    document.getElementById('modal-input-desc').value = '';
+    const tagSel = document.getElementById('modal-input-tag');
+    const wrapper = document.getElementById('modal-tag-wrapper');
+    if (section === 'zadania') {
+      wrapper.style.display = 'none';
+    } else {
+      wrapper.style.display = 'block';
+      tagSel.value = SECTION_TAG[section] || 'notatka';
+    }
+    document.getElementById('modal-overlay').classList.add('open');
+    setTimeout(() => document.getElementById('modal-input-title').focus(), 50);
+  }
+
+  function openEditModal(id) {
+    const item = data.items.find(i => i.id === id);
+    if (!item) return;
+    editingId = id;
+    const isTask = item.tag === 'zadanie';
+    modalSection = isTask ? 'zadania' :
+      Object.entries(SECTION_TAG).find(([,v])=>v===item.tag)?.[0] || 'notatki';
+    document.getElementById('modal-title').textContent = 'Edytuj wpis';
+    document.getElementById('modal-input-title').value = item.title;
+    document.getElementById('modal-input-desc').value = item.desc || '';
+    const wrapper = document.getElementById('modal-tag-wrapper');
+    if (isTask) {
+      wrapper.style.display = 'none';
+    } else {
+      wrapper.style.display = 'block';
+      document.getElementById('modal-input-tag').value = item.tag;
+    }
+    closeViewModal();
+    document.getElementById('modal-overlay').classList.add('open');
+    setTimeout(() => document.getElementById('modal-input-title').focus(), 50);
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    editingId = null;
+  }
+
+  function saveItem() {
+    const title = document.getElementById('modal-input-title').value.trim();
+    if (!title) {
+      document.getElementById('modal-input-title').style.borderColor = 'var(--danger)';
+      document.getElementById('modal-input-title').focus();
+      setTimeout(() => document.getElementById('modal-input-title').style.borderColor = '', 1500);
+      return;
+    }
+    const desc = document.getElementById('modal-input-desc').value.trim();
+    const isTask = modalSection === 'zadania';
+    const tag = isTask ? 'zadanie' : document.getElementById('modal-input-tag').value;
+
+    if (editingId) {
+      const idx = data.items.findIndex(i => i.id === editingId);
+      if (idx !== -1) {
+        data.items[idx] = { ...data.items[idx], title, desc, tag, ts: Date.now() };
+      }
+    } else {
+      data.items.push({ id: uid(), title, desc, tag, done: false, ts: Date.now() });
+    }
+    saveData();
+    closeModal();
+    renderAll();
+  }
+
+  // ── TASK TOGGLE ───────────────────────────────────────────
+  function toggleTask(id) {
+    const item = data.items.find(i => i.id === id);
+    if (item) { item.done = !item.done; item.ts = Date.now(); }
+    saveData();
+    renderTasks();
+    updateCounts();
+    renderDashboard();
+  }
+
+  function filterTasks(f) {
+    taskFilter = f;
+    document.querySelectorAll('[id^="task-filter-"]').forEach(b => b.classList.remove('active'));
+    document.getElementById('task-filter-' + f).classList.add('active');
+    renderTasks();
+  }
+
+  // ── DELETE ────────────────────────────────────────────────
+  function deleteItem(id) {
+    if (!confirm('Usunąć ten wpis? Tej operacji nie można cofnąć.')) return;
+    data.items = data.items.filter(i => i.id !== id);
+    saveData();
+    renderAll();
+  }
+
+  // ── VIEW MODAL ────────────────────────────────────────────
+  function viewItem(id) {
+    const item = data.items.find(i => i.id === id);
+    if (!item) return;
+    const sectionNames = {
+      wizja:'Wizja', pomysł:'Pomysły', struktura:'Struktura',
+      treść:'Treści', zadanie:'Zadania', notatka:'Notatki'
+    };
+    document.getElementById('view-section-label').textContent = sectionNames[item.tag] || 'Wpis';
+    document.getElementById('view-title').textContent = item.title;
+    document.getElementById('view-desc').textContent = item.desc || '—';
+    document.getElementById('view-edit-btn').onclick = () => openEditModal(id);
+    document.getElementById('view-overlay').classList.add('open');
+  }
+
+  function closeViewModal() {
+    document.getElementById('view-overlay').classList.remove('open');
+  }
+
+  // ── EXPORT / IMPORT ───────────────────────────────────────
+  function exportData() {
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'progressio-backup-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData() {
+    document.getElementById('import-json').value = '';
+    document.getElementById('import-overlay').classList.add('open');
+  }
+
+  function closeImportModal() {
+    document.getElementById('import-overlay').classList.remove('open');
+  }
+
+  function doImport() {
+    try {
+      const parsed = JSON.parse(document.getElementById('import-json').value);
+      if (!parsed.items || !Array.isArray(parsed.items)) throw new Error('Nieprawidłowy format');
+      if (!confirm(`Zaimportować ${parsed.items.length} wpisów? Istniejące dane zostaną zastąpione.`)) return;
+      data = parsed;
+      saveData();
+      closeImportModal();
+      renderAll();
+    } catch(e) {
+      alert('Błąd parsowania JSON: ' + e.message);
+    }
+  }
+
+  // ── UTILS ─────────────────────────────────────────────────
+  function escHTML(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function truncate(s, n) {
+    return s && s.length > n ? s.slice(0, n) + '…' : s;
+  }
+
+  // Close modals on overlay click
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  document.getElementById('view-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeViewModal();
+  });
+  document.getElementById('import-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeImportModal();
+  });
+
+  // Enter to save
+  document.getElementById('modal-input-title').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveItem(); }
+  });
+
+  // ── INIT ──────────────────────────────────────────────────
+  renderAll();
+</script>
+</body>
+</html>
