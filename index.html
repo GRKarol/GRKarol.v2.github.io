@@ -147,6 +147,8 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   position: relative;
   height: 100vh; min-height: 640px;
   display: flex; align-items: center;
+  padding: 0 7% 0 56px;
+  gap: 80px;
   overflow: hidden;
 }
 #hero-canvas {
@@ -157,13 +159,12 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .hero::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 35% 50%, transparent 32%, rgba(7,6,10,.72) 68%);
+  background: radial-gradient(ellipse at 50% 55%, transparent 36%, rgba(7,6,10,.85) 78%);
   z-index: 1; pointer-events: none;
 }
 .hero-content {
   position: relative; z-index: 2;
-  padding: 0 56px;
-  max-width: 820px;
+  flex: 1; min-width: 0;
 }
 .hero-eyebrow {
   font-family: var(--ui); font-size: 10px; letter-spacing: .45em;
@@ -237,9 +238,8 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 
 /* ── HERO ASIDE (desktop stats panel) ── */
 .hero-aside {
-  position: absolute; right: 7%; top: 50%;
-  transform: translateY(-50%);
-  z-index: 3; width: 260px;
+  position: relative; z-index: 2;
+  flex-shrink: 0; width: 240px;
   opacity: 0; animation: heroUp .8s var(--silk) 1.4s forwards;
 }
 .hero-stat-block {
@@ -581,24 +581,17 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .wl-sub strong { color: var(--parch); font-style: normal; font-weight: 600; }
 
 .wl-perks {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 2px; max-width: 480px;
-  margin: 0 auto 52px; background: var(--edge);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 0; margin-bottom: 52px;
+  border: 1px solid var(--edge);
 }
-.wl-perk-card {
-  background: var(--surface); padding: 24px 20px; text-align: center;
-  transition: background .3s;
+.wl-perk-item {
+  font-family: var(--ui); font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--smoke);
+  padding: 14px 22px;
+  border-right: 1px solid var(--edge);
 }
-.wl-perk-card:hover { background: var(--lift); }
-.wl-perk-symbol {
-  font-family: var(--serif); font-size: 22px; color: var(--gold);
-  margin-bottom: 10px; display: block;
-}
-.wl-perk-name {
-  font-family: var(--ui); font-size: 10px; letter-spacing: .16em;
-  text-transform: uppercase; color: var(--parch); margin-bottom: 5px;
-}
-.wl-perk-detail { font-family: var(--ui); font-size: 10px; color: var(--smoke); line-height: 1.5; }
+.wl-perk-item:last-child { border-right: none; }
 
 .form-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; }
 .form-dot { width: 28px; height: 2px; background: var(--edge); transition: background .4s, width .4s; }
@@ -707,7 +700,7 @@ footer {
 @media(max-width:1280px){
   #nav { padding: 24px 40px; }
   #nav.frosted { padding: 15px 40px; }
-  .hero-content { padding: 0 40px; }
+  .hero { padding: 0 5% 0 40px; gap: 56px; }
   .features { padding: 80px 40px; }
   .cover-section { padding: 80px 40px; }
   .roadmap-section { padding: 80px 40px; }
@@ -735,9 +728,8 @@ footer {
   .nav-live { display:none; }
   .nav-story { display:none; }
 
-  .hero { min-height: 100svh; }
-  .hero-content { padding: 0 20px; max-width: 100%; }
-  .hero-aside { display:none; }
+  .hero { min-height: 100svh; padding: 0 20px; gap: 0; }
+  .hero-aside { display: none; }
   .hero-whisper { left: 20px; }
   .hero::before { background: radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(7,6,10,.9) 75%); }
   .bts-section { padding: 64px 20px; }
@@ -755,6 +747,9 @@ footer {
   .rm-grid { grid-template-columns: 1fr; gap: 28px; }
 
   .waitlist { padding: 72px 20px; }
+  .wl-perks { flex-direction: column; }
+  .wl-perk-item { border-right: none; border-bottom: 1px solid var(--edge); width: 100%; text-align: center; }
+  .wl-perk-item:last-child { border-bottom: none; }
   .opts { grid-template-columns: 1fr; }
   .opts.col3 { grid-template-columns: 1fr 1fr; }
   .wl-ghost { display:none; }
@@ -963,30 +958,14 @@ footer {
       <div class="wl-orn-r"></div>
     </div>
 
-    <h2 class="wl-h">Be among<br><em>the first.</em></h2>
-    <p class="wl-sub">Progressio launches in 2026. <strong>Founding Members</strong> get early purchase access, locked-in founder pricing, and immediate entry into the community being built around it.</p>
+    <h2 class="wl-h">Begin before<br><em>you're ready.</em></h2>
+    <p class="wl-sub">Most journals record what happened. Progressio is what you reach for when you decide something has to change — not next month, not on Monday. <strong>Now.</strong> Founding Members get in first, pay less, and join the community being built around this idea.</p>
 
     <div class="wl-perks">
-      <div class="wl-perk-card">
-        <span class="wl-perk-symbol">✦</span>
-        <div class="wl-perk-name">Early Access</div>
-        <div class="wl-perk-detail">Buy before the public launch</div>
-      </div>
-      <div class="wl-perk-card">
-        <span class="wl-perk-symbol">◈</span>
-        <div class="wl-perk-name">Founder Pricing</div>
-        <div class="wl-perk-detail">Special rate, locked forever</div>
-      </div>
-      <div class="wl-perk-card">
-        <span class="wl-perk-symbol">◎</span>
-        <div class="wl-perk-name">Skool Community</div>
-        <div class="wl-perk-detail">Access to Grankers Team — now</div>
-      </div>
-      <div class="wl-perk-card">
-        <span class="wl-perk-symbol">◉</span>
-        <div class="wl-perk-name">Founding Status</div>
-        <div class="wl-perk-detail">Named among the first 1000</div>
-      </div>
+      <span class="wl-perk-item">Early access</span>
+      <span class="wl-perk-item">Founder pricing</span>
+      <span class="wl-perk-item">Community on Skool</span>
+      <span class="wl-perk-item">Founding Member status</span>
     </div>
 
     <div class="form-dots">
