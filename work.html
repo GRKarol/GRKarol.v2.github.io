@@ -659,18 +659,35 @@ let unsubscribe    = null;
 
 // ─── Fallback posts (shown before Firebase is configured) ──
 const FALLBACK = [
-  { id:'f1', kind:'text',  type:'Design', status:'active',
-    title:'Full graphic layout — *every page*',
-    body:'Building out the internal structure. Each section designed with intention — daily log, weekly review, monthly reflection, project pages. The system is taking shape.',
+  { id:'f1', kind:'text', type:'Design', status:'active',
+    title:'Interior layout — *every single page*',
+    body:'Building all pages in Canva. Daily log structure: habit checkboxes, *energy checklist* (sleep / fuel / movement), one sentence of progress, gratitude note, quote of the day. Weekly field report every 7th page. Monthly milestone review at weeks 4, 8, and 12. Every element earns its place — nothing is filler.',
     date:'March 2026', order:0 },
-  { id:'f2', kind:'text',  type:'Object', status:'upcoming',
-    title:'First physical *prototype*',
-    body:'~20 copies. Real leather, real binding, real weight in hand. This is the moment everything either works or gets iterated.',
+
+  { id:'f2', kind:'text', type:'Object', status:'upcoming',
+    title:'First physical *prototype* — 20 copies',
+    body:'Real leather. Real gold embossing. Real weight in the hand. The prototype order answers every question a screen can\'t — how the spine holds over months of use, how 90g offset paper takes ink, how it feels to open it for the first time. This is the moment the idea becomes an object.',
     date:'April 2026', order:1 },
-  { id:'f3', kind:'text',  type:'Cover', status:'done',
-    title:'Cover design — *front, spine & back*',
-    body:'Full leather binding. Gold foil embossing. The cover went through multiple rounds — typography, proportions, the lion mark. Now locked in.',
+
+  { id:'f3', kind:'text', type:'Cover', status:'done',
+    title:'Cover locked — *Obsydian* variant chosen',
+    body:'Ten colour studies. One decision. *Obsydian*: antracite leather, gold embossed title on front, spine, and back. Typography: Cinzel (architechtural, timeless) + Cormorant Garamond (elegant contrast). The cover looks exactly like it should — like something worth earning. The other nine variants become future editions.',
     date:'February 2026', order:2 },
+
+  { id:'f4', kind:'text', type:'Philosophy', status:'done',
+    title:'The three-phase *habit engine*',
+    body:'Phase 1 — *Silnik Pędu* (days 1–14): one rule, write one sentence. No performance, no pressure. Just begin. Phase 2 — *Przeprogramowanie* (days 15–45): identity work, goal architecture, first habit planned. Phase 3 — *Własność* (day 45+): full daily pages, Battle Log active, weekly reports in complete form. The system meets you where you are and pulls you forward.',
+    date:'December 2025', order:3 },
+
+  { id:'f5', kind:'text', type:'Structure', status:'done',
+    title:'Four acts. *One full year.*',
+    body:'Akt I — *Fundament*: Pactum Progressio (the signed pact), philosophy, patron of the year, goal architecture. Akt II — *Bitwy*: 12 months of daily battle — each month opens with a patron (Marek Aureliusz, Kobe Bryant, Napoleon Hill...), daily log, weekly field report. Akt III — *Forteca*: mind fortress, energy management (sleep / fuel / movement), identity work. Akt IV — *Zamknięcie*: year review, letter to future self, table of debts of honour. ~130–140 pages. Format B5.',
+    date:'January 2026', order:4 },
+
+  { id:'f6', kind:'text', type:'Beta', status:'upcoming',
+    title:'Beta round with *Founding Members*',
+    body:'20–50 people receive the first copies — PDF first, physical when the prototype is ready. They use it for 30 days. The feedback form asks three things: what worked, what was missing, what they actually used every day. Their answers shape the final version. Their names go in the first edition.',
+    date:'May 2026', order:5 },
 ];
 
 // ─── Load posts ────────────────────────────────────────
