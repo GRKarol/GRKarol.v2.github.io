@@ -215,9 +215,10 @@
     to   { transform: scaleX(1); opacity: 1; }
   }
   @media(max-width:700px){
-    .covers-row { flex-direction: column; align-items: center; }
-    .covers-row > *:nth-child(1) { order: 3; }
-    .covers-row > *:nth-child(2) { order: 2; }
+    .covers-row { flex-direction: column; align-items: center; gap: 24px; }
+    /* Front (child 3) on top, Back (child 1) on bottom, Spine hidden */
+    .covers-row > *:nth-child(2) { display: none; }
+    .covers-row > *:nth-child(1) { order: 2; }
     .covers-row > *:nth-child(3) { order: 1; }
   }
 </style>

@@ -157,7 +157,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .hero::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 38% 50%, transparent 25%, rgba(7,6,10,.88) 75%);
+  background: radial-gradient(ellipse at 35% 50%, transparent 32%, rgba(7,6,10,.72) 68%);
   z-index: 1; pointer-events: none;
 }
 .hero-content {
@@ -235,160 +235,37 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .btn-text svg { transition: transform .3s; }
 .btn-text:hover svg { transform: translateX(4px); }
 
-/* ── 3D BOOK ── */
-.hero-book {
+/* ── HERO ASIDE (desktop stats panel) ── */
+.hero-aside {
   position: absolute; right: 7%; top: 50%;
   transform: translateY(-50%);
-  z-index: 3;
-  opacity: 0; animation: bookReveal 1.4s var(--silk) .9s forwards;
+  z-index: 3; width: 260px;
+  opacity: 0; animation: heroUp .8s var(--silk) 1.4s forwards;
 }
-@keyframes bookReveal {
-  from { opacity:0; transform:translateY(-46%) translateX(40px); }
-  to   { opacity:1; transform:translateY(-50%) translateX(0); }
+.hero-stat-block {
+  margin-bottom: 32px; padding-bottom: 32px;
+  border-bottom: 1px solid var(--edge);
 }
-
-.book-scene { perspective: 1600px; width: 280px; height: 392px; }
-.book-body {
-  width: 100%; height: 100%;
-  transform-style: preserve-3d;
-  transform: rotateY(-28deg) rotateX(7deg);
-  animation: bookDrift 8s ease-in-out infinite;
-  transition: transform 2s var(--silk);
-  will-change: transform;
+.hero-stat-num {
+  font-family: var(--serif);
+  font-size: 68px; font-weight: 700; line-height: 1;
+  color: var(--gold); letter-spacing: -.02em;
 }
-.book-body:hover { transform: rotateY(8deg) rotateX(4deg) !important; animation-play-state: paused; }
-@keyframes bookDrift {
-  0%,100%{ transform: rotateY(-28deg) rotateX(7deg) translateY(0); }
-  50%    { transform: rotateY(-22deg) rotateX(5deg) translateY(-18px); }
+.hero-stat-lbl {
+  font-family: var(--ui); font-size: 9px;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--gold-lo); margin-top: 8px;
 }
-.bf { position: absolute; backface-visibility: hidden; }
-
-/* Front face — mirrors actual cover */
-.bf-front {
-  width: 246px; height: 346px;
-  top: 14px; left: 20px;
-  transform: translateZ(22px);
-  background: linear-gradient(158deg, #1c1400 0%, #2a1c06 30%, #180f02 60%, #0b0900 100%);
-  border: 1px solid rgba(201,168,76,.15);
-  border-radius: 1px 4px 4px 1px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  box-shadow: 0 50px 100px rgba(0,0,0,.95), inset 0 0 80px rgba(0,0,0,.4);
-  overflow: hidden;
+.hero-feats { display: flex; flex-direction: column; gap: 13px; }
+.hero-feat {
+  font-family: var(--ui); font-size: 11px;
+  letter-spacing: .06em; color: var(--smoke);
+  display: flex; align-items: center; gap: 12px;
 }
-/* leather texture */
-.bf-front::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(
-    163deg,
-    rgba(255,255,255,.007) 0px, rgba(255,255,255,.007) 1px,
-    transparent 1px, transparent 14px
-  );
+.hero-feat::before {
+  content: ''; width: 18px; height: 1px;
+  background: var(--gold-lo); flex-shrink: 0;
 }
-/* subtle highlight */
-.bf-front::after {
-  content: '';
-  position: absolute;
-  width: 160px; height: 160px;
-  background: radial-gradient(ellipse, rgba(201,168,76,.05) 0%, transparent 70%);
-  top: 50%; left: 50%;
-  transform: translate(-50%,-60%);
-}
-
-/* Outer border frame */
-.bf-frame {
-  position: absolute; inset: 18px;
-  border: 1px solid rgba(201,168,76,.2);
-  pointer-events: none;
-}
-.bf-frame::before, .bf-frame::after {
-  content: ''; position: absolute;
-  width: 13px; height: 13px;
-}
-.bf-frame::before { top:-1px; left:-1px; border-top:2px solid rgba(201,168,76,.5); border-left:2px solid rgba(201,168,76,.5); }
-.bf-frame::after  { bottom:-1px; right:-1px; border-bottom:2px solid rgba(201,168,76,.5); border-right:2px solid rgba(201,168,76,.5); }
-
-/* Cover content — Cinzel font to match actual cover */
-.bf-cover-content {
-  position: relative; z-index: 2;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 0;
-}
-.bf-line-top {
-  width: 1px; height: 36px;
-  background: linear-gradient(to bottom, transparent, rgba(201,168,76,.7));
-  margin-bottom: 14px;
-}
-.bf-brand {
-  font-family: var(--cinzel);
-  font-size: 19px; font-weight: 600;
-  letter-spacing: 7px; color: var(--gold);
-  text-transform: uppercase; text-align: center;
-  text-shadow: 0 0 40px rgba(201,168,76,.3);
-}
-.bf-gold-rule {
-  width: 80px; height: 1px;
-  background: linear-gradient(to right, transparent, rgba(201,168,76,.8), transparent);
-  margin: 12px 0;
-}
-.bf-journal {
-  font-family: var(--cinzel);
-  font-size: 7px; font-weight: 400;
-  letter-spacing: 5px; color: rgba(201,168,76,.45);
-  text-transform: uppercase;
-}
-.bf-line-bottom {
-  width: 1px; height: 28px;
-  background: linear-gradient(to top, transparent, rgba(201,168,76,.5));
-  margin-top: 14px;
-}
-.bf-year {
-  position: absolute; bottom: 22px;
-  font-family: var(--ui); font-size: 7px;
-  letter-spacing: .3em; color: rgba(201,168,76,.18);
-  z-index: 2;
-}
-
-/* Spine */
-.bf-spine {
-  width: 40px; height: 346px;
-  top: 14px; left: -20px;
-  transform-origin: right center;
-  transform: rotateY(-90deg) translateZ(20px);
-  background: linear-gradient(90deg, #060400 0%, #120c04 50%, #060400 100%);
-  border-right: 1px solid rgba(201,168,76,.06);
-  display: flex; align-items: center; justify-content: center;
-}
-.bf-spine-t {
-  font-family: var(--cinzel); font-size: 7px;
-  letter-spacing: .3em; color: rgba(201,168,76,.25);
-  writing-mode: vertical-rl; transform: rotate(180deg);
-  text-transform: uppercase;
-}
-
-/* Page block top */
-.bf-top {
-  width: 246px; height: 40px;
-  top: -10px; left: 20px;
-  transform-origin: bottom center;
-  transform: rotateX(90deg) translateZ(10px);
-  background: linear-gradient(180deg, var(--parch) 0%, #c8b898 55%, #b0a07a 100%);
-}
-.bf-top::after {
-  content: ''; position: absolute; inset: 0;
-  background: repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,.05) 3px, rgba(0,0,0,.05) 4px);
-}
-
-/* Shadow */
-.book-shadow {
-  position: absolute; bottom: -44px; left: 10px;
-  width: 220px; height: 28px;
-  background: radial-gradient(ellipse, rgba(201,168,76,.2) 0%, transparent 70%);
-  filter: blur(14px);
-  animation: shadowPulse 8s ease-in-out infinite;
-}
-@keyframes shadowPulse { 0%,100%{opacity:.5} 50%{opacity:.9} }
 
 /* ── Scroll whisper ── */
 .hero-whisper {
@@ -592,6 +469,57 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .rm-badge.next { color: var(--smoke); border-color: var(--edge); }
 
 /* ============================================================
+   BEHIND THE SCENES
+============================================================ */
+.bts-section {
+  padding: 100px 56px;
+  background: var(--ink);
+  border-bottom: 1px solid var(--edge);
+  text-align: center;
+}
+.bts-tag {
+  font-family: var(--ui); font-size: 9px;
+  letter-spacing: .44em; text-transform: uppercase;
+  color: var(--gold-lo);
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin-bottom: 28px;
+}
+.bts-tag::before, .bts-tag::after { content:''; width:44px; height:1px; background:var(--gold-lo); }
+.bts-title {
+  font-family: var(--serif); font-size: clamp(32px,4.5vw,64px);
+  font-weight: 700; color: var(--white); margin-bottom: 16px; line-height: 1.1;
+}
+.bts-title em { font-style: italic; color: var(--gold); }
+.bts-sub {
+  font-family: var(--serif); font-size: 17px; font-style: italic;
+  line-height: 1.8; color: var(--ash);
+  max-width: 500px; margin: 0 auto 52px;
+}
+.bts-preview {
+  max-width: 560px; margin: 0 auto 40px;
+  border: 1px solid var(--edge); background: var(--surface);
+  padding: 32px; text-align: left; position: relative; overflow: hidden;
+}
+.bts-preview::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px; background: linear-gradient(to right, transparent, var(--edge), transparent);
+}
+.bts-preview-type {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold-lo); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+.bts-preview-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold-lo); flex-shrink: 0; }
+.bts-preview-title {
+  font-family: var(--serif); font-size: 20px; font-weight: 300;
+  line-height: 1.3; color: var(--parch); margin-bottom: 10px;
+}
+.bts-preview-body { font-size: 12px; line-height: 1.75; color: var(--smoke); letter-spacing: .03em; }
+.bts-preview-date {
+  margin-top: 20px; font-family: var(--ui); font-size: 9px;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--smoke);
+}
+
+/* ============================================================
    WAITLIST
 ============================================================ */
 .waitlist {
@@ -653,15 +581,24 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .wl-sub strong { color: var(--parch); font-style: normal; font-weight: 600; }
 
 .wl-perks {
-  display: flex; flex-wrap:wrap; justify-content:center;
-  gap: 10px 26px; margin-bottom: 52px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; max-width: 480px;
+  margin: 0 auto 52px; background: var(--edge);
 }
-.wl-perk {
-  font-family: var(--ui); font-size: 11px;
-  letter-spacing: .1em; color: var(--ash);
-  display: flex; align-items: center; gap: 8px;
+.wl-perk-card {
+  background: var(--surface); padding: 24px 20px; text-align: center;
+  transition: background .3s;
 }
-.wl-perk::before { content:'✦'; color:var(--gold); font-size:8px; }
+.wl-perk-card:hover { background: var(--lift); }
+.wl-perk-symbol {
+  font-family: var(--serif); font-size: 22px; color: var(--gold);
+  margin-bottom: 10px; display: block;
+}
+.wl-perk-name {
+  font-family: var(--ui); font-size: 10px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--parch); margin-bottom: 5px;
+}
+.wl-perk-detail { font-family: var(--ui); font-size: 10px; color: var(--smoke); line-height: 1.5; }
 
 .form-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; }
 .form-dot { width: 28px; height: 2px; background: var(--edge); transition: background .4s, width .4s; }
@@ -800,9 +737,10 @@ footer {
 
   .hero { min-height: 100svh; }
   .hero-content { padding: 0 20px; max-width: 100%; }
-  .hero-book { display:none; }
+  .hero-aside { display:none; }
   .hero-whisper { left: 20px; }
   .hero::before { background: radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(7,6,10,.9) 75%); }
+  .bts-section { padding: 64px 20px; }
 
   .features { padding: 64px 20px; }
   .features-grid { grid-template-columns: 1fr; gap: 2px; }
@@ -850,7 +788,7 @@ footer {
   <div class="nav-right">
     <div class="nav-live">
       <div class="nav-pulse"></div>
-      <span id="nav-n">—</span>&nbsp;waiting
+      <span id="nav-n">—</span>
     </div>
     <a href="story.html" class="nav-story">Our Story</a>
     <a href="#waitlist" class="nav-btn">Join Waitlist</a>
@@ -883,25 +821,17 @@ footer {
     </div>
   </div>
 
-  <!-- 3D Book — design mirrors actual cover -->
-  <div class="hero-book">
-    <div class="book-scene">
-      <div class="book-body" id="book3d">
-        <div class="bf bf-spine"><span class="bf-spine-t">Progressio · The Journal</span></div>
-        <div class="bf bf-top"></div>
-        <div class="bf bf-front">
-          <div class="bf-frame"></div>
-          <div class="bf-cover-content">
-            <div class="bf-line-top"></div>
-            <span class="bf-brand">PROGRESSIO</span>
-            <div class="bf-gold-rule"></div>
-            <span class="bf-journal">The Journal</span>
-            <div class="bf-line-bottom"></div>
-          </div>
-          <div class="bf-year">Est. MMXXVI</div>
-        </div>
-      </div>
-      <div class="book-shadow"></div>
+  <!-- Desktop aside: stats + features -->
+  <div class="hero-aside">
+    <div class="hero-stat-block">
+      <div class="hero-stat-num" id="hero-stat-n">—</div>
+      <div class="hero-stat-lbl">Founding Members</div>
+    </div>
+    <div class="hero-feats">
+      <div class="hero-feat">Full-grain leather cover</div>
+      <div class="hero-feat">Gold embossed title</div>
+      <div class="hero-feat">~400 pages crafted</div>
+      <div class="hero-feat">Two silk ribbons</div>
     </div>
   </div>
 
@@ -1005,6 +935,20 @@ footer {
   </div>
 </section>
 
+<!-- ═══ BEHIND THE SCENES ═══ -->
+<section class="bts-section rv" id="bts">
+  <div class="bts-tag">Transparency</div>
+  <h2 class="bts-title">Behind the scenes<br><em>— Progressio creating</em></h2>
+  <p class="bts-sub">Every design decision, prototype, and iteration — documented in real time. Watch Progressio being built from the ground up.</p>
+  <div class="bts-preview">
+    <div class="bts-preview-type"><span class="bts-preview-dot"></span>Design Update</div>
+    <h3 class="bts-preview-title">Full graphic design — every page layout finalized</h3>
+    <p class="bts-preview-body">We've completed the layout system for all interior pages. Each section — morning check-in, habit tracker, battle log — has been designed, tested on paper mockups, and refined. The journal is no longer just a concept: it's a complete system on paper.</p>
+    <div class="bts-preview-date">March 2026</div>
+  </div>
+  <a href="work.html" class="btn-primary"><span>See all updates →</span></a>
+</section>
+
 <!-- ═══ WAITLIST ═══ -->
 <section class="waitlist" id="waitlist">
   <div class="wl-bg"></div>
@@ -1014,19 +958,35 @@ footer {
     <div class="wl-orn">
       <div class="wl-orn-l"></div>
       <div class="wl-orn-d"></div>
-      <div class="wl-orn-txt">Reserve Your Spot</div>
+      <div class="wl-orn-txt">Limited Founding Membership</div>
       <div class="wl-orn-d"></div>
       <div class="wl-orn-r"></div>
     </div>
 
-    <h2 class="wl-h">The decision<br><em>starts here.</em></h2>
-    <p class="wl-sub">This is your declaration of readiness to do the work. Founding Members get <strong>early access, founder pricing</strong>, and a community of people who think the same way you do.</p>
+    <h2 class="wl-h">Be among<br><em>the first.</em></h2>
+    <p class="wl-sub">Progressio launches in 2026. <strong>Founding Members</strong> get early purchase access, locked-in founder pricing, and immediate entry into the community being built around it.</p>
 
     <div class="wl-perks">
-      <div class="wl-perk">Early purchase access</div>
-      <div class="wl-perk">Founder pricing</div>
-      <div class="wl-perk">3 months in Grankers Team community</div>
-      <div class="wl-perk">Founding Member status</div>
+      <div class="wl-perk-card">
+        <span class="wl-perk-symbol">✦</span>
+        <div class="wl-perk-name">Early Access</div>
+        <div class="wl-perk-detail">Buy before the public launch</div>
+      </div>
+      <div class="wl-perk-card">
+        <span class="wl-perk-symbol">◈</span>
+        <div class="wl-perk-name">Founder Pricing</div>
+        <div class="wl-perk-detail">Special rate, locked forever</div>
+      </div>
+      <div class="wl-perk-card">
+        <span class="wl-perk-symbol">◎</span>
+        <div class="wl-perk-name">Skool Community</div>
+        <div class="wl-perk-detail">Access to Grankers Team — now</div>
+      </div>
+      <div class="wl-perk-card">
+        <span class="wl-perk-symbol">◉</span>
+        <div class="wl-perk-name">Founding Status</div>
+        <div class="wl-perk-detail">Named among the first 1000</div>
+      </div>
     </div>
 
     <div class="form-dots">
@@ -1086,7 +1046,9 @@ footer {
     <div class="wl-done" id="wl-done">
       <span class="wl-done-icon">✦</span>
       <h3>You're in.</h3>
-      <p>Welcome, Founding Member.<br>You'll be the first to know when Progressio ships.<br>And when it does — you're at the front of the line.</p>
+      <p>Welcome, Founding Member.<br><br>
+      <strong>Check your inbox</strong> — we've sent you an invitation to the Grankers Team community on Skool. Join now and connect with people who chose to begin.<br><br>
+      When Progressio ships, you'll receive a <strong>special discount code</strong> as a thank-you for your trust and early support. You're at the front of the line.</p>
     </div>
   </div>
 </section>
@@ -1241,21 +1203,6 @@ window.addEventListener('scroll',()=>{
   }, 2000);
 })();
 
-/* ── BOOK PARALLAX ───────────────────────────────────── */
-const book = document.getElementById('book3d');
-let bx=-28,by=7,tbx=-28,tby=7;
-document.addEventListener('mousemove',e=>{
-  const cx=innerWidth/2, cy=innerHeight/2;
-  tbx=-28+((e.clientX-cx)/cx)*22;
-  tby=7 -((e.clientY-cy)/cy)*14;
-},{passive:true});
-(function bLoop(){
-  bx+=(tbx-bx)*.04; by+=(tby-by)*.04;
-  if(book && !book.matches(':hover'))
-    book.style.transform=`rotateY(${bx}deg) rotateX(${by}deg)`;
-  requestAnimationFrame(bLoop);
-})();
-
 /* ── SCROLL REVEAL ───────────────────────────────────── */
 const obs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -1273,16 +1220,16 @@ async function fetchCount(){
     const rng = r.headers.get('content-range');
     if(rng){
       const n=parseInt(rng.split('/')[1],10)||0;
-      // Update nav counter
       const navEl=document.getElementById('nav-n');
-      // Update proof strip counter
       const proofEl=document.getElementById('proof-n');
+      const heroEl=document.getElementById('hero-stat-n');
       let c=0; const step=Math.max(1,n/(1000/16));
       const t=setInterval(()=>{
         c=Math.min(c+step,n);
         const v=Math.floor(c).toLocaleString();
         if(navEl) navEl.textContent=v;
         if(proofEl) proofEl.textContent=v;
+        if(heroEl) heroEl.textContent=v;
         if(c>=n)clearInterval(t);
       },16);
     }
@@ -1362,6 +1309,13 @@ async function submit(){
     if([200,201,409].includes(r.status)){
       document.getElementById('form-wrap').style.display='none';
       document.getElementById('wl-done').classList.add('show');
+      // Optimistically increment counter for new signups (not duplicates)
+      if(r.status!==409){
+        ['nav-n','proof-n','hero-stat-n'].forEach(id=>{
+          const el=document.getElementById(id);
+          if(el){ const cur=parseInt(el.textContent.replace(/,/g,''),10)||0; el.textContent=(cur+1).toLocaleString(); }
+        });
+      }
       fetchCount();
     } else throw new Error();
   }catch(_){
