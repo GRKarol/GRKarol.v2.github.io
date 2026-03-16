@@ -164,8 +164,184 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 .hero-content {
   position: relative; z-index: 2;
-  flex: 1; min-width: 0;
+  flex-shrink: 0; width: clamp(300px, 28vw, 400px);
 }
+/* ── 3D Interactive Book ── */
+.hero-spline {
+  position: relative; z-index: 2;
+  flex: 1; min-width: 0;
+  height: 560px; max-height: 70vh;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; animation: heroUp .9s var(--silk) 1s forwards;
+}
+.book-scene {
+  perspective: 1400px;
+  display: flex; align-items: center; justify-content: center;
+}
+.book-float {
+  animation: bookFloat 5s ease-in-out infinite;
+}
+@keyframes bookFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+.book-3d {
+  width: 291px; height: 408px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(4deg) rotateY(-28deg);
+  cursor: grab;
+  user-select: none;
+}
+.book-3d:active { cursor: grabbing; }
+.book-3d * { pointer-events: none; }
+
+/* ── Faces ── */
+.bf { position: absolute; }
+/* Front */
+.bf-front {
+  top: 0; left: 0; width: 291px; height: 408px;
+  background: #111110;
+  transform: translateZ(16px);
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0,0,0,.9);
+}
+.bf-front::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
+  background: linear-gradient(to right, rgba(0,0,0,.7) 0%, rgba(255,255,255,.04) 60%, transparent 100%);
+  z-index: 10;
+}
+/* Spine */
+.bf-spine {
+  top: 0; left: 0; width: 32px; height: 408px;
+  background: #0d0d0c;
+  transform: translateX(-16px) rotateY(-90deg);
+  overflow: hidden;
+}
+.bf-spine::before, .bf-spine::after {
+  content: '';
+  position: absolute; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,.12) 20%, rgba(201,168,76,.12) 80%, transparent);
+}
+.bf-spine::before { left: 0; }
+.bf-spine::after  { right: 0; }
+/* Pages (right side) */
+.bf-pages {
+  top: 0; left: 259px; width: 32px; height: 408px;
+  transform: translateX(16px) rotateY(90deg);
+  background: linear-gradient(to right, #c8b98a 0%, #ede0c4 25%, #f5ead0 55%, #e8d5a8 100%);
+}
+/* Top edge */
+.bf-top {
+  top: 0; left: 0; width: 291px; height: 32px;
+  transform: translateY(-16px) rotateX(90deg);
+  background: linear-gradient(to bottom, #131110 0%, #1e1a14 100%);
+}
+/* Bottom edge */
+.bf-bottom {
+  top: 376px; left: 0; width: 291px; height: 32px;
+  transform: translateY(16px) rotateX(-90deg);
+  background: linear-gradient(to top, #131110 0%, #1e1a14 100%);
+}
+/* Back */
+.bf-back {
+  top: 0; left: 0; width: 291px; height: 408px;
+  background: #111110;
+  transform: rotateY(180deg) translateZ(16px);
+  overflow: hidden;
+}
+.bf-back::after {
+  content: '';
+  position: absolute; right: 0; top: 0; bottom: 0; width: 10px;
+  background: linear-gradient(to left, rgba(0,0,0,.7) 0%, rgba(255,255,255,.04) 60%, transparent 100%);
+  z-index: 10;
+}
+
+/* ── Face content ── */
+.bk-glow {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.bf-front .bk-glow {
+  background: radial-gradient(ellipse 60% 40% at 50% 35%, rgba(201,168,76,.05) 0%, transparent 100%);
+}
+.bf-back .bk-glow {
+  background: radial-gradient(ellipse 55% 45% at 50% 50%, rgba(201,168,76,.04) 0%, transparent 100%);
+}
+.bk-content {
+  position: absolute; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center;
+  z-index: 2;
+}
+.bf-front .bk-content { top: 80px; }
+.bf-back  .bk-content {
+  top: 0; bottom: 0; justify-content: center;
+  padding: 0 44px;
+}
+.bk-line-v {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,.7));
+}
+.bk-line-v.down  { height: 40px; margin-bottom: 18px; }
+.bk-line-v.up    { background: linear-gradient(to top, transparent, rgba(201,168,76,.7)); height: 40px; margin-top: 18px; }
+.bk-line-v.tall  { height: 52px; }
+.bk-line-v.tall.up { background: linear-gradient(to top, transparent, rgba(201,168,76,.55)); }
+.bk-line-v.tall.down { background: linear-gradient(to bottom, transparent, rgba(201,168,76,.55)); }
+.bk-brand {
+  font-family: var(--cinzel);
+  font-size: 26px; font-weight: 600;
+  letter-spacing: 9px; color: #c9a84c;
+  text-transform: uppercase; text-align: center;
+}
+.bk-rule {
+  width: 100px; height: 1px;
+  background: linear-gradient(to right, transparent, #c9a84c, transparent);
+  margin: 16px 0;
+}
+.bk-subtitle {
+  font-family: var(--serif);
+  font-size: 9.5px; font-style: italic; font-weight: 300;
+  letter-spacing: 4.5px; color: rgba(201,168,76,.65);
+  text-transform: uppercase; text-align: center;
+}
+.bk-back-text {
+  font-family: var(--serif);
+  font-size: 16.5px; font-style: italic; font-weight: 300;
+  color: rgba(201,168,76,.9); text-align: center;
+  line-height: 2.4; letter-spacing: .5px;
+  margin: 30px 0;
+}
+.bk-back-rule {
+  height: 1px; width: 46px;
+  background: linear-gradient(to right, transparent, rgba(201,168,76,.45), transparent);
+  margin: 0 0 16px;
+}
+.bk-grankers {
+  font-family: var(--cinzel);
+  font-size: 6.5px; letter-spacing: 5px;
+  color: rgba(201,168,76,.22);
+  text-transform: uppercase; text-align: center;
+}
+.bk-spine-text {
+  font-family: var(--cinzel);
+  font-size: 7px; letter-spacing: 4px;
+  color: rgba(201,168,76,.4); text-transform: uppercase;
+  writing-mode: vertical-rl;
+  position: absolute; top: 50%; left: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(180deg);
+  white-space: nowrap;
+}
+/* drag hint */
+.book-hint {
+  position: absolute; bottom: -32px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--ui); font-size: 9px; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold-lo);
+  opacity: 0; animation: heroUp .6s var(--silk) 2.2s forwards;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 .hero-eyebrow {
   font-family: var(--ui); font-size: 10px; letter-spacing: .45em;
   text-transform: uppercase; color: var(--gold-lo);
@@ -730,6 +906,7 @@ footer {
 
   .hero { min-height: 100svh; padding: 0 20px; gap: 0; }
   .hero-aside { display: none; }
+  .hero-spline { display: none; }
   .hero-whisper { left: 20px; }
   .hero::before { background: radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(7,6,10,.9) 75%); }
   .bts-section { padding: 64px 20px; }
@@ -813,6 +990,53 @@ footer {
           <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
+    </div>
+  </div>
+
+  <!-- 3D Interactive Book -->
+  <div class="hero-spline">
+    <div class="book-scene">
+      <div class="book-float">
+        <div class="book-3d" id="book3d">
+          <!-- Front cover -->
+          <div class="bf bf-front">
+            <div class="bk-glow"></div>
+            <div class="bk-content">
+              <div class="bk-line-v down"></div>
+              <div class="bk-brand">Progressio</div>
+              <div class="bk-rule"></div>
+              <div class="bk-subtitle">System of Rebuild</div>
+              <div class="bk-line-v up"></div>
+            </div>
+          </div>
+          <!-- Spine -->
+          <div class="bf bf-spine">
+            <span class="bk-spine-text">Progressio · System of Rebuild</span>
+          </div>
+          <!-- Pages (right edge) -->
+          <div class="bf bf-pages"></div>
+          <!-- Top edge -->
+          <div class="bf bf-top"></div>
+          <!-- Bottom edge -->
+          <div class="bf bf-bottom"></div>
+          <!-- Back cover -->
+          <div class="bf bf-back">
+            <div class="bk-glow"></div>
+            <div class="bk-content">
+              <div class="bk-line-v tall down"></div>
+              <div class="bk-back-text">
+                The person you become<br>
+                will thank the person<br>
+                who opened this.
+              </div>
+              <div class="bk-back-rule"></div>
+              <div class="bk-grankers">Grankers</div>
+              <div class="bk-line-v tall up"></div>
+            </div>
+          </div>
+        </div>
+        <div class="book-hint">drag to rotate</div>
+      </div>
     </div>
   </div>
 
@@ -1304,6 +1528,64 @@ async function submit(){
 }
 
 document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key==='Enter') go(1); });
+
+/* ── 3D Book drag-to-rotate ── */
+(function(){
+  const book = document.getElementById('book3d');
+  if (!book) return;
+  const floatEl = book.parentElement; // .book-float
+
+  let dragging = false;
+  let lastX = 0, lastY = 0;
+  let rotX = 4, rotY = -28;
+
+  function apply() {
+    book.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  }
+
+  book.addEventListener('mousedown', e => {
+    dragging = true;
+    lastX = e.clientX; lastY = e.clientY;
+    floatEl.style.animationPlayState = 'paused';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    rotY += (e.clientX - lastX) * 0.5;
+    rotX -= (e.clientY - lastY) * 0.5;
+    rotX = Math.max(-40, Math.min(40, rotX));
+    apply();
+    lastX = e.clientX; lastY = e.clientY;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    floatEl.style.animationPlayState = 'running';
+  });
+
+  book.addEventListener('touchstart', e => {
+    dragging = true;
+    lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    floatEl.style.animationPlayState = 'paused';
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    rotY += (e.touches[0].clientX - lastX) * 0.5;
+    rotX -= (e.touches[0].clientY - lastY) * 0.5;
+    rotX = Math.max(-40, Math.min(40, rotX));
+    apply();
+    lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    floatEl.style.animationPlayState = 'running';
+  });
+})();
 </script>
 
 <!--
