@@ -1,0 +1,19 @@
+{
+  "name": "Progressio Journal",
+  "short_name": "Progressio",
+  "description": "A premium structured journal designed to help you write your story — one year, one journey.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07060a",
+  "theme_color": "#c9a84c",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "en",
+  "categories": ["lifestyle", "productivity"]
+}
