@@ -189,7 +189,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   width: 291px; height: 408px;
   position: relative;
   transform-style: preserve-3d;
-  transform: rotateX(4deg) rotateY(-28deg);
+  transform: rotateX(5deg) rotateY(-18deg);
   cursor: grab;
   user-select: none;
 }
@@ -236,13 +236,13 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .bf-top {
   top: 0; left: 0; width: 291px; height: 32px;
   transform: translateY(-16px) rotateX(90deg);
-  background: linear-gradient(to bottom, #131110 0%, #1e1a14 100%);
+  background: linear-gradient(to bottom, #c8b98a, #f0e5c8 40%, #ede0c4 60%, #d4c49a);
 }
 /* Bottom edge */
 .bf-bottom {
   top: 376px; left: 0; width: 291px; height: 32px;
   transform: translateY(16px) rotateX(-90deg);
-  background: linear-gradient(to top, #131110 0%, #1e1a14 100%);
+  background: linear-gradient(to top, #c8b98a, #f0e5c8 40%, #ede0c4 60%, #d4c49a);
 }
 /* Back */
 .bf-back {
@@ -331,6 +331,88 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   transform: translateX(-50%) translateY(-50%) rotate(180deg);
   white-space: nowrap;
 }
+/* ── Book open/close overlay ── */
+.book-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,.88);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease;
+  padding: 20px;
+}
+.book-overlay.bk-open {
+  opacity: 1; pointer-events: all;
+}
+.book-spread {
+  display: flex;
+  max-height: 90vh;
+  box-shadow: 0 40px 120px rgba(0,0,0,.9), 0 0 0 1px rgba(201,168,76,.08);
+  transform: scale(.92);
+  transition: transform .45s cubic-bezier(.34,1.2,.64,1);
+}
+.book-overlay.bk-open .book-spread { transform: scale(1); }
+.book-page {
+  width: min(42vw, 400px);
+  height: min(80vh, 580px);
+  padding: clamp(24px,4vw,48px) clamp(20px,3vw,40px);
+  overflow-y: auto;
+  font-family: Georgia, 'Times New Roman', serif;
+  background: #fafaf8;
+  color: #111;
+}
+.book-page:first-child {
+  border-right: 1px solid #ccc;
+}
+.book-page + .book-page { background: #f8f8f6; }
+.bk-p-h1 {
+  font-size: clamp(18px,2.2vw,26px); font-weight: 700;
+  text-align: center; margin-bottom: clamp(20px,3vh,36px); line-height: 1.2;
+}
+.bk-p-body {
+  font-size: clamp(10px,1.1vw,13px); line-height: 1.75;
+  text-align: center; margin-bottom: 16px; color: #222;
+}
+.bk-p-body.left-align { text-align: left; }
+.bk-p-line {
+  width: 100%; height: 1px; background: #333;
+  margin: 10px 0 20px;
+}
+.bk-p-italic {
+  font-size: clamp(9px,1vw,12px); font-style: italic; line-height: 1.8;
+  text-align: center; color: #333; margin: 0 0 24px;
+}
+.bk-p-cta {
+  font-size: clamp(20px,2.5vw,28px); font-weight: 700;
+  text-align: center; margin-top: clamp(24px,4vh,40px);
+}
+.bk-p-section {
+  font-size: clamp(9px,1vw,11px); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em;
+  margin: 14px 0 4px; color: #111;
+}
+.bk-p-section-body {
+  font-size: clamp(9px,1vw,11px); line-height: 1.7;
+  text-align: left; color: #333; margin-bottom: 10px;
+}
+.bk-p-bold { font-weight: 700; }
+.book-overlay-close {
+  position: fixed; top: 24px; right: 28px;
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+  color: #fff; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; transition: background .2s;
+  z-index: 9001;
+}
+.book-overlay-close:hover { background: rgba(255,255,255,.18); }
+/* Mobile: stack pages vertically */
+@media(max-width:640px){
+  .book-spread { flex-direction: column; overflow-y: auto; max-height: 88vh; }
+  .book-page { width: 100%; min-width: 0; height: auto; border-right: none !important; border-bottom: 1px solid #ccc; }
+  .book-page + .book-page { border-bottom: none; }
+}
+
 /* drag hint */
 .book-hint {
   position: absolute; bottom: -32px; left: 50%;
@@ -889,11 +971,7 @@ footer {
   .rm-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
   .rm-grid::before { display: none; }
   .features-grid { grid-template-columns: 1fr 1fr; }
-  .hero-book { right: 3%; }
-  .book-scene { width: 240px; height: 336px; }
-  .bf-front { width: 212px; height: 298px; top: 12px; left: 17px; }
-  .bf-spine { width: 34px; height: 298px; left: -17px; }
-  .bf-top { width: 212px; height: 34px; }
+  .book-scene { transform: scale(0.78); transform-origin: center center; }
   .proof-strip { gap: 48px; }
 }
 
@@ -915,7 +993,7 @@ footer {
   .features-grid { grid-template-columns: 1fr; gap: 2px; }
 
   .cover-section { padding: 64px 20px; }
-  .cover-iframe { height: 900px; }
+  .cover-iframe { height: 1060px; pointer-events: none; }
 
   .proof-strip { padding: 48px 20px; gap: 32px; }
   .proof-divider { display: none; }
@@ -938,7 +1016,7 @@ footer {
   .hero-title { font-size: clamp(48px, 14vw, 64px); }
   .wl-h { font-size: clamp(34px, 10vw, 42px); }
   .opts.col3 { grid-template-columns: 1fr; }
-  .cover-iframe { height: 980px; }
+  .cover-iframe { height: 1100px; }
   .rm-grid { grid-template-columns: 1fr; }
   .features-grid { grid-template-columns: 1fr; }
   .proof-strip { gap: 28px; }
@@ -1093,6 +1171,7 @@ footer {
       class="cover-iframe"
       title="Progressio Journal Cover Design"
       loading="lazy"
+      scrolling="no"
     ></iframe>
   </div>
 </section>
@@ -1269,6 +1348,41 @@ footer {
 <!-- ================================================================
      JAVASCRIPT
 ================================================================ -->
+<!-- ═══ BOOK OPEN OVERLAY ═══ -->
+<div class="book-overlay" id="bookOverlay" role="dialog" aria-modal="true" aria-label="Journal preview">
+  <button class="book-overlay-close" id="bookOverlayClose" aria-label="Close">✕</button>
+  <div class="book-spread">
+    <!-- Left page: Owner's Data -->
+    <div class="book-page">
+      <p class="bk-p-h1">Owner's Data</p>
+      <p class="bk-p-body">This journal is a personal record of the transformation process<br>that is undergone by:</p>
+      <div class="bk-p-line"></div>
+      <p class="bk-p-body">The taking of full responsibility for your life occurred on the day of:</p>
+      <div class="bk-p-line"></div>
+      <p class="bk-p-italic">If you have found this journal, you are looking at the strategic map of the Warrior. Each page is a battle recorded, won or lost, but always fought. Please, return this map to its strategist. Without it, he loses the advantage on the battlefield.</p>
+      <p class="bk-p-cta">Get to work!</p>
+    </div>
+    <!-- Right page: Fundamentals -->
+    <div class="book-page">
+      <p class="bk-p-h1">Fundamentals of Your Transformation</p>
+      <p class="bk-p-body">In moments of doubt, when you ask yourself "Why am I doing this at all?", return to this: <span class="bk-p-bold">Do this because you decided that the story of your life will be a story of ACTION, and not of INACTIVITY.</span></p>
+      <p class="bk-p-body">This journal is not just a collection of magic tricks. It is a system designed to help you build the most important skill in the world: keeping the word given to yourself. On these pages, you will turn your intentions into concrete actions, and a chaos of thoughts into a strategic plan.</p>
+      <p class="bk-p-body">For this system to work, all you need is to understand a few simple principles.</p>
+      <p class="bk-p-section">1. THE PRINCIPLE OF ARCHITECTURE: How this Journal is built</p>
+      <p class="bk-p-section-body">System, which you hold in your hands, has been divided into three 90-day "phases", each of which focuses on building a habit that brings you closer to achieving any goal. <span class="bk-p-bold">Remember: focus on one thing at a time is the key to achieving goals, and self-control is the key to self-discipline.</span></p>
+      <p class="bk-p-section">2. THE PRINCIPLE OF STARTING: Successful People Do Not Wait</p>
+      <p class="bk-p-section-body">The biggest potential thief is the word "someday". Your journey begins with one, simple decision: <span class="bk-p-bold">I am starting now.</span></p>
+      <p class="bk-p-section">3. THE PRINCIPLE OF GAMIFICATION: Measure this, Which is Important</p>
+      <p class="bk-p-section-body">Inside you will find mechanisms that allow you to track progress. Their purpose is to provide you with hard evidence of how your daily actions yield results. This is a mechanism that rewards consistency.</p>
+      <p class="bk-p-section">4. THE PRINCIPLE OF OWNERSHIP: This is Your Laboratory</p>
+      <p class="bk-p-section-body">Treat this journal as your personal laboratory. Frames and templates are a proven foundation, but the real magic begins when you start to adapt them to yourself.</p>
+      <p class="bk-p-section">5. THE PRINCIPLE OF THE MIRROR: Brutal Honesty</p>
+      <p class="bk-p-section-body">The only person you can cheat on these pages is yourself. But lying to the mirror does not change what can be seen in it. This journey makes sense only when it is based on brutal, uncompromising honesty.</p>
+      <p class="bk-p-cta">Get to work!</p>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ── CONFIG ─────────────────────────────────────────── */
 const SB_URL = 'https://olxwhtltqoksngilifob.supabase.co';
@@ -1529,22 +1643,40 @@ async function submit(){
 
 document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key==='Enter') go(1); });
 
-/* ── 3D Book drag-to-rotate ── */
+/* ── 3D Book drag-to-rotate + click-to-open ── */
 (function(){
-  const book = document.getElementById('book3d');
+  const book    = document.getElementById('book3d');
   if (!book) return;
   const floatEl = book.parentElement; // .book-float
+  const overlay = document.getElementById('bookOverlay');
+  const closeBtn= document.getElementById('bookOverlayClose');
 
-  let dragging = false;
+  let dragging  = false;
+  let moved     = false;
   let lastX = 0, lastY = 0;
-  let rotX = 4, rotY = -28;
+  let rotX = 5, rotY = -18;
 
   function apply() {
     book.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
   }
 
+  function openOverlay() {
+    overlay.classList.add('bk-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeOverlay() {
+    overlay.classList.remove('bk-open');
+    document.body.style.overflow = '';
+  }
+
+  // Close via button or backdrop click
+  closeBtn.addEventListener('click', closeOverlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeOverlay(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay(); });
+
+  /* ── Mouse ── */
   book.addEventListener('mousedown', e => {
-    dragging = true;
+    dragging = true; moved = false;
     lastX = e.clientX; lastY = e.clientY;
     floatEl.style.animationPlayState = 'paused';
     e.preventDefault();
@@ -1552,29 +1684,37 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
 
   document.addEventListener('mousemove', e => {
     if (!dragging) return;
-    rotY += (e.clientX - lastX) * 0.5;
-    rotX -= (e.clientY - lastY) * 0.5;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+    rotY += dx * 0.5;
+    rotX -= dy * 0.5;
     rotX = Math.max(-40, Math.min(40, rotX));
     apply();
     lastX = e.clientX; lastY = e.clientY;
   });
 
-  document.addEventListener('mouseup', () => {
+  document.addEventListener('mouseup', e => {
     if (!dragging) return;
     dragging = false;
     floatEl.style.animationPlayState = 'running';
+    if (!moved) openOverlay(); // click without drag → open
   });
 
+  /* ── Touch ── */
   book.addEventListener('touchstart', e => {
-    dragging = true;
+    dragging = true; moved = false;
     lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
     floatEl.style.animationPlayState = 'paused';
   }, { passive: true });
 
   document.addEventListener('touchmove', e => {
     if (!dragging) return;
-    rotY += (e.touches[0].clientX - lastX) * 0.5;
-    rotX -= (e.touches[0].clientY - lastY) * 0.5;
+    const dx = e.touches[0].clientX - lastX;
+    const dy = e.touches[0].clientY - lastY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+    rotY += dx * 0.5;
+    rotX -= dy * 0.5;
     rotX = Math.max(-40, Math.min(40, rotX));
     apply();
     lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
@@ -1584,6 +1724,7 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
     if (!dragging) return;
     dragging = false;
     floatEl.style.animationPlayState = 'running';
+    if (!moved) openOverlay();
   });
 })();
 </script>
