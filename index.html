@@ -1646,6 +1646,7 @@ const obs = new IntersectionObserver(entries=>{
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
 /* ── COUNTER ─────────────────────────────────────────── */
+let displayedCount = 0;
 async function fetchCount(){
   try{
     const r = await fetch(`${SB_URL}/rest/v1/${TABLE}?select=id`,{
@@ -1654,17 +1655,18 @@ async function fetchCount(){
     const rng = r.headers.get('content-range');
     if(rng){
       const n=parseInt(rng.split('/')[1],10)||0;
+      if(n <= displayedCount) return; // never go backwards
       const navEl=document.getElementById('nav-n');
       const proofEl=document.getElementById('proof-n');
       const heroEl=document.getElementById('hero-stat-n');
-      let c=0; const step=Math.max(1,n/(1000/16));
+      let c=displayedCount; const step=Math.max(1,(n-c)/(1000/16));
       const t=setInterval(()=>{
         c=Math.min(c+step,n);
         const v=Math.floor(c).toLocaleString();
         if(navEl) navEl.textContent=v;
         if(proofEl) proofEl.textContent=v;
         if(heroEl) heroEl.textContent=v;
-        if(c>=n)clearInterval(t);
+        if(c>=n){ clearInterval(t); displayedCount=n; }
       },16);
     }
   }catch(_){}
@@ -1745,12 +1747,14 @@ async function submit(){
       document.getElementById('wl-done').classList.add('show');
       // Optimistically increment counter for new signups (not duplicates)
       if(r.status!==409){
+        displayedCount = (displayedCount||0) + 1;
         ['nav-n','proof-n','hero-stat-n'].forEach(id=>{
           const el=document.getElementById(id);
-          if(el){ const cur=parseInt(el.textContent.replace(/,/g,''),10)||0; el.textContent=(cur+1).toLocaleString(); }
+          if(el) el.textContent=displayedCount.toLocaleString();
         });
+        // Delay fetchCount so Supabase has time to commit the row
+        setTimeout(fetchCount, 2000);
       }
-      fetchCount();
     } else throw new Error();
   }catch(_){
     btn.disabled=false;
