@@ -464,6 +464,35 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   .bk-nav-next { right: 4px; }
 }
 
+/* Scroll hint inside book page */
+.bk-scroll-hint {
+  display: block;
+  position: sticky;
+  bottom: 0;
+  text-align: center;
+  padding: 18px 0 10px;
+  background: linear-gradient(transparent, rgba(250,250,248,.97) 40%);
+  font-family: Georgia, serif;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #888;
+  pointer-events: none;
+  transition: opacity .4s;
+  margin-top: -56px;
+}
+.bk-scroll-hint span {
+  display: block;
+  font-size: 16px;
+  animation: bkBounce 1.4s ease-in-out infinite;
+  color: #aaa;
+  letter-spacing: 0;
+}
+@keyframes bkBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
 /* drag hint */
 .book-hint {
   position: absolute; bottom: -32px; left: 50%;
@@ -890,14 +919,16 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .wl-sub strong { color: var(--parch); font-style: normal; font-weight: 600; }
 
 .wl-perks {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 0; margin-bottom: 52px;
   border: 1px solid var(--edge);
 }
 .wl-perk-item {
   font-family: var(--ui); font-size: 10px; letter-spacing: .18em;
   text-transform: uppercase; color: var(--smoke);
-  padding: 14px 22px;
+  padding: 14px 16px;
+  text-align: center;
   border-right: 1px solid var(--edge);
 }
 .wl-perk-item:last-child { border-right: none; }
@@ -1053,8 +1084,8 @@ footer {
   .rm-grid { grid-template-columns: 1fr; gap: 28px; }
 
   .waitlist { padding: 72px 20px; }
-  .wl-perks { flex-direction: column; }
-  .wl-perk-item { border-right: none; border-bottom: 1px solid var(--edge); width: 100%; text-align: center; }
+  .wl-perks { grid-template-columns: 1fr; }
+  .wl-perk-item { border-right: none; border-bottom: 1px solid var(--edge); }
   .wl-perk-item:last-child { border-bottom: none; }
   .opts { grid-template-columns: 1fr; }
   .opts.col3 { grid-template-columns: 1fr 1fr; }
@@ -1761,6 +1792,20 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
   }
   bkPrev.addEventListener('click', () => { if (curSpread > 0) showSpread(curSpread - 1); });
   bkNext.addEventListener('click', () => { if (curSpread < spreads.length - 1) showSpread(curSpread + 1); });
+
+  // Scroll hints for book pages
+  document.querySelectorAll('.book-page').forEach(page => {
+    const hint = document.createElement('div');
+    hint.className = 'bk-scroll-hint';
+    hint.innerHTML = '<span>↓</span>scroll';
+    page.appendChild(hint);
+    function updateHint() {
+      const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight - 8;
+      hint.style.opacity = atBottom ? '0' : '1';
+    }
+    updateHint();
+    page.addEventListener('scroll', updateHint, { passive: true });
+  });
 
   function openOverlay() {
     showSpread(0);
