@@ -345,13 +345,14 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   opacity: 1; pointer-events: all;
 }
 .book-spread {
-  display: flex;
+  display: none;
   max-height: 90vh;
   box-shadow: 0 40px 120px rgba(0,0,0,.9), 0 0 0 1px rgba(201,168,76,.08);
   transform: scale(.92);
   transition: transform .45s cubic-bezier(.34,1.2,.64,1);
 }
-.book-overlay.bk-open .book-spread { transform: scale(1); }
+.book-spread.bk-active { display: flex; }
+.book-overlay.bk-open .book-spread.bk-active { transform: scale(1); }
 .book-page {
   width: min(42vw, 400px);
   height: min(80vh, 580px);
@@ -406,11 +407,61 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   z-index: 9001;
 }
 .book-overlay-close:hover { background: rgba(255,255,255,.18); }
+/* Spread navigation arrows */
+.bk-nav {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2);
+  color: #fff; font-size: 36px; cursor: pointer;
+  width: 44px; height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; transition: background .2s; z-index: 9002;
+  line-height: 1;
+}
+.bk-nav:hover { background: rgba(255,255,255,.18); }
+.bk-nav:disabled { opacity: .2; pointer-events: none; }
+.bk-nav-prev { left: 12px; }
+.bk-nav-next { right: 12px; }
+/* Quote page */
+.bk-quotes-page {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.bk-p-quote {
+  font-size: clamp(11px,1.15vw,14px); font-style: italic; line-height: 1.85;
+  text-align: center; margin: 0 0 clamp(20px,3vh,36px); color: #222;
+}
+.bk-p-quote-author {
+  display: block; font-style: normal; font-size: .88em; color: #666; margin-top: 6px;
+}
+/* Pactum Progressio page */
+.bk-pactum-page { display: flex; flex-direction: column; }
+.bk-p-h1-pactum { border-bottom: 2px solid #111; padding-bottom: 10px; }
+.bk-pact-text {
+  font-size: clamp(9px,1vw,12px); font-style: italic; line-height: 1.9;
+  text-align: center; color: #222; margin-bottom: 20px; flex: 1;
+}
+.bk-pact-text p { margin: 0 0 10px; }
+.bk-pact-text strong { font-style: normal; }
+.bk-p-sig-block { margin-top: auto; }
+.bk-p-sig-label {
+  font-family: Georgia, serif; font-size: clamp(10px,1.1vw,13px); font-weight: 600;
+  margin: 0 0 4px; color: #111;
+}
+.bk-p-sig-line { width: 65%; margin-bottom: 18px; }
+/* Contact line */
+.bk-p-contact {
+  display: flex; align-items: center; gap: 8px; margin-top: 16px;
+}
+.bk-p-contact-line {
+  flex: 1; height: 1px; background: #333;
+}
 /* Mobile: stack pages vertically */
 @media(max-width:640px){
-  .book-spread { flex-direction: column; overflow-y: auto; max-height: 88vh; }
+  .book-spread.bk-active { flex-direction: column; overflow-y: auto; max-height: 88vh; }
   .book-page { width: 100%; min-width: 0; height: auto; border-right: none !important; border-bottom: 1px solid #ccc; }
   .book-page + .book-page { border-bottom: none; }
+  .bk-nav { width: 36px; height: 56px; font-size: 26px; }
+  .bk-nav-prev { left: 4px; }
+  .bk-nav-next { right: 4px; }
 }
 
 /* drag hint */
@@ -1351,34 +1402,70 @@ footer {
 <!-- ═══ BOOK OPEN OVERLAY ═══ -->
 <div class="book-overlay" id="bookOverlay" role="dialog" aria-modal="true" aria-label="Journal preview">
   <button class="book-overlay-close" id="bookOverlayClose" aria-label="Close">✕</button>
-  <div class="book-spread">
-    <!-- Left page: Owner's Data -->
-    <div class="book-page">
-      <p class="bk-p-h1">Owner's Data</p>
-      <p class="bk-p-body">This journal is a personal record of the transformation process<br>that is undergone by:</p>
-      <div class="bk-p-line"></div>
-      <p class="bk-p-body">The taking of full responsibility for your life occurred on the day of:</p>
-      <div class="bk-p-line"></div>
-      <p class="bk-p-italic">If you have found this journal, you are looking at the strategic map of the Warrior. Each page is a battle recorded, won or lost, but always fought. Please, return this map to its strategist. Without it, he loses the advantage on the battlefield.</p>
-      <p class="bk-p-cta">Get to work!</p>
+  <button class="bk-nav bk-nav-prev" id="bkPrev" aria-label="Previous pages" disabled>&#8249;</button>
+  <button class="bk-nav bk-nav-next" id="bkNext" aria-label="Next pages">&#8250;</button>
+
+  <!-- Spread 1: Quotes + Owner Details -->
+  <div class="book-spread bk-active">
+    <!-- Left page: Quotes -->
+    <div class="book-page bk-quotes-page">
+      <p class="bk-p-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="bk-p-quote-author">~ Winston Churchill</span></p>
+      <p class="bk-p-quote">"Success is the sum of small efforts repeated day after day."<span class="bk-p-quote-author">~ Robert Collier</span></p>
+      <p class="bk-p-quote">"Whatever the mind of man can conceive and believe, it can achieve."<span class="bk-p-quote-author">~ Napoleon Hill</span></p>
     </div>
-    <!-- Right page: Fundamentals -->
+    <!-- Right page: Owner Details -->
     <div class="book-page">
-      <p class="bk-p-h1">Fundamentals of Your Transformation</p>
-      <p class="bk-p-body">In moments of doubt, when you ask yourself "Why am I doing this at all?", return to this: <span class="bk-p-bold">Do this because you decided that the story of your life will be a story of ACTION, and not of INACTIVITY.</span></p>
-      <p class="bk-p-body">This journal is not just a collection of magic tricks. It is a system designed to help you build the most important skill in the world: keeping the word given to yourself. On these pages, you will turn your intentions into concrete actions, and a chaos of thoughts into a strategic plan.</p>
-      <p class="bk-p-body">For this system to work, all you need is to understand a few simple principles.</p>
-      <p class="bk-p-section">1. THE PRINCIPLE OF ARCHITECTURE: How this Journal is built</p>
-      <p class="bk-p-section-body">System, which you hold in your hands, has been divided into three 90-day "phases", each of which focuses on building a habit that brings you closer to achieving any goal. <span class="bk-p-bold">Remember: focus on one thing at a time is the key to achieving goals, and self-control is the key to self-discipline.</span></p>
-      <p class="bk-p-section">2. THE PRINCIPLE OF STARTING: Successful People Do Not Wait</p>
-      <p class="bk-p-section-body">The biggest potential thief is the word "someday". Your journey begins with one, simple decision: <span class="bk-p-bold">I am starting now.</span></p>
-      <p class="bk-p-section">3. THE PRINCIPLE OF GAMIFICATION: Measure this, Which is Important</p>
-      <p class="bk-p-section-body">Inside you will find mechanisms that allow you to track progress. Their purpose is to provide you with hard evidence of how your daily actions yield results. This is a mechanism that rewards consistency.</p>
-      <p class="bk-p-section">4. THE PRINCIPLE OF OWNERSHIP: This is Your Laboratory</p>
-      <p class="bk-p-section-body">Treat this journal as your personal laboratory. Frames and templates are a proven foundation, but the real magic begins when you start to adapt them to yourself.</p>
-      <p class="bk-p-section">5. THE PRINCIPLE OF THE MIRROR: Brutal Honesty</p>
-      <p class="bk-p-section-body">The only person you can cheat on these pages is yourself. But lying to the mirror does not change what can be seen in it. This journey makes sense only when it is based on brutal, uncompromising honesty.</p>
-      <p class="bk-p-cta">Get to work!</p>
+      <p class="bk-p-h1">Owner details</p>
+      <p class="bk-p-body">This journal is a personal record of the transformation process that I am undergoing:</p>
+      <div class="bk-p-line"></div>
+      <p class="bk-p-body">Taking full responsibility for my life occurred on:</p>
+      <div class="bk-p-line"></div>
+      <p class="bk-p-italic">If you found this journal, you are looking at the Warrior's strategic map. Each page is a recorded battle, won or lost, but always fought. Please return this map to her strategist. Without it, she loses her advantage on the battlefield.</p>
+      <p class="bk-p-contact"><span style="font-size:clamp(10px,1.1vw,13px);font-weight:600;color:#111;white-space:nowrap;">Contact:</span><span class="bk-p-contact-line"></span></p>
+    </div>
+  </div>
+
+  <!-- Spread 2: Foundations + Pactum Progressio -->
+  <div class="book-spread">
+    <!-- Left page: The Foundations of Your Transformation -->
+    <div class="book-page">
+      <p class="bk-p-h1">The Foundations of Your Transformation</p>
+      <p class="bk-p-body">In moments of doubt, when you ask yourself, "Why am I even doing this?", come back to this sentence: <span class="bk-p-bold">You are doing this because you have decided that the story of your life will be one of ACTION, not PASSIVITY.</span></p>
+      <p class="bk-p-body">This journal isn't a collection of magic tricks. It's a system designed to help you build the most important skill in the world: keeping your word to yourself. Within these pages, you'll transform your intentions into concrete actions, and transform your chaotic thoughts into strategic planning.</p>
+      <p class="bk-p-body">For this system to work, you just need to understand a few simple rules.</p>
+      <p class="bk-p-section">1. PRINCIPLE OF ARCHITECTURE: How This Journal Is Built</p>
+      <p class="bk-p-section-body">The system you're holding in your hands is divided into three 90-day "phases," each focused on building a habit that will bring you closer to achieving any goal. <span class="bk-p-bold">Remember: focusing on one thing at a time is key to achieving your goals, and self-control is key to discipline.</span></p>
+      <p class="bk-p-section-body">The year in this journal consists of twelve equal, 30-day cycles. This structure intentionally breaks away from the traditional calendar and gives you complete control over your time. You decide when your "New Year" begins. This also leaves 5–6 free days per year, which serve as a reserve for unexpected events.</p>
+      <p class="bk-p-section-body">To unify the narrative, I address you as a male throughout this journal. This is a stylistic choice—the principles and tools are universal. I hope that regardless of your gender, you will find the strength for your own transformation here.</p>
+      <p class="bk-p-section">2. START RULE: Successful People Don't Wait</p>
+      <p class="bk-p-section-body">The greatest thief of potential is the word "someday." Successful people know that the perfect moment doesn't exist. Think about how far you can go in the few months others spend waiting for the New Year. Your journey begins with one simple decision: <span class="bk-p-bold">I'm starting now.</span></p>
+      <p class="bk-p-section">3. GAMALIZATION PRINCIPLE: Measure What Matters</p>
+      <p class="bk-p-section-body">Inside, you'll find mechanisms that allow you to track your progress. Remember, their purpose isn't to collect points for the sake of satisfaction, nor are they a goal in and of themselves. Their purpose is to provide you with hard evidence that your daily actions are producing results. This is a mechanism that rewards consistency.</p>
+      <p class="bk-p-section">4. OWNERSHIP PRINCIPLE: This is your laboratory</p>
+      <p class="bk-p-section-body">Treat this journal as your personal laboratory. Frameworks and templates are a proven foundation, but the real magic begins when you begin to adapt them to your needs. Draw, write, change, experiment. This tool should adapt to you, not you to it.</p>
+      <p class="bk-p-section">5. MIRROR PRINCIPLE: Brutal Honesty</p>
+      <p class="bk-p-section-body">Finally, the most important rule: The only person you can deceive on these pages is yourself. But lying to the mirror doesn't change what you see there. This journey is only worthwhile if it's based on brutal, uncompromising honesty.</p>
+      <p class="bk-p-cta">Let's do it!</p>
+    </div>
+    <!-- Right page: Pactum Progressio -->
+    <div class="book-page bk-pactum-page">
+      <p class="bk-p-h1 bk-p-h1-pactum">Pactum Progressio</p>
+      <div class="bk-pact-text">
+        <p>I, fully aware of my decision, take my oath today<br>before the only judge who matters – the man I intend to become.</p>
+        <p>I vow to keep my word to myself, to turn excuses<br>into discipline, and intentions into daily action.</p>
+        <p><strong>I swear to carry out the plans I create on these pages.</strong></p>
+        <p>I understand that this journal is not just a place to write,<br>but a contract I am making with my future.</p>
+        <p>I swear to treat this journal as a witness to my transformation.</p>
+        <p>I know that its strength lies not in the perfection of each entry, but in its consistency<br>and courage to continue working, even after stumbling.</p>
+        <p>I know that abandoning this pact is a tacit consent to stagnation.</p>
+        <p><strong>By signing, I choose to fight. I choose to grow. I choose to take full responsibility.</strong></p>
+      </div>
+      <div class="bk-p-sig-block">
+        <p class="bk-p-sig-label">Signature:</p>
+        <div class="bk-p-line bk-p-sig-line"></div>
+        <p class="bk-p-sig-label">Date:</p>
+        <div class="bk-p-line bk-p-sig-line"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1660,7 +1747,23 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
     book.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
   }
 
+  // Spread navigation
+  const spreads  = document.querySelectorAll('.book-spread');
+  const bkPrev   = document.getElementById('bkPrev');
+  const bkNext   = document.getElementById('bkNext');
+  let curSpread  = 0;
+
+  function showSpread(i) {
+    spreads.forEach((s, idx) => s.classList.toggle('bk-active', idx === i));
+    bkPrev.disabled = (i === 0);
+    bkNext.disabled = (i === spreads.length - 1);
+    curSpread = i;
+  }
+  bkPrev.addEventListener('click', () => { if (curSpread > 0) showSpread(curSpread - 1); });
+  bkNext.addEventListener('click', () => { if (curSpread < spreads.length - 1) showSpread(curSpread + 1); });
+
   function openOverlay() {
+    showSpread(0);
     overlay.classList.add('bk-open');
     document.body.style.overflow = 'hidden';
   }
