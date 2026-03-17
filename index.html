@@ -1501,6 +1501,10 @@ footer {
   </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script>
 /* ── CONFIG ─────────────────────────────────────────── */
 const SB_URL = 'https://olxwhtltqoksngilifob.supabase.co';
@@ -1645,8 +1649,46 @@ const obs = new IntersectionObserver(entries=>{
 },{threshold:.08});
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
+/* ── FIREBASE ────────────────────────────────────────── */
+const fbApp = firebase.initializeApp({
+  apiKey:            "AIzaSyCSqyrUodb_QksejAxF08h4MDbgCrfXM9A",
+  authDomain:        "progressio-e380c.firebaseapp.com",
+  projectId:         "progressio-e380c",
+  storageBucket:     "progressio-e380c.firebasestorage.app",
+  messagingSenderId: "901173874681",
+  appId:             "1:901173874681:web:96fe8aead3989f8a8e7728"
+});
+const fbDb = firebase.firestore();
+const COUNTER_DOC = fbDb.doc('counters/waitlist');
+
 /* ── COUNTER ─────────────────────────────────────────── */
 let displayedCount = 0;
+
+function animateToCount(n){
+  if(n <= displayedCount) return;
+  const navEl=document.getElementById('nav-n');
+  const proofEl=document.getElementById('proof-n');
+  const heroEl=document.getElementById('hero-stat-n');
+  let c=displayedCount; const step=Math.max(1,(n-c)/(1000/16));
+  const t=setInterval(()=>{
+    c=Math.min(c+step,n);
+    const v=Math.floor(c).toLocaleString();
+    if(navEl) navEl.textContent=v;
+    if(proofEl) proofEl.textContent=v;
+    if(heroEl) heroEl.textContent=v;
+    if(c>=n){ clearInterval(t); displayedCount=n; }
+  },16);
+}
+
+// Real-time Firebase listener — updates on every device instantly
+COUNTER_DOC.onSnapshot(snap=>{
+  if(snap && snap.exists){
+    const n = snap.data().count || 0;
+    animateToCount(n);
+  }
+});
+
+// Seed initial count from Supabase (only once at load)
 async function fetchCount(){
   try{
     const r = await fetch(`${SB_URL}/rest/v1/${TABLE}?select=id`,{
@@ -1655,23 +1697,16 @@ async function fetchCount(){
     const rng = r.headers.get('content-range');
     if(rng){
       const n=parseInt(rng.split('/')[1],10)||0;
-      if(n <= displayedCount) return; // never go backwards
-      const navEl=document.getElementById('nav-n');
-      const proofEl=document.getElementById('proof-n');
-      const heroEl=document.getElementById('hero-stat-n');
-      let c=displayedCount; const step=Math.max(1,(n-c)/(1000/16));
-      const t=setInterval(()=>{
-        c=Math.min(c+step,n);
-        const v=Math.floor(c).toLocaleString();
-        if(navEl) navEl.textContent=v;
-        if(proofEl) proofEl.textContent=v;
-        if(heroEl) heroEl.textContent=v;
-        if(c>=n){ clearInterval(t); displayedCount=n; }
-      },16);
+      animateToCount(n);
+      // Sync Firebase counter if it's behind Supabase (e.g. first run)
+      COUNTER_DOC.get().then(snap=>{
+        const fbCount = (snap.exists && snap.data().count) || 0;
+        if(n > fbCount) COUNTER_DOC.set({ count: n }, { merge: true });
+      });
     }
   }catch(_){}
 }
-fetchCount(); setInterval(fetchCount,30000);
+fetchCount();
 
 /* ── FORM LOGIC ──────────────────────────────────────── */
 let step=1;
@@ -1745,15 +1780,13 @@ async function submit(){
     if([200,201,409].includes(r.status)){
       document.getElementById('form-wrap').style.display='none';
       document.getElementById('wl-done').classList.add('show');
-      // Optimistically increment counter for new signups (not duplicates)
+      // Increment Firebase counter for new signups (not duplicates)
+      // onSnapshot will propagate the new value to all devices in real-time
       if(r.status!==409){
-        displayedCount = (displayedCount||0) + 1;
-        ['nav-n','proof-n','hero-stat-n'].forEach(id=>{
-          const el=document.getElementById(id);
-          if(el) el.textContent=displayedCount.toLocaleString();
-        });
-        // Delay fetchCount so Supabase has time to commit the row
-        setTimeout(fetchCount, 2000);
+        COUNTER_DOC.set(
+          { count: firebase.firestore.FieldValue.increment(1) },
+          { merge: true }
+        );
       }
     } else throw new Error();
   }catch(_){
