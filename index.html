@@ -1681,12 +1681,17 @@ function animateToCount(n){
 }
 
 // Real-time Firebase listener — updates on every device instantly
-COUNTER_DOC.onSnapshot(snap=>{
-  if(snap && snap.exists){
-    const n = snap.data().count || 0;
-    animateToCount(n);
-  }
-});
+let fbLive = false; // tracks if Firebase is connected and working
+COUNTER_DOC.onSnapshot(
+  snap=>{
+    fbLive = true;
+    if(snap && snap.exists){
+      const n = snap.data().count || 0;
+      animateToCount(n);
+    }
+  },
+  err=>{ fbLive = false; /* Firebase unavailable — Supabase polling fallback covers this */ }
+);
 
 // Seed initial count from Supabase (only once at load)
 async function fetchCount(){
@@ -1701,12 +1706,14 @@ async function fetchCount(){
       // Sync Firebase counter if it's behind Supabase (e.g. first run)
       COUNTER_DOC.get().then(snap=>{
         const fbCount = (snap.exists && snap.data().count) || 0;
-        if(n > fbCount) COUNTER_DOC.set({ count: n }, { merge: true });
-      });
+        if(n > fbCount) COUNTER_DOC.set({ count: n }, { merge: true }).catch(()=>{});
+      }).catch(()=>{});
     }
   }catch(_){}
 }
 fetchCount();
+// Fallback: poll Supabase every 60s so the counter stays fresh even if Firebase is unavailable
+setInterval(fetchCount, 60000);
 
 /* ── FORM LOGIC ──────────────────────────────────────── */
 let step=1;
@@ -1786,7 +1793,10 @@ async function submit(){
         COUNTER_DOC.set(
           { count: firebase.firestore.FieldValue.increment(1) },
           { merge: true }
-        );
+        ).catch(()=>{
+          // Firebase write failed (e.g. security rules) — refresh Supabase count as fallback
+          fetchCount();
+        });
       }
     } else throw new Error();
   }catch(_){
