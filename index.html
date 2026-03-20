@@ -289,6 +289,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   transform: translateZ(16px);
   transform-origin: 0% 50%;
   overflow: hidden;
+  backface-visibility: hidden;
   box-shadow:
     2px 4px 12px rgba(0,0,0,.7),
     8px 20px 60px rgba(0,0,0,.85),
@@ -335,21 +336,21 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
     repeating-linear-gradient(
       to bottom,
       transparent 0px, transparent 1px,
-      rgba(160,135,95,.1) 1px, rgba(160,135,95,.1) 2px
+      rgba(80,60,30,.18) 1px, rgba(80,60,30,.18) 2px
     ),
-    linear-gradient(to right, #c2b07a 0%, #ede0c4 30%, #f5ead0 60%, #e8d5a8 100%);
+    linear-gradient(to right, #8a7040 0%, #b8996a 30%, #c9a84c 60%, #a07838 100%);
 }
 /* Top edge */
 .bf-top {
   top: 0; left: 0; width: 291px; height: 32px;
   transform: translateY(-16px) rotateX(90deg);
-  background: linear-gradient(to bottom, #c2b07a, #f0e5c8 40%, #ede0c4 60%, #d4c49a);
+  background: linear-gradient(to bottom, #7a5e20, #a07838 40%, #b8996a 60%, #8a7040);
 }
 /* Bottom edge */
 .bf-bottom {
   top: 376px; left: 0; width: 291px; height: 32px;
   transform: translateY(16px) rotateX(-90deg);
-  background: linear-gradient(to top, #c2b07a, #f0e5c8 40%, #ede0c4 60%, #d4c49a);
+  background: linear-gradient(to top, #7a5e20, #a07838 40%, #b8996a 60%, #8a7040);
 }
 /* Back */
 .bf-back {
@@ -454,6 +455,40 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   font-size: 5px; letter-spacing: .12em; text-transform: uppercase;
   color: #666; margin-bottom: 3px;
 }
+/* Title page (left side of inner spread) */
+.is-title-page {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 14px 10px;
+  overflow: hidden;
+}
+.is-title-line {
+  width: 1px; height: 22px;
+  background: linear-gradient(to bottom, transparent, rgba(140,100,30,.55));
+  margin-bottom: 8px;
+}
+.is-title-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 3.5px; color: #8a6820;
+  text-transform: uppercase; text-align: center;
+}
+.is-title-rule {
+  width: 44px; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(140,100,30,.5), transparent);
+  margin: 5px 0;
+}
+.is-title-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5px; font-style: italic; font-weight: 300;
+  letter-spacing: 2px; color: rgba(140,100,30,.65);
+  text-transform: uppercase; text-align: center;
+}
+.is-title-line-up {
+  width: 1px; height: 22px;
+  background: linear-gradient(to top, transparent, rgba(140,100,30,.55));
+  margin-top: 8px;
+}
 
 /* ── Face content ── */
 .bk-glow {
@@ -470,7 +505,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   display: flex; flex-direction: column; align-items: center;
   z-index: 2;
 }
-.bf-front .bk-content { top: 80px; }
+.bf-front .bk-content { top: 120px; }
 .bf-back  .bk-content {
   top: 0; bottom: 0; justify-content: center;
   padding: 0 44px;
@@ -556,20 +591,22 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .book-overlay.bk-open .book-spread.bk-active { transform: scale(1); }
 .book-page {
   width: min(42vw, 400px);
-  height: min(80vh, 580px);
-  padding: clamp(24px,4vw,48px) clamp(20px,3vw,40px);
-  overflow-y: auto;
+  height: min(82vh, 600px);
+  padding: clamp(16px,2.5vw,40px) clamp(16px,2.5vw,36px);
+  overflow: hidden;
   font-family: Georgia, 'Times New Roman', serif;
   background: #fafaf8;
   color: #111;
+  display: flex;
+  flex-direction: column;
 }
 .book-page:first-child {
   border-right: 1px solid #ccc;
 }
 .book-page + .book-page { background: #f8f8f6; }
 .bk-p-h1 {
-  font-size: clamp(18px,2.2vw,26px); font-weight: 700;
-  text-align: center; margin-bottom: clamp(20px,3vh,36px); line-height: 1.2;
+  font-size: clamp(15px,1.8vw,22px); font-weight: 700;
+  text-align: center; margin-bottom: clamp(10px,1.5vh,22px); line-height: 1.2;
 }
 .bk-p-body {
   font-size: clamp(10px,1.1vw,13px); line-height: 1.75;
@@ -637,17 +674,17 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .bk-pactum-page { display: flex; flex-direction: column; }
 .bk-p-h1-pactum { border-bottom: 2px solid #111; padding-bottom: 10px; }
 .bk-pact-text {
-  font-size: clamp(9px,1vw,12px); font-style: italic; line-height: 1.9;
-  text-align: center; color: #222; margin-bottom: 20px; flex: 1;
+  font-size: clamp(8px,0.85vw,11px); font-style: italic; line-height: 1.75;
+  text-align: center; color: #222; margin-bottom: clamp(8px,1.2vh,16px); flex: 1;
 }
-.bk-pact-text p { margin: 0 0 10px; }
+.bk-pact-text p { margin: 0 0 clamp(5px,0.8vh,9px); }
 .bk-pact-text strong { font-style: normal; }
 .bk-p-sig-block { margin-top: auto; }
 .bk-p-sig-label {
-  font-family: Georgia, serif; font-size: clamp(10px,1.1vw,13px); font-weight: 600;
-  margin: 0 0 4px; color: #111;
+  font-family: Georgia, serif; font-size: clamp(9px,0.95vw,12px); font-weight: 600;
+  margin: 0 0 3px; color: #111;
 }
-.bk-p-sig-line { width: 65%; margin-bottom: 18px; }
+.bk-p-sig-line { width: 65%; margin-bottom: clamp(8px,1.2vh,14px); }
 /* Contact line */
 .bk-p-contact {
   display: flex; align-items: center; gap: 8px; margin-top: 16px;
@@ -657,8 +694,8 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 /* Mobile: stack pages vertically */
 @media(max-width:640px){
-  .book-spread.bk-active { flex-direction: column; overflow-y: auto; max-height: 88vh; }
-  .book-page { width: 100%; min-width: 0; height: auto; border-right: none !important; border-bottom: 1px solid #ccc; }
+  .book-spread.bk-active { flex-direction: column; overflow-y: auto; max-height: 90vh; }
+  .book-page { width: 100%; min-width: 0; height: auto; max-height: none; overflow: visible; border-right: none !important; border-bottom: 1px solid #ccc; display: block; }
   .book-page + .book-page { border-bottom: none; }
   .bk-nav { width: 36px; height: 56px; font-size: 26px; }
   .bk-nav-prev { left: 4px; }
@@ -667,43 +704,45 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 
 /* ── Foundations compact page ── */
 .bk-foundations-page {
-  overflow: hidden; /* no scroll */
+  overflow: hidden;
   display: flex; flex-direction: column;
 }
 .bk-foundations-intro {
-  font-family: Georgia, serif; font-size: clamp(10px, 1.1vw, 12.5px);
+  font-family: Georgia, serif; font-size: clamp(9px, 0.95vw, 11.5px);
   font-style: italic; color: #555; text-align: center;
-  margin-bottom: clamp(12px, 1.6vh, 20px); line-height: 1.5;
+  margin-bottom: clamp(8px, 1.1vh, 14px); line-height: 1.4;
 }
 .bk-rules {
   display: flex; flex-direction: column;
-  gap: clamp(7px, 1vh, 11px);
-  margin-bottom: clamp(10px, 1.4vh, 16px);
+  gap: clamp(4px, 0.7vh, 8px);
+  margin-bottom: clamp(6px, 0.9vh, 12px);
+  flex: 1;
 }
 .bk-rule-item {
-  display: flex; align-items: flex-start; gap: 12px;
+  display: flex; align-items: flex-start; gap: 10px;
   border: 1px solid #e0dcd5;
-  padding: clamp(8px, 1.1vh, 13px) clamp(10px, 1.2vw, 16px);
+  padding: clamp(5px, 0.7vh, 9px) clamp(8px, 1vw, 13px);
   background: #f6f5f2;
 }
 .bk-rule-num {
-  font-family: Georgia, serif; font-size: clamp(15px, 1.7vw, 20px);
+  font-family: Georgia, serif; font-size: clamp(13px, 1.4vw, 17px);
   font-style: italic; color: #888; flex-shrink: 0;
-  width: 20px; text-align: center; line-height: 1.3;
+  width: 18px; text-align: center; line-height: 1.3;
 }
 .bk-rule-body {
-  display: flex; flex-direction: column; gap: 2px;
+  display: flex; flex-direction: column; gap: 1px;
 }
 .bk-rule-body strong {
-  font-family: Georgia, serif; font-size: clamp(9px, 1vw, 11px);
+  font-family: Georgia, serif; font-size: clamp(8px, 0.85vw, 10.5px);
   font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #111;
 }
 .bk-rule-body span {
-  font-family: Georgia, serif; font-size: clamp(9px, 1vw, 11px);
-  line-height: 1.55; color: #444;
+  font-family: Georgia, serif; font-size: clamp(8px, 0.85vw, 10.5px);
+  line-height: 1.5; color: #444;
 }
 .bk-foundations-page .bk-p-cta {
-  margin-top: auto;
+  font-size: clamp(16px, 2vw, 24px);
+  margin-top: clamp(8px, 1vh, 16px);
 }
 
 /* Scroll hint inside book page */
@@ -921,12 +960,12 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   letter-spacing: -.03em;
 }
 .ss-label {
-  font-family: var(--ui); font-size: 9px; letter-spacing: .4em;
+  font-family: var(--ui); font-size: clamp(9px, 0.7vw, 13px); letter-spacing: .4em;
   text-transform: uppercase; color: var(--smoke); margin-top: 10px;
   display: block;
 }
 .ss-sub {
-  font-family: var(--serif); font-size: 13px; font-style: italic;
+  font-family: var(--serif); font-size: clamp(13px, 1.1vw, 20px); font-style: italic;
   color: var(--gold-lo); margin-top: 6px; line-height: 1.4;
 }
 
@@ -994,16 +1033,77 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .ps-title {
   font-family: var(--serif); font-size: clamp(22px, 3vw, 36px);
   font-weight: 700; color: var(--parch); line-height: 1.15;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .ps-title em { font-style: italic; color: var(--gold); }
-.ps-date {
+.ps-desc {
+  font-family: var(--serif); font-size: clamp(13px, 1.15vw, 16px);
+  font-style: italic; color: var(--smoke); line-height: 1.6;
+  max-width: 480px; margin-bottom: clamp(20px, 2.5vh, 32px);
+}
+/* Progress bar */
+.ps-progress-wrap {
+  display: flex; flex-direction: column; gap: 8px;
+  max-width: 420px;
+}
+.ps-progress-track {
+  width: 100%; height: 3px;
+  background: var(--edge);
+  position: relative; overflow: hidden;
+}
+.ps-progress-fill {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  background: linear-gradient(to right, var(--gold-lo), var(--gold));
+  width: 78%;
+  transition: width 1.2s var(--silk);
+}
+.ps-progress-label {
   font-family: var(--ui); font-size: 9px; letter-spacing: .22em;
   text-transform: uppercase; color: var(--smoke);
 }
 .ps-bar {
   width: 1px; background: var(--edge); flex-shrink: 0;
 }
+/* Right CTA column */
+.ps-right {
+  display: flex; flex-direction: column; align-items: flex-start;
+  justify-content: center; gap: 14px;
+  padding: clamp(40px, 5vh, 64px) clamp(32px, 5vw, 72px);
+  flex-shrink: 0; min-width: clamp(240px, 28vw, 360px);
+}
+.ps-urgency-badge {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .32em;
+  text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 8px;
+}
+.ps-urgency-badge::before {
+  content: ''; width: 18px; height: 1px; background: var(--gold-lo);
+}
+.ps-urgency-title {
+  font-family: var(--serif); font-size: clamp(18px, 2vw, 28px);
+  font-weight: 700; color: var(--white); line-height: 1.2;
+}
+.ps-urgency-sub {
+  font-family: var(--serif); font-size: clamp(12px, 1vw, 15px);
+  font-style: italic; color: var(--ash); line-height: 1.55;
+}
+.ps-join-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--ui); font-size: 10px; font-weight: 500;
+  letter-spacing: .26em; text-transform: uppercase;
+  color: var(--ink); background: var(--gold);
+  padding: 14px 32px;
+  transition: background .3s, transform .2s;
+  margin-top: 6px;
+}
+.ps-join-btn:hover { background: var(--gold-hi); transform: translateY(-2px); }
+.ps-see-more {
+  font-family: var(--ui); font-size: 10px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--smoke);
+  transition: color .3s;
+}
+.ps-see-more:hover { color: var(--ash); }
+/* Old ps-cta kept for mobile fallback */
 .ps-cta {
   display: flex; align-items: center; justify-content: center; gap: 12px;
   padding: clamp(40px, 5vh, 64px) clamp(32px, 5vw, 72px);
@@ -1075,7 +1175,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   letter-spacing: .06em;
 }
 .wl-inner {
-  max-width: 640px; width:100%;
+  max-width: clamp(640px, 50vw, 820px); width:100%;
   position: relative; z-index: 2;
   text-align: center;
 }
@@ -1178,23 +1278,23 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .wl-err.show { display:block; }
 .wl-note { font-family: var(--ui); font-size: 10px; letter-spacing: .08em; color: var(--ash); margin-top: 14px; }
 .wl-social-proof {
-  display: flex; align-items: center; gap: 14px;
-  margin-top: 28px; padding-top: 24px;
+  display: flex; align-items: center; gap: clamp(14px, 2vw, 28px);
+  margin-top: clamp(28px, 3vh, 44px); padding-top: clamp(24px, 2.5vh, 36px);
   border-top: 1px solid var(--edge);
 }
 .wl-sp-count {
-  font-family: var(--serif); font-size: 40px; font-weight: 300;
+  font-family: var(--serif); font-size: clamp(40px, 4vw, 68px); font-weight: 300;
   color: var(--gold); letter-spacing: -.02em; line-height: 1;
 }
 .wl-sp-text {
-  display: flex; flex-direction: column; gap: 3px;
+  display: flex; flex-direction: column; gap: 4px;
 }
 .wl-sp-label {
-  font-family: var(--ui); font-size: 9px; letter-spacing: .28em;
+  font-family: var(--ui); font-size: clamp(9px, 0.75vw, 13px); letter-spacing: .28em;
   text-transform: uppercase; color: var(--parch);
 }
 .wl-sp-sub {
-  font-family: var(--ui); font-size: 9px; letter-spacing: .1em;
+  font-family: var(--ui); font-size: clamp(9px, 0.7vw, 12px); letter-spacing: .1em;
   color: var(--ash);
 }
 
@@ -1278,6 +1378,7 @@ footer {
   .ps-inner { flex-direction: column; }
   .ps-bar { display: none; }
   .ps-left { padding: 36px 20px 24px; }
+  .ps-right { padding: 0 20px 36px; min-width: 0; width: 100%; }
   .ps-cta { justify-content: flex-start; padding: 0 20px 36px; }
 
   .waitlist { padding: 72px 20px; }
@@ -1396,23 +1497,20 @@ footer {
           <!-- Inner page spread (visible when cover opens) -->
           <div class="bf bf-inner-spread">
             <div class="is-pages">
-              <!-- Left page: Quotes -->
+              <!-- Left page: Title page -->
+              <div class="is-title-page">
+                <div class="is-title-line"></div>
+                <div class="is-title-brand">Progressio</div>
+                <div class="is-title-rule"></div>
+                <div class="is-title-sub">System of Rebuild</div>
+                <div class="is-title-line-up"></div>
+              </div>
+              <!-- Right page: Opening quotes -->
               <div class="is-page">
                 <p class="is-p-header">Opening</p>
                 <p class="is-p-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="is-p-author">~ W. Churchill</span></p>
                 <p class="is-p-quote">"Success is the sum of small efforts repeated day after day."<span class="is-p-author">~ R. Collier</span></p>
                 <p class="is-p-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="is-p-author">~ N. Hill</span></p>
-              </div>
-              <!-- Right page: Owner details -->
-              <div class="is-page">
-                <p class="is-p-header">Owner</p>
-                <p class="is-p-label">Name</p>
-                <div class="is-p-line"></div>
-                <p class="is-p-body">This journal is a personal record of the transformation process I am undergoing.</p>
-                <p class="is-p-label">Journey began on</p>
-                <div class="is-p-line"></div>
-                <p class="is-p-label">Contact</p>
-                <div class="is-p-line"></div>
               </div>
             </div>
           </div>
@@ -1522,18 +1620,25 @@ footer {
     <div class="ps-left">
       <div class="ps-tag">
         <div class="ps-live-dot"></div>
-        In progress
+        Production in progress
       </div>
-      <h3 class="ps-title">Full graphic design —<br><em>every page finalized</em></h3>
-      <p class="ps-date">March 2026</p>
+      <h3 class="ps-title">400 pages.<br><em>Every detail built by hand.</em></h3>
+      <p class="ps-desc">12 monthly cycles, 3 phases, 90-day architecture — all hand-crafted. Founding Members lock in the lowest price before launch. No payment now.</p>
+      <div class="ps-progress-wrap">
+        <div class="ps-progress-track">
+          <div class="ps-progress-fill"></div>
+        </div>
+        <span class="ps-progress-label">78% complete — shipping Q2 2026</span>
+      </div>
     </div>
     <div class="ps-bar"></div>
-    <a href="work.html" class="ps-cta">
-      <span>See what we're building</span>
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
+    <div class="ps-right">
+      <div class="ps-urgency-badge">Founding Membership</div>
+      <p class="ps-urgency-title">Lock in your price.<br>Before it goes up.</p>
+      <p class="ps-urgency-sub">Early members get the lowest price<br>+ community access on Skool.<br>Spots are limited.</p>
+      <a href="#waitlist" class="ps-join-btn">Reserve My Spot →</a>
+      <a href="work.html" class="ps-see-more">See what we're building ↗</a>
+    </div>
   </div>
 </section>
 
