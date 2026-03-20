@@ -215,23 +215,22 @@
     to   { transform: scaleX(1); opacity: 1; }
   }
   @media(max-width:700px){
-    .covers-row { flex-direction: column; align-items: center; gap: 24px; }
+    body { padding: 16px; justify-content: flex-start; min-height: unset; }
+    .covers-row { flex-direction: column; align-items: center; gap: 0; }
     /* Front (child 3) on top, Back (child 1) on bottom, Spine hidden */
     .covers-row > *:nth-child(2) { display: none; }
-    .covers-row > *:nth-child(1) { order: 2; }
+    .covers-row > *:nth-child(1) { display: none; }
     .covers-row > *:nth-child(3) { order: 1; }
   }
 </style>
 </head>
 <body>
 
-<div class="ui-label">Progressio · B5 154×216mm · Back &amp; Spine &amp; Front</div>
 
 <div class="covers-row">
 
   <!-- BACK -->
   <div class="cover-unit">
-    <div class="cover-unit-label">Back</div>
     <div class="cover back">
       <div class="bg-glow"></div>
       <div class="content">
@@ -251,7 +250,6 @@
 
   <!-- SPINE -->
   <div class="spine-wrap">
-    <div class="cover-unit-label">Spine</div>
     <div class="spine">
       <div class="spine-text">Progressio · System of Rebuild</div>
     </div>
@@ -259,7 +257,6 @@
 
   <!-- FRONT -->
   <div class="cover-unit">
-    <div class="cover-unit-label">Front</div>
     <div class="cover front">
       <div class="bg-glow"></div>
       <div class="content">
