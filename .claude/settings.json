@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r 'if (.tool_input.command | test(\"git push\")) then .tool_input.command | capture(\"origin (?<branch>\\\\S+)\") | {systemMessage: \"PR link: https://github.com/GRKarol/GRKarol.v2.github.io/compare/master...\\(.branch)\"} | tojson else empty end' 2>/dev/null || true",
+            "statusMessage": "Generating PR link..."
+          }
+        ]
+      }
+    ]
+  }
+}
