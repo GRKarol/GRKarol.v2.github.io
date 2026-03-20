@@ -255,17 +255,20 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .book-3d * { pointer-events: none; }
 
 /* ── Opening animation states ── */
-.book-3d.book-will-open {
-  transform: rotateX(2deg) rotateY(-5deg) !important;
-  transition: transform 0.4s cubic-bezier(.4,0,.2,1) !important;
+/* State: cover-open (first click) */
+.book-3d.book-cover-open {
+  transform: rotateX(2deg) rotateY(-10deg) !important;
+  transition: transform 0.45s cubic-bezier(.4,0,.2,1) !important;
+  cursor: pointer !important;
 }
-.book-3d.book-will-open .bf-front {
-  transform: translateZ(16px) rotateY(-175deg);
-  transition: transform 0.6s cubic-bezier(.4,0,.2,1) 0.25s;
+.book-3d.book-cover-open .bf-front {
+  transform: translateZ(16px) rotateY(-170deg);
+  transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
 }
-.book-3d.book-closing .bf-front {
+/* State: cover closing */
+.book-3d.book-cover-closing .bf-front {
   transform: translateZ(16px);
-  transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1);
 }
 
 /* ── Faces ── */
@@ -383,6 +386,35 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   z-index: 10;
 }
 
+/* ── Inner page spread (visible when cover opens) ── */
+.bf-inner-spread {
+  top: 0; left: 0; width: 291px; height: 408px;
+  transform: translateZ(13px);
+  background: linear-gradient(
+    to right,
+    #e2d9c7 0%, #f0e8d8 12%,
+    #f8f3eb 50%,
+    #f0e8d8 88%, #e2d9c7 100%
+  );
+  overflow: hidden;
+}
+/* Spine gutter shadow */
+.bf-inner-spread::before {
+  content: '';
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 6px; transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    transparent, rgba(0,0,0,.08), rgba(0,0,0,.14), rgba(0,0,0,.08), transparent
+  );
+}
+/* Left page shadow from spine */
+.bf-inner-spread::after {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 32px;
+  background: linear-gradient(to right, rgba(0,0,0,.08), transparent);
+}
+
 /* ── Face content ── */
 .bk-glow {
   position: absolute; inset: 0; pointer-events: none;
@@ -463,11 +495,11 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 /* ── Book open/close overlay ── */
 .book-overlay {
   position: fixed; inset: 0; z-index: 9000;
-  background: rgba(0,0,0,.88);
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,.92);
+  backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
   opacity: 0; pointer-events: none;
-  transition: opacity .35s ease;
+  transition: opacity .4s ease;
   padding: 20px;
 }
 .book-overlay.bk-open {
@@ -477,8 +509,8 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   display: none;
   max-height: 90vh;
   box-shadow: 0 40px 120px rgba(0,0,0,.9), 0 0 0 1px rgba(201,168,76,.08);
-  transform: scale(.92);
-  transition: transform .45s cubic-bezier(.34,1.2,.64,1);
+  transform: scale(.78);
+  transition: transform .55s cubic-bezier(.22,.68,0,1.1);
 }
 .book-spread.bk-active { display: flex; }
 .book-overlay.bk-open .book-spread.bk-active { transform: scale(1); }
@@ -796,80 +828,176 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 
 /* ============================================================
-   FEATURES — 3 concise highlights
+   STORY SECTION — sells the feeling
 ============================================================ */
-.features {
-  padding: 100px 56px;
+/* Act 1: The problem */
+.story-section {
+  background: var(--ink);
   border-bottom: 1px solid var(--edge);
-  background: var(--deep);
+  overflow: hidden;
 }
-.sec-eyebrow {
-  font-family: var(--ui); font-size: 9px;
-  letter-spacing: .44em; text-transform: uppercase; color: var(--gold-lo);
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 56px;
+.story-problem {
+  padding: clamp(72px, 9vw, 120px) clamp(32px, 7vw, 100px);
+  text-align: center;
+  border-bottom: 1px solid var(--edge);
 }
-.sec-eyebrow::before { content:''; width:44px; height:1px; background:var(--gold-lo); }
+.sp-line {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3vw, 40px);
+  font-weight: 300; font-style: italic;
+  color: var(--smoke); line-height: 1.5;
+  margin-bottom: 4px;
+}
+.sp-dim { color: rgba(158,148,178,.45); }
+.sp-turn {
+  width: 44px; height: 1px; margin: 44px auto;
+  background: linear-gradient(to right, transparent, rgba(201,168,76,.5), transparent);
+}
+.sp-answer {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4.5vw, 60px);
+  font-weight: 700; color: var(--parch); line-height: 1.2;
+  margin-bottom: 6px;
+}
+.sp-answer.sp-gold { color: var(--gold); font-style: italic; }
 
-.features-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+/* Act 2: The stats */
+.story-stats {
+  display: flex; align-items: stretch; justify-content: center;
+  background: var(--deep);
+  border-bottom: 1px solid var(--edge);
 }
-.feat-card {
-  background: var(--surface);
-  border: 1px solid var(--edge);
-  padding: 44px 36px;
-  position: relative; overflow: hidden;
-  transition: border-color .4s var(--silk), transform .4s var(--silk), background .4s;
+.ss-item {
+  text-align: center; padding: clamp(40px, 5vh, 64px) clamp(40px, 6vw, 100px);
+  flex: 1; max-width: 320px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
-.feat-card::before {
+.ss-item + .ss-item { border-left: 1px solid var(--edge); }
+.ss-num {
+  font-family: var(--serif);
+  font-size: clamp(64px, 10vw, 128px);
+  font-weight: 700; font-style: italic;
+  color: var(--gold); line-height: 1; display: block;
+  letter-spacing: -.03em;
+}
+.ss-label {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .4em;
+  text-transform: uppercase; color: var(--smoke); margin-top: 10px;
+  display: block;
+}
+.ss-sub {
+  font-family: var(--serif); font-size: 13px; font-style: italic;
+  color: var(--gold-lo); margin-top: 6px; line-height: 1.4;
+}
+
+/* Act 3: The ticker */
+.story-ticker {
+  overflow: hidden; white-space: nowrap;
+  background: var(--ink);
+  border-bottom: 1px solid var(--edge);
+  position: relative;
+}
+.story-ticker::before, .story-ticker::after {
   content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(201,168,76,.3), transparent);
-  opacity: 0; transition: opacity .4s;
+  position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2;
+  pointer-events: none;
 }
-.feat-card:hover {
-  border-color: rgba(201,168,76,.22); background: rgba(201,168,76,.03);
-  transform: translateY(-6px);
+.story-ticker::before { left: 0; background: linear-gradient(to right, var(--ink), transparent); }
+.story-ticker::after  { right: 0; background: linear-gradient(to left, var(--ink), transparent); }
+.ticker-track {
+  display: inline-flex; align-items: center; gap: 36px;
+  padding: 20px 36px;
+  animation: tickerScroll 28s linear infinite;
 }
-.feat-card:hover::before { opacity: 1; }
-.feat-num {
-  font-family: var(--serif); font-size: 64px; font-weight: 700; font-style: italic;
-  line-height: 1;
-  background: linear-gradient(150deg, rgba(201,168,76,.4) 0%, rgba(201,168,76,.06) 100%);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 24px; display: block;
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
-.feat-title {
-  font-family: var(--serif); font-size: 24px; font-weight: 700;
-  color: var(--white); line-height: 1.2; margin-bottom: 14px;
+.ticker-track span {
+  font-family: var(--ui); font-size: 11px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--ash); white-space: nowrap;
+  flex-shrink: 0;
 }
-.feat-title em { font-style: italic; color: var(--gold); }
-.feat-desc {
-  font-family: var(--serif); font-size: 15px; line-height: 1.85;
-  color: var(--ash);
+.ticker-track .tk-dot {
+  color: var(--gold-lo); font-size: 18px;
+  letter-spacing: 0; line-height: 1; flex-shrink: 0;
 }
 
 /* ============================================================
-   WORK BRIDGE
+   PROGRESS / BTS SECTION
 ============================================================ */
-.work-bridge {
-  padding: 44px 56px;
-  text-align: center;
+.progress-section {
+  background: var(--deep);
+  border-bottom: 1px solid var(--edge);
+  padding: 0;
+}
+.ps-inner {
+  display: flex; align-items: stretch;
+  max-width: 1400px; margin: 0 auto;
+}
+.ps-left {
+  padding: clamp(40px, 5vh, 64px) clamp(32px, 5vw, 72px);
+  flex: 1;
+}
+.ps-tag {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .38em;
+  text-transform: uppercase; color: var(--gold-lo);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.ps-tag::before { content: ''; width: 32px; height: 1px; background: var(--gold-lo); }
+.ps-live-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
+  box-shadow: 0 0 0 0 rgba(201,168,76,.6); flex-shrink: 0;
+  animation: livePulse 2s ease-out infinite;
+}
+.ps-title {
+  font-family: var(--serif); font-size: clamp(22px, 3vw, 36px);
+  font-weight: 700; color: var(--parch); line-height: 1.15;
+  margin-bottom: 8px;
+}
+.ps-title em { font-style: italic; color: var(--gold); }
+.ps-date {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--smoke);
+}
+.ps-bar {
+  width: 1px; background: var(--edge); flex-shrink: 0;
+}
+.ps-cta {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: clamp(40px, 5vh, 64px) clamp(32px, 5vw, 72px);
+  flex-shrink: 0;
+  font-family: var(--ui); font-size: 11px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--ash);
+  transition: color .3s; white-space: nowrap;
+}
+.ps-cta:hover { color: var(--parch); }
+.ps-cta svg { transition: transform .3s; flex-shrink: 0; }
+.ps-cta:hover svg { transform: translateX(4px); }
+
+/* ============================================================
+   MOBILE COVER PREVIEW
+============================================================ */
+.mobile-cover {
+  display: none; /* hidden on desktop */
   border-bottom: 1px solid var(--edge);
   background: var(--ink);
 }
-.work-bridge-link {
-  font-family: var(--ui); font-size: 11px; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--smoke);
-  display: inline-flex; align-items: center; gap: 10px;
-  transition: color .3s;
+.mc-tag {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .44em;
+  text-transform: uppercase; color: var(--gold-lo);
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  padding: 40px 20px 24px;
 }
-.work-bridge-link:hover { color: var(--parch); }
-.work-bridge-link svg { transition: transform .3s; }
-.work-bridge-link:hover svg { transform: translateX(4px); }
+.mc-tag::before, .mc-tag::after { content:''; width:32px; height:1px; background:var(--gold-lo); }
+.mc-iframe {
+  width: 100%; height: 520px;
+  border: none; display: block;
+  background: #080808;
+  pointer-events: none;
+}
+
+/* (work-bridge folded into progress-section) */
 
 /* ============================================================
    WAITLIST
@@ -1055,15 +1183,14 @@ footer {
   #nav { padding: 24px 40px; }
   #nav.frosted { padding: 15px 40px; }
   .hero { padding: 0 5% 0 40px; gap: 56px; }
-  .features { padding: 80px 40px; }
-  .work-bridge { padding: 36px 40px; }
   .hero-whisper { left: 40px; }
   footer { padding: 32px 40px; }
 }
 
-/* Tablet / small laptop */
+/* Tablet */
 @media(max-width:1024px){
-  .features-grid { grid-template-columns: 1fr 1fr; }
+  .story-stats { flex-wrap: wrap; }
+  .ss-item { min-width: 33%; max-width: none; }
   .book-scene { transform: scale(0.78); transform-origin: center center; }
 }
 
@@ -1080,10 +1207,17 @@ footer {
   .hero-whisper { left: 20px; }
   .hero::before { background: radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(7,6,10,.9) 75%); }
 
-  .features { padding: 64px 20px; }
-  .features-grid { grid-template-columns: 1fr; gap: 2px; }
+  /* Show mobile cover */
+  .mobile-cover { display: block; }
 
-  .work-bridge { padding: 32px 20px; }
+  .story-stats { flex-direction: column; }
+  .ss-item { max-width: none; width: 100%; }
+  .ss-item + .ss-item { border-left: none; border-top: 1px solid var(--edge); }
+
+  .ps-inner { flex-direction: column; }
+  .ps-bar { display: none; }
+  .ps-left { padding: 36px 20px 24px; }
+  .ps-cta { justify-content: flex-start; padding: 0 20px 36px; }
 
   .waitlist { padding: 72px 20px; }
   .wl-perks { grid-template-columns: 1fr; }
@@ -1100,7 +1234,6 @@ footer {
   .hero-title { font-size: clamp(48px, 14vw, 64px); }
   .wl-h { font-size: clamp(34px, 10vw, 42px); }
   .opts.col3 { grid-template-columns: 1fr; }
-  .features-grid { grid-template-columns: 1fr; }
 }
 
 /* Large monitors */
@@ -1108,21 +1241,20 @@ footer {
   .hero { padding: 0 8% 0 clamp(56px, 5vw, 120px); gap: clamp(80px, 6vw, 140px); }
   .hero-content { width: clamp(400px, 30vw, 560px); }
   .hero-title { font-size: clamp(80px, 8vw, 160px); }
-  .features { padding: 120px clamp(56px, 7vw, 140px); }
-  .features-grid { max-width: 1600px; margin: 0 auto; }
   .waitlist { padding: 140px 60px; }
-  .work-bridge { padding: 56px; }
   footer { padding: 44px clamp(56px, 7vw, 140px); }
   .book-3d { width: 350px; height: 490px; }
   .bf-front, .bf-back { width: 350px; height: 490px; }
+  .bf-inner-spread { width: 350px; height: 490px; }
   .bf-front { transform: translateZ(20px); }
   .bf-back { transform: rotateY(180deg) translateZ(20px); }
+  .bf-inner-spread { transform: translateZ(18px); }
   .bf-spine { height: 490px; transform: translateX(-20px) rotateY(-90deg); }
   .bf-pages { left: 310px; height: 490px; width: 40px; transform: translateX(20px) rotateY(90deg); }
   .bf-top { width: 350px; height: 40px; transform: translateY(-20px) rotateX(90deg); }
   .bf-bottom { top: 450px; width: 350px; height: 40px; transform: translateY(20px) rotateX(-90deg); }
-  .book-3d.book-will-open .bf-front { transform: translateZ(20px) rotateY(-175deg); }
-  .book-3d.book-closing .bf-front { transform: translateZ(20px); }
+  .book-3d.book-cover-open .bf-front { transform: translateZ(20px) rotateY(-170deg); }
+  .book-3d.book-cover-closing .bf-front { transform: translateZ(20px); }
 }
 
 /* ── Rotating word ── */
@@ -1200,6 +1332,8 @@ footer {
           <div class="bf bf-top"></div>
           <!-- Bottom edge -->
           <div class="bf bf-bottom"></div>
+          <!-- Inner page spread (visible when cover opens) -->
+          <div class="bf bf-inner-spread"></div>
           <!-- Back cover -->
           <div class="bf bf-back">
             <div class="bk-glow"></div>
@@ -1241,37 +1375,99 @@ footer {
   </div>
 </section>
 
-<!-- ═══ FEATURES ═══ -->
-<section class="features rv">
-  <div class="sec-eyebrow">Not a planner.</div>
-  <div class="features-grid">
-    <div class="feat-card rv rv1">
-      <span class="feat-num">I</span>
-      <div class="feat-title">A system,<br>not a <em>diary</em></div>
-      <p class="feat-desc">Every page has a purpose. Habit tracking, morning check-ins, a battle log for your goals. Designed so you move forward — even on the days you don't feel like it.</p>
+<!-- ═══ STORY SECTION ═══ -->
+<section class="story-section" id="system">
+
+  <!-- Act 1: Create the problem -->
+  <div class="story-problem rv">
+    <p class="sp-line">You've tried planners. You've tried habit apps.</p>
+    <p class="sp-line sp-dim">You've started over. Again.</p>
+    <p class="sp-line sp-dim">And still — the gap between who you are and who you want to be feels wider every year.</p>
+    <div class="sp-turn"></div>
+    <p class="sp-answer">The problem was never discipline.</p>
+    <p class="sp-answer sp-gold">It was architecture.</p>
+  </div>
+
+  <!-- Act 2: The numbers that prove it -->
+  <div class="story-stats rv">
+    <div class="ss-item">
+      <span class="ss-num">400</span>
+      <span class="ss-label">pages</span>
+      <span class="ss-sub">Full-grain leather.<br>Built to last a year.</span>
     </div>
-    <div class="feat-card rv rv2">
-      <span class="feat-num">II</span>
-      <div class="feat-title">Premium<br><em>by design</em></div>
-      <p class="feat-desc">Full-grain leather cover. Gold embossed title. Two silk ribbons. Reinforced corners. ~400 pages of paper that feels as serious as your ambitions.</p>
+    <div class="ss-item">
+      <span class="ss-num">12</span>
+      <span class="ss-label">cycles</span>
+      <span class="ss-sub">30-day loops.<br>You decide when it starts.</span>
     </div>
-    <div class="feat-card rv rv3">
-      <span class="feat-num">III</span>
-      <div class="feat-title">Start today.<br><em>Start now.</em></div>
-      <p class="feat-desc">No waiting for Monday. No January deadlines. Progressio is designed to begin wherever you are — because real change doesn't care what month it is.</p>
+    <div class="ss-item">
+      <span class="ss-num">3</span>
+      <span class="ss-label">phases</span>
+      <span class="ss-sub">90-day focus. One goal.<br>No distractions.</span>
     </div>
   </div>
+
+  <!-- Act 3: The ticker -->
+  <div class="story-ticker rv">
+    <div class="ticker-track">
+      <span>Full-grain leather cover</span><span class="tk-dot">·</span>
+      <span>Gold embossed title</span><span class="tk-dot">·</span>
+      <span>Two silk ribbons</span><span class="tk-dot">·</span>
+      <span>Start any day of the year</span><span class="tk-dot">·</span>
+      <span>Morning check-in</span><span class="tk-dot">·</span>
+      <span>Daily battle log</span><span class="tk-dot">·</span>
+      <span>Habit tracking</span><span class="tk-dot">·</span>
+      <span>Weekly review</span><span class="tk-dot">·</span>
+      <span>90-day phase architecture</span><span class="tk-dot">·</span>
+      <span>One decision changes everything</span><span class="tk-dot">·</span>
+      <!-- duplicate for seamless loop -->
+      <span>Full-grain leather cover</span><span class="tk-dot">·</span>
+      <span>Gold embossed title</span><span class="tk-dot">·</span>
+      <span>Two silk ribbons</span><span class="tk-dot">·</span>
+      <span>Start any day of the year</span><span class="tk-dot">·</span>
+      <span>Morning check-in</span><span class="tk-dot">·</span>
+      <span>Daily battle log</span><span class="tk-dot">·</span>
+      <span>Habit tracking</span><span class="tk-dot">·</span>
+      <span>Weekly review</span><span class="tk-dot">·</span>
+      <span>90-day phase architecture</span><span class="tk-dot">·</span>
+      <span>One decision changes everything</span><span class="tk-dot">·</span>
+    </div>
+  </div>
+
 </section>
 
-<!-- ═══ WORK BRIDGE ═══ -->
-<div class="work-bridge rv">
-  <a href="work.html" class="work-bridge-link">
-    See what we're building
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </a>
-</div>
+<!-- ═══ MOBILE COVER PREVIEW ═══ -->
+<section class="mobile-cover rv" id="cover">
+  <div class="mc-tag">The Journal · Cover</div>
+  <iframe
+    src="progressio-covers-complete-1.html"
+    class="mc-iframe"
+    title="Progressio Journal Cover Design"
+    loading="lazy"
+    scrolling="no"
+  ></iframe>
+</section>
+
+<!-- ═══ PROGRESS / BTS ═══ -->
+<section class="progress-section rv" id="progress">
+  <div class="ps-inner">
+    <div class="ps-left">
+      <div class="ps-tag">
+        <div class="ps-live-dot"></div>
+        In progress
+      </div>
+      <h3 class="ps-title">Full graphic design —<br><em>every page finalized</em></h3>
+      <p class="ps-date">March 2026</p>
+    </div>
+    <div class="ps-bar"></div>
+    <a href="work.html" class="ps-cta">
+      <span>See what we're building</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
 
 <!-- ═══ WAITLIST ═══ -->
 <section class="waitlist" id="waitlist">
@@ -1804,17 +2000,20 @@ async function submit(){
 
 document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key==='Enter') go(1); });
 
-/* ── 3D Book drag-to-rotate + animated open/close ── */
+/* ── 3D Book: 3-state interaction ── */
 (function(){
   const book    = document.getElementById('book3d');
   if (!book) return;
-  const floatEl = book.parentElement; // .book-float
+  const floatEl = book.parentElement;          // .book-float
+  const hint    = book.closest('.book-float').querySelector('.book-hint');
   const overlay = document.getElementById('bookOverlay');
   const closeBtn= document.getElementById('bookOverlayClose');
 
+  // States: 'closed' | 'cover-open' | 'reading'
+  let bookState  = 'closed';
+  let animating  = false;
   let dragging   = false;
   let moved      = false;
-  let animating  = false;
   let lastX = 0, lastY = 0;
   let rotX = 5, rotY = -18;
 
@@ -1822,11 +2021,11 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
     book.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
   }
 
-  // Spread navigation
-  const spreads  = document.querySelectorAll('.book-spread');
-  const bkPrev   = document.getElementById('bkPrev');
-  const bkNext   = document.getElementById('bkNext');
-  let curSpread  = 0;
+  /* ── Spread navigation ── */
+  const spreads = document.querySelectorAll('.book-spread');
+  const bkPrev  = document.getElementById('bkPrev');
+  const bkNext  = document.getElementById('bkNext');
+  let curSpread = 0;
 
   function showSpread(i) {
     spreads.forEach((s, idx) => s.classList.toggle('bk-active', idx === i));
@@ -1837,47 +2036,68 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
   bkPrev.addEventListener('click', () => { if (curSpread > 0) showSpread(curSpread - 1); });
   bkNext.addEventListener('click', () => { if (curSpread < spreads.length - 1) showSpread(curSpread + 1); });
 
-  function openBook() {
+  /* ── State: closed → cover-open ── */
+  function openCover() {
     if (animating) return;
     animating = true;
+    bookState = 'cover-open';
     floatEl.style.animationPlayState = 'paused';
-    // Clear inline transform — CSS class takes over
     book.style.transform = '';
     book.style.transition = '';
-    book.classList.add('book-will-open');
-    // After cover swings open, show the overlay
-    setTimeout(() => {
-      showSpread(0);
-      overlay.classList.add('bk-open');
-      document.body.style.overflow = 'hidden';
-      animating = false;
-    }, 820);
+    book.classList.add('book-cover-open');
+    if (hint) hint.textContent = 'click to read';
+    setTimeout(() => { animating = false; }, 850);
   }
 
-  function closeBook() {
+  /* ── State: cover-open → reading (overlay zoom-in) ── */
+  function zoomInToRead() {
+    bookState = 'reading';
+    showSpread(0);
+    overlay.classList.add('bk-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  /* ── State: reading → closed (overlay close + cover close) ── */
+  function closeAll() {
     overlay.classList.remove('bk-open');
     document.body.style.overflow = '';
-    book.classList.remove('book-will-open');
-    book.classList.add('book-closing');
-    // After cover closes, restore book to resting position
+    bookState = 'closed';
+    // Close the cover
+    book.classList.remove('book-cover-open');
+    book.classList.add('book-cover-closing');
     setTimeout(() => {
-      book.classList.remove('book-closing');
+      book.classList.remove('book-cover-closing');
       rotX = 5; rotY = -18;
       book.style.transition = 'transform 0.5s cubic-bezier(.4,0,.2,1)';
       apply();
       floatEl.style.animationPlayState = 'running';
+      if (hint) hint.textContent = 'drag · click to open';
       setTimeout(() => { book.style.transition = ''; }, 550);
     }, 380);
   }
 
-  // Close via button or backdrop click or Escape
-  closeBtn.addEventListener('click', closeBook);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeBook(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('bk-open')) closeBook(); });
+  /* ── Click handler on book ── */
+  function handleClick() {
+    if (bookState === 'closed')      openCover();
+    else if (bookState === 'cover-open') zoomInToRead();
+  }
+
+  // Close via button / backdrop / Escape
+  closeBtn.addEventListener('click', closeAll);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeAll(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && bookState === 'reading') closeAll(); });
 
   /* ── Mouse ── */
   book.addEventListener('mousedown', e => {
-    if (animating || book.classList.contains('book-will-open')) return;
+    if (animating || bookState !== 'closed') {
+      // In cover-open state: click to read, no drag
+      if (bookState === 'cover-open' && !animating) {
+        // Will be handled on mouseup via moved check
+        dragging = false; moved = false;
+        lastX = e.clientX; lastY = e.clientY;
+      }
+      return;
+    }
     dragging = true; moved = false;
     lastX = e.clientX; lastY = e.clientY;
     floatEl.style.animationPlayState = 'paused';
@@ -1897,18 +2117,24 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
   });
 
   document.addEventListener('mouseup', () => {
+    if (bookState === 'cover-open' && !animating) {
+      zoomInToRead(); return;
+    }
     if (!dragging) return;
     dragging = false;
     floatEl.style.animationPlayState = 'running';
-    if (!moved) openBook();
+    if (!moved) handleClick();
   });
 
   /* ── Touch ── */
   book.addEventListener('touchstart', e => {
-    if (animating || book.classList.contains('book-will-open')) return;
-    dragging = true; moved = false;
+    if (animating) return;
+    moved = false;
     lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
-    floatEl.style.animationPlayState = 'paused';
+    if (bookState === 'closed') {
+      dragging = true;
+      floatEl.style.animationPlayState = 'paused';
+    }
   }, { passive: true });
 
   document.addEventListener('touchmove', e => {
@@ -1924,10 +2150,13 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
   }, { passive: true });
 
   document.addEventListener('touchend', () => {
+    if (bookState === 'cover-open' && !animating && !moved) {
+      zoomInToRead(); return;
+    }
     if (!dragging) return;
     dragging = false;
     floatEl.style.animationPlayState = 'running';
-    if (!moved) openBook();
+    if (!moved) handleClick();
   });
 })();
 </script>
