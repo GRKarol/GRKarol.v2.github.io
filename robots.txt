@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Don't index internal/admin pages
+Disallow: /work.html
+Disallow: /Dok%C5%82adne%20plany.html
+Disallow: /progressio-covers-complete-1.html
+
+Sitemap: https://progressio.giize.com/sitemap.xml

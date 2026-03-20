@@ -4,6 +4,64 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Progressio — Write Your Story</title>
+
+<!-- ═══ SEO META ═══ -->
+<meta name="description" content="Progressio is a premium structured journal designed to help you write your story. One year. One journey. Reserve your copy today.">
+<meta name="keywords" content="journal, planner, premium journal, structured journal, progressio, diary, self-improvement">
+<meta name="author" content="Progressio">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://progressio.giize.com/">
+
+<!-- ═══ OPEN GRAPH (Facebook, LinkedIn, WhatsApp) ═══ -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://progressio.giize.com/">
+<meta property="og:title" content="Progressio — Write Your Story">
+<meta property="og:description" content="A premium structured journal designed to help you write your story. One year. One journey. Reserve your copy today.">
+<meta property="og:image" content="https://progressio.giize.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Progressio">
+
+<!-- ═══ TWITTER / X CARDS ═══ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://progressio.giize.com/">
+<meta name="twitter:title" content="Progressio — Write Your Story">
+<meta name="twitter:description" content="A premium structured journal designed to help you write your story. One year. One journey.">
+<meta name="twitter:image" content="https://progressio.giize.com/og-image.jpg">
+
+<!-- ═══ FAVICON ═══ -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<meta name="theme-color" content="#c9a84c">
+<meta name="msapplication-TileColor" content="#07060a">
+
+<!-- ═══ PWA MANIFEST ═══ -->
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- ═══ SCHEMA.ORG STRUCTURED DATA ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Progressio Journal",
+  "description": "A premium structured journal designed to help you write your story. One year. One journey.",
+  "url": "https://progressio.giize.com/",
+  "brand": {
+    "@type": "Brand",
+    "name": "Progressio"
+  },
+  "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/PreOrder",
+    "priceCurrency": "USD",
+    "price": "0",
+    "description": "Join the waitlist to reserve your copy at launch price."
+  }
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Tenor+Sans&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -1505,11 +1563,32 @@ footer {
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+<!-- EmailJS — email notifications on waitlist signup -->
+<!-- Setup: https://www.emailjs.com/ → create account → add email service → create template -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <script>
 /* ── CONFIG ─────────────────────────────────────────── */
 const SB_URL = 'https://olxwhtltqoksngilifob.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9seHdodGx0cW9rc25naWxpZm9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NzA1ODQsImV4cCI6MjA4OTE0NjU4NH0.iFoaWc8xtzQHeUkwOeQq8aKvpNXvbyCvhEKZCcTUHtw';
 const TABLE  = 'waitlist';
+
+/* ── EMAILJS CONFIG ──────────────────────────────────
+   Setup in ~5 min:
+   1. Zarejestruj się na https://www.emailjs.com/ (darmowy plan: 200 maili/mies.)
+   2. Email Services → dodaj swój Gmail/Outlook
+   3. Email Templates → utwórz szablon z polami:
+        {{subscriber_email}}  {{source}}  {{language}}  {{date}}
+   4. Wklej swoje ID-ki poniżej
+─────────────────────────────────────────────────────── */
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // Account → General → Public Key
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // Email Services → Service ID
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // Email Templates → Template ID
+const EMAILJS_TO_EMAIL    = 'your@email.com';    // Twój adres email (odbiorca)
+
+if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+}
 /* ── CURSOR ─────────────────────────────────────────── */
 const dot  = document.getElementById('c-dot');
 const ring = document.getElementById('c-ring');
@@ -1797,6 +1876,16 @@ async function submit(){
           // Firebase write failed (e.g. security rules) — refresh Supabase count as fallback
           fetchCount();
         });
+        // Send email notification via EmailJS (only for NEW signups, not duplicates)
+        if(EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY'){
+          emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            to_email:         EMAILJS_TO_EMAIL,
+            subscriber_email: fd.email,
+            source:           fd.source   || 'not specified',
+            language:         fd.language || 'not specified',
+            date:             new Date().toLocaleString('pl-PL', { timeZone: 'Europe/Warsaw' })
+          }).catch(()=>{}); // silent fail — don't block UX if email fails
+        }
       }
     } else throw new Error();
   }catch(_){

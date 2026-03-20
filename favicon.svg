@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="18" fill="#07060a"/>
+  <!-- Gold horizontal rule top -->
+  <rect x="22" y="24" width="56" height="1.5" fill="#c9a84c" opacity="0.6"/>
+  <!-- Letter P — thick stroke serif style -->
+  <text
+    x="50" y="70"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="58"
+    font-weight="400"
+    letter-spacing="-1"
+    fill="#c9a84c"
+  >P</text>
+  <!-- Gold horizontal rule bottom -->
+  <rect x="22" y="78" width="56" height="1.5" fill="#c9a84c" opacity="0.6"/>
+</svg>
