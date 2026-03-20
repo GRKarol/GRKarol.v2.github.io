@@ -415,6 +415,46 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   background: linear-gradient(to right, rgba(0,0,0,.08), transparent);
 }
 
+/* ── Inner spread page content ── */
+.is-pages {
+  position: absolute; inset: 0; display: flex; z-index: 1;
+}
+.is-page {
+  flex: 1; padding: 14px 10px 10px;
+  display: flex; flex-direction: column; gap: 5px;
+  overflow: hidden;
+}
+.is-page + .is-page { padding-left: 12px; }
+.is-p-header {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 6px; letter-spacing: .18em; text-transform: uppercase;
+  color: #888; padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0,0,0,.12);
+  margin-bottom: 3px;
+}
+.is-p-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5.5px; line-height: 1.5; font-style: italic;
+  color: #333; margin-bottom: 5px;
+}
+.is-p-author {
+  display: block; font-style: normal; font-size: 5px;
+  color: #888; letter-spacing: .1em; margin-top: 1px; text-align: right;
+}
+.is-p-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5.5px; line-height: 1.5; color: #444; margin-bottom: 5px;
+}
+.is-p-line {
+  height: 1px; background: rgba(0,0,0,.15);
+  margin: 5px 0 7px;
+}
+.is-p-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5px; letter-spacing: .12em; text-transform: uppercase;
+  color: #666; margin-bottom: 3px;
+}
+
 /* ── Face content ── */
 .bk-glow {
   position: absolute; inset: 0; pointer-events: none;
@@ -908,6 +948,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   display: inline-flex; align-items: center; gap: 36px;
   padding: 20px 36px;
   animation: tickerScroll 28s linear infinite;
+  will-change: transform;
 }
 @keyframes tickerScroll {
   0% { transform: translateX(0); }
@@ -991,7 +1032,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 .mc-tag::before, .mc-tag::after { content:''; width:32px; height:1px; background:var(--gold-lo); }
 .mc-iframe {
-  width: 100%; height: 520px;
+  width: 100%; height: 450px;
   border: none; display: block;
   background: #080808;
   pointer-events: none;
@@ -1135,7 +1176,27 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 
 .wl-err { font-family: var(--ui); font-size: 11px; color: #d08080; text-align:left; margin-bottom:10px; display:none; }
 .wl-err.show { display:block; }
-.wl-note { font-family: var(--ui); font-size: 10px; letter-spacing: .08em; color: var(--smoke); margin-top: 14px; }
+.wl-note { font-family: var(--ui); font-size: 10px; letter-spacing: .08em; color: var(--ash); margin-top: 14px; }
+.wl-social-proof {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 28px; padding-top: 24px;
+  border-top: 1px solid var(--edge);
+}
+.wl-sp-count {
+  font-family: var(--serif); font-size: 40px; font-weight: 300;
+  color: var(--gold); letter-spacing: -.02em; line-height: 1;
+}
+.wl-sp-text {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.wl-sp-label {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--parch);
+}
+.wl-sp-sub {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .1em;
+  color: var(--ash);
+}
 
 .wl-done { display:none; padding: 52px 32px; border: 1px solid var(--gold-lo); background: rgba(201,168,76,.03); }
 .wl-done.show { display:block; }
@@ -1333,7 +1394,28 @@ footer {
           <!-- Bottom edge -->
           <div class="bf bf-bottom"></div>
           <!-- Inner page spread (visible when cover opens) -->
-          <div class="bf bf-inner-spread"></div>
+          <div class="bf bf-inner-spread">
+            <div class="is-pages">
+              <!-- Left page: Quotes -->
+              <div class="is-page">
+                <p class="is-p-header">Opening</p>
+                <p class="is-p-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="is-p-author">~ W. Churchill</span></p>
+                <p class="is-p-quote">"Success is the sum of small efforts repeated day after day."<span class="is-p-author">~ R. Collier</span></p>
+                <p class="is-p-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="is-p-author">~ N. Hill</span></p>
+              </div>
+              <!-- Right page: Owner details -->
+              <div class="is-page">
+                <p class="is-p-header">Owner</p>
+                <p class="is-p-label">Name</p>
+                <div class="is-p-line"></div>
+                <p class="is-p-body">This journal is a personal record of the transformation process I am undergoing.</p>
+                <p class="is-p-label">Journey began on</p>
+                <div class="is-p-line"></div>
+                <p class="is-p-label">Contact</p>
+                <div class="is-p-line"></div>
+              </div>
+            </div>
+          </div>
           <!-- Back cover -->
           <div class="bf bf-back">
             <div class="bk-glow"></div>
@@ -1355,19 +1437,6 @@ footer {
     </div>
   </div>
 
-  <!-- Desktop aside: stats + features -->
-  <div class="hero-aside">
-    <div class="hero-stat-block">
-      <div class="hero-stat-num" id="hero-stat-n">—</div>
-      <div class="hero-stat-lbl">Founding Members</div>
-    </div>
-    <div class="hero-feats">
-      <div class="hero-feat">Full-grain leather cover</div>
-      <div class="hero-feat">Gold embossed title</div>
-      <div class="hero-feat">~400 pages crafted</div>
-      <div class="hero-feat">Two silk ribbons</div>
-    </div>
-  </div>
 
   <div class="hero-whisper">
     <div class="hw-line"></div>
@@ -1380,12 +1449,12 @@ footer {
 
   <!-- Act 1: Create the problem -->
   <div class="story-problem rv">
-    <p class="sp-line">You've tried planners. You've tried habit apps.</p>
-    <p class="sp-line sp-dim">You've started over. Again.</p>
-    <p class="sp-line sp-dim">And still — the gap between who you are and who you want to be feels wider every year.</p>
+    <p class="sp-line">You've tried the planners. The apps. The 30-day challenges.</p>
+    <p class="sp-line sp-dim">You got motivated. Started strong. Got busy. Started over.</p>
+    <p class="sp-line sp-dim">Somewhere along the way, the gap between who you are and who you want to be stopped feeling temporary.</p>
     <div class="sp-turn"></div>
-    <p class="sp-answer">The problem was never discipline.</p>
-    <p class="sp-answer sp-gold">It was architecture.</p>
+    <p class="sp-answer">The problem was never motivation.</p>
+    <p class="sp-answer sp-gold">You needed a system built for the full year.</p>
   </div>
 
   <!-- Act 2: The numbers that prove it -->
@@ -1408,7 +1477,7 @@ footer {
   </div>
 
   <!-- Act 3: The ticker -->
-  <div class="story-ticker rv">
+  <div class="story-ticker">
     <div class="ticker-track">
       <span>Full-grain leather cover</span><span class="tk-dot">·</span>
       <span>Gold embossed title</span><span class="tk-dot">·</span>
@@ -1438,7 +1507,6 @@ footer {
 
 <!-- ═══ MOBILE COVER PREVIEW ═══ -->
 <section class="mobile-cover rv" id="cover">
-  <div class="mc-tag">The Journal · Cover</div>
   <iframe
     src="progressio-covers-complete-1.html"
     class="mc-iframe"
@@ -1512,6 +1580,7 @@ footer {
         <p class="wl-note">No spam. One email when it's ready.</p>
       </div>
 
+
       <!-- Step 2: Source -->
       <div class="wl-step" id="s2">
         <div class="step-q">How did you find Progressio?</div>
@@ -1553,6 +1622,15 @@ footer {
       <p>Welcome, Founding Member.<br><br>
       <strong>Check your inbox</strong> — we've sent you an invitation to the Grankers Team community on Skool. Join now and connect with people who chose to begin.<br><br>
       When Progressio ships, you'll receive a <strong>special discount code</strong> as a thank-you for your trust and early support. You're at the front of the line.</p>
+    </div>
+
+    <!-- Founding Members Social Proof -->
+    <div class="wl-social-proof">
+      <div class="wl-sp-count" id="wl-proof-n">—</div>
+      <div class="wl-sp-text">
+        <span class="wl-sp-label">Founding Members</span>
+        <span class="wl-sp-sub">have already reserved their spot</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1851,13 +1929,13 @@ let displayedCount = 0;
 function animateToCount(n){
   if(n <= displayedCount) return;
   const navEl=document.getElementById('nav-n');
-  const heroEl=document.getElementById('hero-stat-n');
+  const proofEl=document.getElementById('wl-proof-n');
   let c=displayedCount; const step=Math.max(1,(n-c)/(1000/16));
   const t=setInterval(()=>{
     c=Math.min(c+step,n);
     const v=Math.floor(c).toLocaleString();
     if(navEl) navEl.textContent=v;
-    if(heroEl) heroEl.textContent=v;
+    if(proofEl) proofEl.textContent=v;
     if(c>=n){ clearInterval(t); displayedCount=n; }
   },16);
 }

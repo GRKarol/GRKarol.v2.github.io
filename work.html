@@ -74,28 +74,74 @@ a { text-decoration: none; color: inherit; }
 .nav-back {
   font-family: var(--ui); font-size: 10px; font-weight: 400;
   letter-spacing: .22em; text-transform: uppercase;
-  color: var(--smoke); transition: color .3s;
+  color: var(--ash); transition: color .3s;
 }
-.nav-back:hover { color: var(--parch); }
+.nav-back:hover { color: var(--cream); }
 
 /* ── PAGE HEADER ── */
 .page-header {
-  padding: 160px 56px 72px;
-  max-width: 860px;
+  padding: 140px 56px 56px;
+  max-width: 900px;
+  border-bottom: 1px solid var(--edge);
+  margin-bottom: 60px;
 }
-.ph-tag {
-  font-family: var(--ui); font-size: 10px; letter-spacing: .24em;
-  text-transform: uppercase; color: var(--gold-lo); margin-bottom: 20px;
+.ph-status {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 28px;
+}
+.ph-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold);
+  animation: adot 2.4s ease-in-out infinite;
+}
+.ph-status-label {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--gold);
+}
+.ph-status-divider { color: var(--gold-lo); }
+.ph-status-date {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ash);
 }
 .ph-title {
-  font-family: var(--serif); font-size: clamp(32px, 5vw, 56px);
-  font-weight: 300; line-height: 1.1; color: var(--cream);
-  margin-bottom: 20px;
+  font-family: var(--serif); font-size: clamp(36px, 5.5vw, 68px);
+  font-weight: 300; line-height: 1.05; color: var(--cream);
+  margin-bottom: 36px;
 }
 .ph-title em { font-style: italic; color: var(--gold); }
-.ph-sub {
-  font-size: 13px; line-height: 1.7; color: var(--smoke);
-  max-width: 480px; letter-spacing: .04em;
+.ph-progress-wrap {
+  margin-bottom: 40px;
+}
+.ph-progress-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.ph-progress-lbl {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--ash);
+}
+.ph-progress-pct {
+  font-family: var(--serif); font-size: 14px; color: var(--gold);
+}
+.ph-progress-track {
+  height: 1px; background: var(--edge); position: relative;
+}
+.ph-progress-fill {
+  position: absolute; left: 0; top: 0; height: 1px;
+  background: linear-gradient(to right, var(--gold-lo), var(--gold));
+  transition: width 1.2s cubic-bezier(.25,.46,.45,.94);
+}
+.ph-stats {
+  display: flex; gap: 48px; flex-wrap: wrap;
+}
+.ph-stat-num {
+  font-family: var(--serif); font-size: 28px; font-weight: 300;
+  color: var(--parch); display: block; line-height: 1;
+}
+.ph-stat-lbl {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ash);
+  display: block; margin-top: 4px;
 }
 
 /* ── SETUP BANNER ── */
@@ -105,7 +151,7 @@ a { text-decoration: none; color: inherit; }
   border: 1px solid var(--gold-lo);
   background: rgba(201,168,76,.04);
 }
-#setup-banner p { font-size: 12px; line-height: 1.8; color: var(--smoke); }
+#setup-banner p { font-size: 12px; line-height: 1.8; color: var(--ash); }
 #setup-banner strong { color: var(--gold); font-family: var(--serif); font-size: 14px; }
 #setup-banner code {
   font-family: monospace; font-size: 11px;
@@ -139,26 +185,26 @@ a { text-decoration: none; color: inherit; }
 }
 .card-type {
   font-family: var(--ui); font-size: 9px; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--gold-lo); margin-bottom: 16px;
+  text-transform: uppercase; color: var(--ash); margin-bottom: 16px;
   display: flex; align-items: center; gap: 8px;
 }
 .card-dot {
   width: 4px; height: 4px; border-radius: 50%;
-  background: var(--gold-lo); flex-shrink: 0;
+  background: var(--ash); flex-shrink: 0;
 }
 .card-title {
-  font-family: var(--serif); font-size: 20px; font-weight: 300;
-  line-height: 1.3; color: var(--parch); margin-bottom: 10px;
+  font-family: var(--serif); font-size: 22px; font-weight: 300;
+  line-height: 1.25; color: var(--cream); margin-bottom: 12px;
 }
-.card-title em { font-style: italic; color: var(--ash); }
+.card-title em { font-style: italic; color: var(--gold); }
 .card-body {
-  font-size: 12px; line-height: 1.75; color: var(--smoke);
-  letter-spacing: .03em;
+  font-size: 13px; line-height: 1.75; color: var(--ash);
+  letter-spacing: .02em;
 }
 .card-date {
   margin-top: 20px;
   font-family: var(--ui); font-size: 9px; letter-spacing: .16em;
-  text-transform: uppercase; color: var(--smoke);
+  text-transform: uppercase; color: var(--ash);
 }
 
 /* Image card variant */
@@ -191,12 +237,16 @@ a { text-decoration: none; color: inherit; }
   display: inline-block;
   font-family: var(--ui); font-size: 8px; letter-spacing: .2em;
   text-transform: uppercase; padding: 3px 8px;
-  border: 1px solid var(--edge); color: var(--smoke);
+  border: 1px solid var(--edge); color: var(--ash);
   margin-bottom: 14px;
 }
-.card-status.active   { border-color: var(--gold-lo); color: var(--gold-lo); }
-.card-status.upcoming { border-color: var(--smoke);   color: var(--smoke); }
-.card-status.done     { border-color: var(--edge);    color: var(--edge); }
+.card-status.active   { border-color: var(--gold); color: var(--gold); }
+.card-status.upcoming { border-color: var(--ash);  color: var(--ash); }
+.card-status.done     { border-color: var(--smoke); color: var(--smoke); }
+
+/* ── Scroll reveal ── */
+.rv { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.25,.46,.45,.94), transform .7s cubic-bezier(.25,.46,.45,.94); }
+.rv.in { opacity: 1; transform: none; }
 
 /* ── EMPTY STATE ── */
 .wip-card.add-new {
@@ -225,7 +275,7 @@ footer {
   display: flex; align-items:center; justify-content:space-between;
 }
 .ft-brand { font-family: var(--serif); font-size: 16px; font-weight:600; letter-spacing: .22em; color: var(--gold-lo); text-transform:uppercase; }
-.ft-copy { font-family: var(--ui); font-size: 10px; letter-spacing: .1em; color: var(--edge); }
+.ft-copy { font-family: var(--ui); font-size: 10px; letter-spacing: .1em; color: var(--smoke); }
 .ft-link { font-family: var(--ui); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--smoke); transition: color .3s; }
 .ft-link:hover { color: var(--parch); }
 
@@ -464,9 +514,36 @@ footer {
 
 <!-- ═══ PAGE HEADER ═══ -->
 <div class="page-header">
-  <div class="ph-tag">Process · Updates · Work</div>
+  <div class="ph-status">
+    <span class="ph-live-dot"></span>
+    <span class="ph-status-label">Live updates</span>
+    <span class="ph-status-divider">·</span>
+    <span class="ph-status-date">March 2026</span>
+  </div>
   <h1 class="ph-title">The Work<br><em>in Progress.</em></h1>
-  <p class="ph-sub">Raw updates from the studio. Current designs, decisions, and iterations — documented as they happen.</p>
+  <div class="ph-progress-wrap">
+    <div class="ph-progress-meta">
+      <span class="ph-progress-lbl">Production phase</span>
+      <span class="ph-progress-pct">70%</span>
+    </div>
+    <div class="ph-progress-track">
+      <div class="ph-progress-fill" id="ph-fill" style="width:0"></div>
+    </div>
+  </div>
+  <div class="ph-stats">
+    <div class="ph-stat">
+      <span class="ph-stat-num">400</span>
+      <span class="ph-stat-lbl">pages designed</span>
+    </div>
+    <div class="ph-stat">
+      <span class="ph-stat-num">12</span>
+      <span class="ph-stat-lbl">monthly cycles</span>
+    </div>
+    <div class="ph-stat">
+      <span class="ph-stat-num">Q2</span>
+      <span class="ph-stat-lbl">2026 launch</span>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ SETUP BANNER ═══ -->
@@ -1145,6 +1222,18 @@ $('modal-overlay').addEventListener('click', e => {
 window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('frosted', scrollY > 50);
 }, { passive: true });
+
+// ─── Progress bar animation ─────────────────────────────
+setTimeout(() => {
+  const fill = document.getElementById('ph-fill');
+  if (fill) fill.style.width = '70%';
+}, 300);
+
+// ─── Scroll reveal ─────────────────────────────────────
+const rvObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rvObs.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.rv').forEach(el => rvObs.observe(el));
 
 // ─── Init ──────────────────────────────────────────────
 loadPosts();
