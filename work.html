@@ -221,48 +221,88 @@ a { text-decoration: none; color: inherit; }
 }
 #setup-banner.hidden { display: none; }
 
-/* ══ DISPATCH FILMSTRIP ══════════════════════════════ */
-.dispatch-strip {
+/* ══ DISPATCH GALLERY ════════════════════════════════ */
+.gallery-stage {
+  position: relative;
   display: flex;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  align-items: stretch;
-  padding: 0 0 24px 56px;
-  gap: 16px;
-  /* Fade mask: hints more cards on the right */
-  -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
-  mask-image: linear-gradient(to right, black 70%, transparent 100%);
+  align-items: center;
+  justify-content: center;
+  padding: 0 88px;
+  min-height: 82vh;
 }
-.dispatch-strip::-webkit-scrollbar { display: none; }
-/* Trailing gutter so last card doesn't touch edge */
-.dispatch-strip::after { content: ''; flex: 0 0 56px; }
+.dispatch-strip {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 82vh;
+}
+
+/* ── NAVIGATION ARROWS ── */
+.strip-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px; height: 44px;
+  background: none;
+  border: 1px solid rgba(201,168,76,.2);
+  color: var(--gold-lo);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: border-color .3s var(--silk), color .3s var(--silk), background .3s var(--silk);
+  font-family: var(--serif); font-size: 18px;
+  flex-shrink: 0;
+}
+.strip-arrow:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,.05);
+}
+.strip-arrow:disabled { opacity: .2; cursor: not-allowed; pointer-events: none; }
+.strip-arrow.prev { left: 16px; }
+.strip-arrow.next { right: 16px; }
+
+/* ── STRIP COUNTER ── */
+.strip-counter {
+  text-align: center;
+  font-family: var(--ui); font-size: 9px;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: rgba(158,148,178,.35);
+  padding: 4px 0 0;
+}
 
 /* ── DISPATCH CARD ── */
 .dispatch-card {
-  flex: 0 0 clamp(300px, 38vw, 520px);
-  min-height: 72vh;
-  scroll-snap-align: start;
+  flex: none;
+  width: min(600px, 84vw);
+  min-height: 75vh;
   background: linear-gradient(160deg, var(--surface) 0%, var(--deep) 100%);
   border: 1px solid rgba(255,255,255,.04);
   border-radius: 2px;
-  position: relative;
+  position: absolute;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  /* Entry animation */
+  /* Gallery: hidden by default */
   opacity: 0;
-  transform: scale(.96) translateY(8px);
-  transition: opacity .6s var(--silk), transform .6s var(--silk),
+  pointer-events: none;
+  transform: scale(.97) translateY(8px);
+  transition: opacity .55s var(--silk), transform .55s var(--silk),
               box-shadow .4s var(--silk);
-  transition-delay: var(--enter-delay, 0ms);
 }
-.dispatch-card.entered { opacity: 1; transform: none; }
+/* Active card — visible and in-flow (gives container its height) */
+.dispatch-card.card-active {
+  opacity: 1;
+  pointer-events: all;
+  transform: none;
+  position: relative;
+}
 
-/* Featured card: wider, more presence */
+/* Featured card: slightly wider, more presence */
 .dispatch-card.dc-featured {
-  flex: 0 0 clamp(360px, 52vw, 680px);
+  width: min(660px, 88vw);
   background: linear-gradient(155deg, #17141f 0%, #0e0c15 100%);
   border-color: rgba(201,168,76,.08);
   border-left: 3px solid var(--gold-lo);
@@ -407,11 +447,11 @@ a { text-decoration: none; color: inherit; }
 }
 .sdot.active { background: var(--gold); width: 32px; }
 
-/* ── DRAG HINT ── */
+/* ── NAV HINT ── */
 .strip-hint {
   font-family: var(--ui); font-size: 9px; letter-spacing: .22em;
   text-transform: uppercase; color: rgba(158,148,178,.4);
-  text-align: center; margin-bottom: 8px; padding-left: 56px;
+  text-align: center; margin-bottom: 8px;
   transition: opacity .5s;
 }
 .strip-hint.hidden { opacity: 0; pointer-events: none; }
@@ -660,21 +700,22 @@ footer {
   #admin-bar { padding: 12px 20px; flex-wrap: wrap; gap: 8px; }
   #modal { padding: 28px 20px; }
   .ph-glow { width: 100%; }
-  .dispatch-strip { padding-left: 20px; }
-  .strip-hint { padding-left: 20px; }
+  .gallery-stage { padding: 0 52px; }
 }
 @media(max-width:768px){
   .ph-title { font-size: clamp(40px, 10vw, 64px); }
-  .dispatch-card { flex: 0 0 85vw; min-height: 75vh; }
-  .dispatch-card.dc-featured { flex: 0 0 85vw; }
+  .dispatch-card,
+  .dispatch-card.dc-featured { width: 88vw; min-height: 72vh; }
+  .gallery-stage { padding: 0 44px; }
   /* Disable 3D tilt on touch */
-  .dispatch-card:hover { transform: none !important; box-shadow: none !important; }
+  .dispatch-card.card-active:hover { transform: none !important; box-shadow: none !important; }
 }
 @media(max-width:480px){
   .ph-title { font-size: clamp(32px, 9vw, 48px); }
   .ph-stats { gap: 28px; }
-  .dispatch-card { flex: 0 0 88vw; }
   .dc-title { font-size: clamp(22px, 6vw, 32px); }
+  .gallery-stage { padding: 0 36px; }
+  .strip-arrow { width: 36px; height: 36px; font-size: 14px; }
 }
 </style>
 </head>
@@ -747,16 +788,20 @@ footer {
   Póki co strona pokazuje przykładowe posty. Po skonfigurowaniu Firebase ten baner zniknie automatycznie.</p>
 </div>
 
-<!-- ═══ WIP GRID ═══ -->
-<!-- ═══ DRAG HINT ═══ -->
-<p class="strip-hint" id="strip-hint">drag to explore →</p>
+<!-- ═══ NAV HINT ═══ -->
+<p class="strip-hint" id="strip-hint">← → arrows · swipe · keys to navigate</p>
 
-<!-- ═══ DISPATCH FILMSTRIP ═══ -->
-<div class="dispatch-strip" id="wip-grid">
-  <!-- karty renderowane przez JS -->
+<!-- ═══ GALLERY STAGE ═══ -->
+<div class="gallery-stage">
+  <button class="strip-arrow prev" id="strip-prev" onclick="navigateGallery(-1)" aria-label="Previous post">←</button>
+  <div class="dispatch-strip" id="wip-grid">
+    <!-- karty renderowane przez JS -->
+  </div>
+  <button class="strip-arrow next" id="strip-next" onclick="navigateGallery(1)" aria-label="Next post">→</button>
 </div>
 
-<!-- ═══ STRIP DOTS ═══ -->
+<!-- ═══ COUNTER + DOTS ═══ -->
+<div class="strip-counter" id="strip-counter"></div>
 <div class="strip-dots" id="strip-dots"></div>
 
 <div class="wip-divider"></div>
@@ -946,6 +991,7 @@ let currentTpl     = 'text';
 let imgUrlList     = [];   // array of URL strings for multi-image
 let orderDirty     = false;
 let unsubscribe    = null;
+let currentIdx     = 0;    // active gallery card index
 
 // ─── Fallback posts (shown before Firebase is configured) ──
 const FALLBACK = [
@@ -1010,66 +1056,45 @@ function renderPosts() {
 
   if (!sorted.length) {
     strip.innerHTML = `
-      <article class="dispatch-card add-new entered" aria-hidden="true">
+      <article class="dispatch-card add-new card-active" aria-hidden="true">
         <div class="add-icon">+</div>
         <div class="add-text">Brak postów — wejdź w tryb admina</div>
       </article>`;
     $('strip-dots').innerHTML = '';
+    $('strip-counter').textContent = '';
     return;
   }
 
   strip.innerHTML = sorted.map((p, i) => cardHTML(p, i, sorted.length)).join('');
 
-  // Entry animation — stagger via rAF
-  requestAnimationFrame(() => {
-    strip.querySelectorAll('.dispatch-card').forEach((card, i) => {
-      card.style.setProperty('--enter-delay', (i * 80) + 'ms');
-      setTimeout(() => card.classList.add('entered'), i * 80 + 16);
-    });
-  });
+  // Show first card (or preserved currentIdx)
+  currentIdx = Math.min(currentIdx, sorted.length - 1);
+  const cards = strip.querySelectorAll('.dispatch-card');
+  cards[currentIdx].classList.add('card-active');
 
   // Strip dots
   const dotsEl = $('strip-dots');
   dotsEl.innerHTML = sorted.map((_, i) =>
-    `<button class="sdot${i===0?' active':''}" data-idx="${i}" aria-label="Card ${i+1}"></button>`
+    `<button class="sdot" data-idx="${i}" aria-label="Card ${i+1}"></button>`
   ).join('');
   dotsEl.querySelectorAll('.sdot').forEach(dot => {
-    dot.addEventListener('click', () => {
-      const cards = strip.querySelectorAll('.dispatch-card');
-      const idx = parseInt(dot.dataset.idx, 10);
-      if (cards[idx]) cards[idx].scrollIntoView({ behavior:'smooth', block:'nearest', inline:'start' });
-    });
+    dot.addEventListener('click', () => showCard(parseInt(dot.dataset.idx, 10)));
   });
 
-  // Active dot tracking + hide hint on first scroll
-  let hintHidden = false;
-  strip.addEventListener('scroll', () => {
-    if (!hintHidden) {
-      hintHidden = true;
-      const hint = $('strip-hint');
-      if (hint) hint.classList.add('hidden');
-    }
-    const cards = strip.querySelectorAll('.dispatch-card');
-    let closest = 0, minDist = Infinity;
-    cards.forEach((card, i) => {
-      const dist = Math.abs(card.getBoundingClientRect().left - strip.getBoundingClientRect().left);
-      if (dist < minDist) { minDist = dist; closest = i; }
-    });
-    dotsEl.querySelectorAll('.sdot').forEach((d, i) => d.classList.toggle('active', i === closest));
-  }, { passive: true });
+  updateGalleryNav();
 
-  // 3D tilt (desktop only)
-  if (window.innerWidth > 768) {
-    strip.querySelectorAll('.dispatch-card').forEach(card => {
+  // 3D tilt on active card (desktop only)
+  if (window.matchMedia('(pointer: fine)').matches) {
+    cards.forEach(card => {
       card.addEventListener('mousemove', e => {
+        if (!card.classList.contains('card-active')) return;
         const r  = card.getBoundingClientRect();
         const cx = (e.clientX - r.left) / r.width  - 0.5;
         const cy = (e.clientY - r.top)  / r.height - 0.5;
-        const rotY =  cx * 8;
-        const rotX = -cy * 5;
+        const rotY =  cx * 8, rotX = -cy * 5;
         card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
-        const shadowX = -cx * 24, shadowY = -cy * 20;
-        card.style.boxShadow = `${shadowX}px ${shadowY}px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(201,168,76,${0.07 + Math.abs(cx + cy) * 0.1})`;
+        const sx = -cx * 24, sy = -cy * 20;
+        card.style.boxShadow = `${sx}px ${sy}px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(201,168,76,${0.07 + Math.abs(cx+cy)*.1})`;
       });
       card.addEventListener('mouseleave', () => {
         card.style.transform = '';
@@ -1077,6 +1102,40 @@ function renderPosts() {
       });
     });
   }
+}
+
+// ─── Gallery navigation ────────────────────────────────
+function showCard(newIdx) {
+  const strip = $('wip-grid');
+  const cards = Array.from(strip.querySelectorAll('.dispatch-card:not(.add-new)'));
+  if (!cards.length || newIdx < 0 || newIdx >= cards.length || newIdx === currentIdx) return;
+
+  cards[currentIdx].classList.remove('card-active');
+  cards[newIdx].classList.add('card-active');
+  currentIdx = newIdx;
+  updateGalleryNav();
+}
+
+function navigateGallery(dir) {
+  showCard(currentIdx + dir);
+}
+
+function updateGalleryNav() {
+  const strip = $('wip-grid');
+  const cards = strip.querySelectorAll('.dispatch-card:not(.add-new)');
+  const total = cards.length;
+
+  const prev = $('strip-prev');
+  const next = $('strip-next');
+  if (prev) prev.disabled = currentIdx === 0;
+  if (next) next.disabled = currentIdx === total - 1;
+
+  const counter = $('strip-counter');
+  if (counter && total) {
+    counter.textContent = String(currentIdx + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+  }
+
+  document.querySelectorAll('.sdot').forEach((d, i) => d.classList.toggle('active', i === currentIdx));
 }
 
 // ─── Card HTML builder ─────────────────────────────────
@@ -1188,6 +1247,24 @@ function buildVideoEmbed(url) {
 
   return `<div class="card-no-media"><span>Nieobsługiwany format wideo</span></div>`;
 }
+
+// ─── Keyboard gallery navigation ──────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if ($('modal-overlay').classList.contains('open')) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); navigateGallery(1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); navigateGallery(-1); }
+});
+
+// ─── Swipe support ────────────────────────────────────
+(function() {
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 48) navigateGallery(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
 
 // ─── Secret code detection ─────────────────────────────
 let secretBuf = '';
@@ -1370,6 +1447,7 @@ function movePost(id, dir) {
   });
 
   orderDirty = true;
+  currentIdx = 0;
   $('btn-save-order').style.display = '';
   renderPosts();
 }
