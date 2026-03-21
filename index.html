@@ -262,12 +262,12 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   cursor: pointer !important;
 }
 .book-3d.book-cover-open .bf-front {
-  transform: translateZ(16px) rotateY(-170deg);
+  transform: translateZ(22px) rotateY(-170deg);
   transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
 }
 /* State: cover closing */
 .book-3d.book-cover-closing .bf-front {
-  transform: translateZ(16px);
+  transform: translateZ(22px);
   transition: transform 0.4s cubic-bezier(.4,0,.2,1);
 }
 
@@ -286,7 +286,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
       rgba(0,0,0,.025) 4px, rgba(0,0,0,.025) 5px
     ),
     #13100d;
-  transform: translateZ(16px);
+  transform: translateZ(22px);
   transform-origin: 0% 50%;
   overflow: hidden;
   backface-visibility: hidden;
@@ -316,9 +316,9 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 /* Spine */
 .bf-spine {
-  top: 0; left: 0; width: 32px; height: 408px;
+  top: 0; left: 0; width: 44px; height: 408px;
   background: #0f0d0a;
-  transform: translateX(-16px) rotateY(-90deg);
+  transform: translateX(-22px) rotateY(-90deg);
   overflow: hidden;
 }
 .bf-spine::before, .bf-spine::after {
@@ -330,8 +330,8 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .bf-spine::after  { right: 0; }
 /* Pages (right side) */
 .bf-pages {
-  top: 0; left: 259px; width: 32px; height: 408px;
-  transform: translateX(16px) rotateY(90deg);
+  top: 0; left: 247px; width: 44px; height: 408px;
+  transform: translateX(22px) rotateY(90deg);
   background:
     repeating-linear-gradient(
       to bottom,
@@ -342,14 +342,14 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 /* Top edge */
 .bf-top {
-  top: 0; left: 0; width: 291px; height: 32px;
-  transform: translateY(-16px) rotateX(90deg);
+  top: 0; left: 0; width: 291px; height: 44px;
+  transform: translateY(-22px) rotateX(90deg);
   background: linear-gradient(to bottom, #7a5e20, #a07838 40%, #b8996a 60%, #8a7040);
 }
 /* Bottom edge */
 .bf-bottom {
-  top: 376px; left: 0; width: 291px; height: 32px;
-  transform: translateY(16px) rotateX(-90deg);
+  top: 364px; left: 0; width: 291px; height: 44px;
+  transform: translateY(22px) rotateX(-90deg);
   background: linear-gradient(to top, #7a5e20, #a07838 40%, #b8996a 60%, #8a7040);
 }
 /* Back */
@@ -365,7 +365,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
       rgba(0,0,0,.025) 4px, rgba(0,0,0,.025) 5px
     ),
     #121009;
-  transform: rotateY(180deg) translateZ(16px);
+  transform: rotateY(180deg) translateZ(22px);
   backface-visibility: hidden;
   overflow: hidden;
 }
@@ -391,7 +391,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 /* ── Inner page (visible when cover opens — single right-hand page) ── */
 .bf-inner-spread {
   top: 0; left: 0; width: 291px; height: 408px;
-  transform: translateZ(13px);
+  transform: translateZ(20px);
   background: linear-gradient(
     to right,
     #e8dfd0 0%, #f0e8d8 8%,
@@ -1370,15 +1370,15 @@ footer {
   .book-3d { width: 350px; height: 490px; }
   .bf-front, .bf-back { width: 350px; height: 490px; }
   .bf-inner-spread { width: 350px; height: 490px; }
-  .bf-front { transform: translateZ(20px); }
-  .bf-back { transform: rotateY(180deg) translateZ(20px); }
-  .bf-inner-spread { transform: translateZ(18px); }
-  .bf-spine { height: 490px; transform: translateX(-20px) rotateY(-90deg); }
-  .bf-pages { left: 310px; height: 490px; width: 40px; transform: translateX(20px) rotateY(90deg); }
-  .bf-top { width: 350px; height: 40px; transform: translateY(-20px) rotateX(90deg); }
-  .bf-bottom { top: 450px; width: 350px; height: 40px; transform: translateY(20px) rotateX(-90deg); }
-  .book-3d.book-cover-open .bf-front { transform: translateZ(20px) rotateY(-170deg); }
-  .book-3d.book-cover-closing .bf-front { transform: translateZ(20px); }
+  .bf-front { transform: translateZ(28px); }
+  .bf-back { transform: rotateY(180deg) translateZ(28px); }
+  .bf-inner-spread { transform: translateZ(26px); }
+  .bf-spine { height: 490px; width: 56px; transform: translateX(-28px) rotateY(-90deg); }
+  .bf-pages { left: 294px; height: 490px; width: 56px; transform: translateX(28px) rotateY(90deg); }
+  .bf-top { width: 350px; height: 56px; transform: translateY(-28px) rotateX(90deg); }
+  .bf-bottom { top: 434px; width: 350px; height: 56px; transform: translateY(28px) rotateX(-90deg); }
+  .book-3d.book-cover-open .bf-front { transform: translateZ(28px) rotateY(-170deg); }
+  .book-3d.book-cover-closing .bf-front { transform: translateZ(28px); }
 }
 
 /* ── Rotating word ── */
