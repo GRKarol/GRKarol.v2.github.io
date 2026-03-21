@@ -796,7 +796,7 @@ footer { position: relative; }
 <nav id="nav">
   <div class="nav-logo">
     <a href="https://grankerslinks.giize.com" target="_blank" rel="noopener" aria-label="Grankers Team">
-      <img src="/grankers-lion.svg" alt="Grankers" class="nav-lion">
+      <img src="/grankers-lion.png" alt="Grankers" class="nav-lion">
     </a>
     <a href="index.html" class="nav-brand-wrap">
       <span>Progressio</span>
@@ -850,7 +850,7 @@ footer { position: relative; }
       <div class="ph-timeline-track">
         <div class="ph-timeline-fill" id="ph-fill"></div>
       </div>
-      <div class="ph-progress-pct">70% complete</div>
+      <div class="ph-progress-pct">30% complete</div>
     </div>
   </div>
 </div>
@@ -1758,7 +1758,7 @@ if (statsEl) {
     });
     setTimeout(() => {
       const fill = document.getElementById('ph-fill');
-      if (fill) fill.style.width = '70%';
+      if (fill) fill.style.width = '30%';
     }, 200);
   }, { threshold: 0.2 });
   statsObs.observe(statsEl);
