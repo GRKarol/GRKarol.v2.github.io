@@ -160,8 +160,22 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   border-color: var(--edge);
 }
 .nav-logo {
+  display: flex; align-items: center; gap: 12px;
   font-family: var(--serif); font-size: 18px; font-weight: 600;
   letter-spacing: .22em; color: var(--gold); text-transform: uppercase;
+  text-decoration: none;
+}
+.nav-lion {
+  width: 34px; height: 37px; flex-shrink: 0;
+  opacity: .9; transition: opacity .3s;
+}
+.nav-lion:hover { opacity: 1; }
+.nav-brand-wrap {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+}
+.nav-brand-sub {
+  font-family: var(--ui); font-size: 8px; font-weight: 300;
+  letter-spacing: .28em; color: var(--gold-lo); text-transform: uppercase;
 }
 .nav-right { display: flex; align-items: center; gap: 36px; }
 .nav-live {
@@ -265,10 +279,41 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   transform: translateZ(22px) rotateY(-170deg);
   transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
 }
+.book-3d.book-cover-open .bf-cover-inside {
+  transform: translateZ(19px) rotateY(10deg);
+  transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
+}
 /* State: cover closing */
 .book-3d.book-cover-closing .bf-front {
   transform: translateZ(22px);
   transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+}
+.book-3d.book-cover-closing .bf-cover-inside {
+  transform: translateZ(19px) rotateY(180deg);
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Inside of front cover (visible when cover opens) ── */
+.bf-cover-inside {
+  position: absolute;
+  top: 0; left: 0; width: 291px; height: 408px;
+  transform-origin: 0% 50%;
+  transform: translateZ(19px) rotateY(180deg);
+  backface-visibility: hidden;
+  background:
+    linear-gradient(160deg, #1c1508 0%, #140f04 40%, #0e0a02 100%);
+  overflow: hidden;
+  transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
+}
+.bf-cover-inside::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(201,168,76,.06) 0%, transparent 70%);
+}
+.bf-cover-inside::after {
+  content: '';
+  position: absolute; right: 0; top: 0; bottom: 0; width: 14px;
+  background: linear-gradient(to left, rgba(0,0,0,.4) 0%, transparent 100%);
 }
 
 /* ── Faces ── */
@@ -1016,7 +1061,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .ps-progress-fill {
   position: absolute; top: 0; left: 0; bottom: 0;
   background: linear-gradient(to right, var(--gold-lo), var(--gold));
-  width: 78%;
+  width: 30%;
   transition: width 1.2s var(--silk);
 }
 .ps-progress-label {
@@ -1094,7 +1139,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 .mc-tag::before, .mc-tag::after { content:''; width:32px; height:1px; background:var(--gold-lo); }
 .mc-iframe {
-  width: 100%; height: 450px;
+  width: 100%; height: 820px;
   border: none; display: block;
   background: #080808;
   pointer-events: none;
@@ -1379,10 +1424,131 @@ footer {
   .bf-bottom { top: 434px; width: 350px; height: 56px; transform: translateY(28px) rotateX(-90deg); }
   .book-3d.book-cover-open .bf-front { transform: translateZ(28px) rotateY(-170deg); }
   .book-3d.book-cover-closing .bf-front { transform: translateZ(28px); }
+  .bf-cover-inside { width: 350px; height: 490px; transform: translateZ(25px) rotateY(180deg); }
+  .book-3d.book-cover-open .bf-cover-inside { transform: translateZ(25px) rotateY(10deg); }
+  .book-3d.book-cover-closing .bf-cover-inside { transform: translateZ(25px) rotateY(180deg); }
 }
 
 /* ── Rotating word ── */
 #rotating-word { transition: none; }
+
+/* ============================================================
+   ORGANIC / SOUL STYLING — softens angularity, adds warmth
+============================================================ */
+
+/* Subtle radius on buttons */
+.btn-primary, .nav-btn, .ps-join-btn { border-radius: 2px; }
+.wl-btn-primary { border-radius: 2px; }
+
+/* Progress track — pill ends */
+.ps-progress-track { border-radius: 4px; }
+.ps-progress-fill { border-radius: 4px; }
+
+/* Waitlist perk items — subtle rounding */
+.wl-perk-item { border-radius: 3px 3px 0 0; }
+
+/* Email input — subtle radius */
+.email-inp { border-radius: 2px; }
+
+/* Form option buttons */
+.opt { border-radius: 3px; }
+
+/* Urgency badge — rounded pill */
+.ps-urgency-badge {
+  background: rgba(201,168,76,.06);
+  border: 1px solid rgba(201,168,76,.14);
+  border-radius: 20px;
+  padding: 5px 14px;
+}
+
+/* Story section: curved top for stats block */
+.story-stats {
+  position: relative;
+  clip-path: none;
+}
+.story-stats::before {
+  content: '';
+  position: absolute; top: -1px; left: 0; right: 0;
+  height: 32px;
+  background: var(--deep);
+  clip-path: ellipse(55% 100% at 50% 0%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Ticker — soft fade on edges */
+.story-ticker { position: relative; }
+.story-ticker::before, .story-ticker::after {
+  content: '';
+  position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+  pointer-events: none;
+}
+.story-ticker::before { left: 0; background: linear-gradient(to right, var(--ink), transparent); }
+.story-ticker::after { right: 0; background: linear-gradient(to left, var(--ink), transparent); }
+
+/* Progress section: curved top edge */
+.progress-section {
+  position: relative;
+}
+.progress-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 40px;
+  background: var(--ink);
+  clip-path: ellipse(60% 100% at 50% 0%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Waitlist: subtle arc top */
+.waitlist {
+  clip-path: polygon(0 20px, 2% 0%, 98% 0%, 100% 20px, 100% 100%, 0 100%);
+}
+
+/* Decorative gold rule after story problem */
+.story-problem {
+  position: relative;
+}
+.story-problem::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 2px;
+  background: radial-gradient(ellipse at center, var(--gold-lo) 0%, transparent 100%);
+}
+
+/* ss-item: curved internal card look */
+.ss-item {
+  border-radius: 0;
+  position: relative;
+}
+
+/* Organic decorative orb in waitlist bg */
+.wl-bg::before {
+  border-radius: 50%;
+}
+
+/* Book hint text — rounded badge */
+.book-hint {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-family: var(--ui); font-size: 9px;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--smoke); text-align: center; margin-top: 20px;
+}
+
+/* Perk items grid — more rounded */
+.wl-orn-d { border-radius: 50%; }
+
+/* Join waitlist btn in progress — pill style offset */
+.ps-join-btn {
+  border-radius: 2px;
+  box-shadow: 0 4px 24px rgba(201,168,76,.15);
+}
+
+/* Footer border softening */
+footer { border-top: 1px solid var(--edge); }
 </style>
 </head>
 <body>
@@ -1393,7 +1559,15 @@ footer {
 
 <!-- ═══ NAV ═══ -->
 <nav id="nav">
-  <span class="nav-logo">Progressio</span>
+  <div class="nav-logo">
+    <a href="https://grankerslinks.giize.com" target="_blank" rel="noopener" aria-label="Grankers Team">
+      <img src="/grankers-lion.svg" alt="Grankers" class="nav-lion">
+    </a>
+    <div class="nav-brand-wrap">
+      <span>Progressio</span>
+      <span class="nav-brand-sub">by Grankers</span>
+    </div>
+  </div>
   <div class="nav-right">
     <div class="nav-live">
       <div class="nav-pulse"></div>
@@ -1456,6 +1630,8 @@ footer {
           <div class="bf bf-top"></div>
           <!-- Bottom edge -->
           <div class="bf bf-bottom"></div>
+          <!-- Inside of front cover (dark leather liner, visible during opening) -->
+          <div class="bf bf-cover-inside"></div>
           <!-- Inner page (visible when cover opens) — single right-hand page -->
           <div class="bf bf-inner-spread">
             <div class="is-pages">
@@ -1582,7 +1758,7 @@ footer {
         <div class="ps-progress-track">
           <div class="ps-progress-fill"></div>
         </div>
-        <span class="ps-progress-label">78% complete — shipping Q2 2026</span>
+        <span class="ps-progress-label">30% complete — shipping Q2 2026</span>
       </div>
     </div>
     <div class="ps-bar"></div>

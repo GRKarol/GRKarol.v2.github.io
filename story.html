@@ -110,6 +110,20 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   font-size: 18px; font-weight: 600;
   letter-spacing: .22em; color: var(--gold);
   text-transform: uppercase;
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+.nav-lion {
+  width: 34px; height: 37px; flex-shrink: 0;
+  opacity: .9; transition: opacity .3s;
+}
+.nav-lion:hover { opacity: 1; }
+.nav-brand-wrap {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+}
+.nav-brand-sub {
+  font-family: var(--ui); font-size: 8px; font-weight: 300;
+  letter-spacing: .28em; color: var(--gold-lo); text-transform: uppercase;
 }
 .nav-right { display: flex; align-items: center; gap: 32px; }
 .nav-link {
@@ -393,6 +407,45 @@ footer {
 .ft-brand { font-family: var(--serif); font-size: 16px; font-weight:600; letter-spacing: .22em; color: var(--gold-lo); text-transform:uppercase; }
 .ft-copy { font-family: var(--ui); font-size: 10px; letter-spacing: .1em; color: var(--edge); }
 
+/* ── ORGANIC SOUL STYLING ── */
+.nav-btn { border-radius: 2px; }
+.btn-primary { border-radius: 2px; }
+
+/* Chapter text cards — subtle radius */
+.ch-card {
+  border-radius: 4px;
+}
+.ch-spec-item {
+  border-radius: 3px;
+}
+
+/* Story hero — organic curved bottom */
+.story-hero {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), 98% 100%, 2% 100%, 0 calc(100% - 24px));
+}
+
+/* Chapter alternating bg — soft edge */
+.chapter:nth-child(odd) .ch-stage {
+  position: relative;
+}
+
+/* Story CTA — curved top */
+.story-cta {
+  position: relative;
+}
+.story-cta::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 40px;
+  background: var(--surface);
+  clip-path: ellipse(55% 100% at 50% 0%);
+  z-index: 0; pointer-events: none;
+}
+
+/* Roadmap step numbers — pill */
+.ch-step-n {
+  border-radius: 50%;
+}
+
 /* ── MOBILE ── */
 @media(max-width:1024px){
   #nav { padding: 24px 36px; }
@@ -436,7 +489,15 @@ footer {
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="index.html" class="nav-logo">Progressio</a>
+  <div class="nav-logo">
+    <a href="https://grankerslinks.giize.com" target="_blank" rel="noopener" aria-label="Grankers Team">
+      <img src="/grankers-lion.svg" alt="Grankers" class="nav-lion">
+    </a>
+    <a href="index.html" class="nav-brand-wrap">
+      <span>Progressio</span>
+      <span class="nav-brand-sub">by Grankers</span>
+    </a>
+  </div>
   <div class="nav-right">
     <a href="index.html" class="nav-link">Home</a>
     <a href="index.html#waitlist" class="nav-btn">Join Waitlist</a>
