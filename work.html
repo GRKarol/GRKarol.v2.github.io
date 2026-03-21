@@ -49,9 +49,36 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   transition: padding-bottom .4s var(--silk);
+  cursor: none;
 }
 body.admin-active { padding-bottom: 68px; }
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 50% at 50% 10%, rgba(201,168,76,.03) 0%, transparent 70%);
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: .35;
+}
 a { text-decoration: none; color: inherit; }
+
+/* ── CURSOR ── */
+#cursor-canvas {
+  position: fixed; inset: 0; z-index: 9998;
+  pointer-events: none;
+}
+#c-dot, #c-ring {
+  position: fixed; border-radius: 50%; pointer-events: none;
+  z-index: 9999; transform: translate(-50%,-50%); will-change: left,top;
+}
+#c-dot  { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; transition: width .2s, height .2s, opacity .2s; }
+#c-ring { width: 34px; height: 34px; border: 1px solid rgba(201,168,76,.35); border-radius: 50%; transition: width .4s var(--silk), height .4s var(--silk), opacity .3s; }
+.cursor-expand #c-dot  { width: 20px; height: 20px; opacity: .6; }
+.cursor-expand #c-ring { width: 64px; height: 64px; opacity: .3; }
+@media(max-width:768px){ #c-dot,#c-ring,#cursor-canvas { display: none; } body { cursor: auto; } }
 
 /* ── NAV ── */
 #nav {
@@ -78,16 +105,28 @@ a { text-decoration: none; color: inherit; }
 }
 .nav-back:hover { color: var(--cream); }
 
-/* ── PAGE HEADER ── */
+/* ── PAGE HEADER (EDITORIAL MASTHEAD) ── */
 .page-header {
-  padding: 140px 56px 56px;
-  max-width: 900px;
-  border-bottom: 1px solid var(--edge);
+  padding: 140px 56px 0;
   margin-bottom: 60px;
+  position: relative;
+}
+.ph-masthead {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--edge);
+}
+.ph-issue {
+  position: absolute; top: 0; right: 0;
+  font-family: var(--ui); font-size: 8px; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold-lo);
 }
 .ph-status {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 28px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-bottom: 24px;
 }
 .ph-live-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -103,36 +142,25 @@ a { text-decoration: none; color: inherit; }
   font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
   text-transform: uppercase; color: var(--ash);
 }
+.ph-glow {
+  position: absolute; left: 50%; top: 40%; transform: translate(-50%,-50%);
+  width: 640px; height: 260px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(ellipse, rgba(201,168,76,.06) 0%, transparent 70%);
+}
 .ph-title {
-  font-family: var(--serif); font-size: clamp(36px, 5.5vw, 68px);
-  font-weight: 300; line-height: 1.05; color: var(--cream);
-  margin-bottom: 36px;
+  font-family: var(--serif); font-size: clamp(52px, 8vw, 96px);
+  font-weight: 300; line-height: 1.0; color: var(--cream);
+  margin-bottom: 40px; position: relative; z-index: 1;
 }
 .ph-title em { font-style: italic; color: var(--gold); }
-.ph-progress-wrap {
-  margin-bottom: 40px;
-}
-.ph-progress-meta {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 8px;
-}
-.ph-progress-lbl {
-  font-family: var(--ui); font-size: 9px; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--ash);
-}
-.ph-progress-pct {
-  font-family: var(--serif); font-size: 14px; color: var(--gold);
-}
-.ph-progress-track {
-  height: 1px; background: var(--edge); position: relative;
-}
-.ph-progress-fill {
-  position: absolute; left: 0; top: 0; height: 1px;
-  background: linear-gradient(to right, var(--gold-lo), var(--gold));
-  transition: width 1.2s cubic-bezier(.25,.46,.45,.94);
+.ph-rule {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-lo), transparent);
+  margin-bottom: 28px;
 }
 .ph-stats {
-  display: flex; gap: 48px; flex-wrap: wrap;
+  display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 28px; position: relative; z-index: 1;
 }
 .ph-stat-num {
   font-family: var(--serif); font-size: 28px; font-weight: 300;
@@ -142,6 +170,40 @@ a { text-decoration: none; color: inherit; }
   font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
   text-transform: uppercase; color: var(--ash);
   display: block; margin-top: 4px;
+}
+/* Timeline progress */
+.ph-timeline-wrap {
+  max-width: 640px; margin: 0 auto; position: relative; z-index: 1;
+}
+.ph-tl-labels {
+  display: flex; justify-content: space-between; margin-bottom: 18px;
+}
+.ph-tl-label {
+  font-family: var(--ui); font-size: 8px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ash);
+  flex: 1; text-align: center; position: relative; padding-bottom: 14px;
+}
+.ph-tl-label::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px; border-radius: 50%;
+  border: 1px solid var(--edge); background: var(--ink);
+  transition: border-color .5s, background .5s, box-shadow .5s;
+}
+.ph-tl-label.passed::after { background: var(--gold); border-color: var(--gold); }
+.ph-tl-label.active { color: var(--gold); }
+.ph-tl-label.active::after { background: var(--gold); border-color: var(--gold-hi); box-shadow: 0 0 8px rgba(201,168,76,.6); }
+.ph-timeline-track {
+  height: 1px; background: var(--edge); position: relative;
+}
+.ph-timeline-fill {
+  position: absolute; left: 0; top: 0; height: 1px;
+  background: linear-gradient(to right, var(--gold-lo), var(--gold));
+  width: 0; transition: width 1.6s cubic-bezier(.25,.46,.45,.94);
+}
+.ph-progress-pct {
+  font-family: var(--serif); font-size: 11px; color: var(--gold-lo);
+  text-align: right; margin-top: 8px; letter-spacing: .08em;
 }
 
 /* ── SETUP BANNER ── */
@@ -159,53 +221,116 @@ a { text-decoration: none; color: inherit; }
 }
 #setup-banner.hidden { display: none; }
 
-/* ── GRID ── */
+/* ── GRID (EDITORIAL) ── */
 .wip-grid {
   padding: 0 56px 120px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--ink);
 }
 
-/* ── CARD ── */
+/* ── CARD BASE ── */
 .wip-card {
   background: var(--surface);
   padding: 32px;
-  transition: background .3s var(--silk);
+  transition: background .3s var(--silk), transform .3s var(--silk), box-shadow .3s var(--silk);
   position: relative;
   overflow: hidden;
 }
-.wip-card:hover { background: var(--lift); }
+.wip-card:hover {
+  background: var(--lift);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  z-index: 2;
+}
+/* Gold accent line animates on hover */
 .wip-card::before {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--edge), transparent);
+  top: 0; left: 0;
+  width: 2px; height: 0;
+  background: var(--gold);
+  transition: height .4s var(--silk);
 }
+.wip-card:hover::before { height: 100%; }
+/* Ornamental quotemark (text cards) */
+.wip-card.slot-standard::after,
+.wip-card.slot-accent::after {
+  content: '\201C';
+  position: absolute; bottom: -20px; right: 12px;
+  font-family: var(--serif); font-size: 120px; line-height: 1;
+  color: rgba(201,168,76,.04); pointer-events: none; z-index: 0;
+}
+
+/* Card number */
+.card-num {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
+  color: var(--smoke); margin-bottom: 4px; display: block;
+}
+/* Card type label */
 .card-type {
   font-family: var(--ui); font-size: 9px; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--ash); margin-bottom: 16px;
+  text-transform: uppercase; color: var(--ash); margin-bottom: 12px;
   display: flex; align-items: center; gap: 8px;
 }
 .card-dot {
   width: 4px; height: 4px; border-radius: 50%;
   background: var(--ash); flex-shrink: 0;
 }
+/* Standard: type label in top-right (rotated) */
+.wip-card.slot-standard .card-type {
+  position: absolute; top: 20px; right: 12px;
+  writing-mode: vertical-rl; text-orientation: mixed;
+  transform: rotate(180deg);
+  margin-bottom: 0; font-size: 8px; gap: 0;
+}
+.wip-card.slot-standard .card-type .card-dot { display: none; }
+
 .card-title {
   font-family: var(--serif); font-size: 22px; font-weight: 300;
   line-height: 1.25; color: var(--cream); margin-bottom: 12px;
+  position: relative; z-index: 1;
 }
 .card-title em { font-style: italic; color: var(--gold); }
 .card-body {
-  font-size: 13px; line-height: 1.75; color: var(--ash);
-  letter-spacing: .02em;
+  font-size: 14px; line-height: 1.85; color: var(--ash);
+  letter-spacing: .02em; position: relative; z-index: 1;
 }
 .card-date {
   margin-top: 20px;
   font-family: var(--ui); font-size: 9px; letter-spacing: .16em;
   text-transform: uppercase; color: var(--ash);
 }
+
+/* ── SLOT VARIANTS ── */
+.wip-card.slot-featured {
+  grid-column: span 2;
+  min-height: 340px;
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(28,24,36,1) 100%);
+}
+.wip-card.slot-featured::before { background: linear-gradient(to bottom, var(--gold-hi), var(--gold-lo)); }
+.wip-card.slot-featured::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,168,76,.012) 40px);
+}
+.wip-card.slot-featured .card-title {
+  font-size: 36px; line-height: 1.15;
+}
+.wip-card.slot-featured .card-body { display: block; }
+
+.wip-card.slot-wide {
+  grid-column: span 3;
+  display: flex; align-items: flex-start; gap: 48px;
+  padding: 32px 48px;
+  border-top: 1px solid var(--gold-lo);
+}
+.wip-card.slot-wide::before { height: 100%; width: 2px; top: 0; }
+.wip-card.slot-wide .card-wide-left { flex: 1.2; min-width: 0; }
+.wip-card.slot-wide .card-wide-right { flex: 1; min-width: 0; }
+.wip-card.slot-wide .card-title { font-size: 26px; }
+.wip-card.slot-wide .card-date { margin-top: 0; }
 
 /* Image card variant */
 .wip-card.has-image { padding: 0; }
@@ -232,21 +357,34 @@ a { text-decoration: none; color: inherit; }
 }
 .card-no-media span { font-size: 10px; letter-spacing: .1em; color: var(--smoke); text-transform: uppercase; }
 
-/* Status badge */
+/* Status badge — pill with colored dot */
 .card-status {
-  display: inline-block;
-  font-family: var(--ui); font-size: 8px; letter-spacing: .2em;
-  text-transform: uppercase; padding: 3px 8px;
-  border: 1px solid var(--edge); color: var(--ash);
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--ui); font-size: 8px; letter-spacing: .18em;
+  text-transform: uppercase; padding: 3px 8px 3px 5px;
+  background: rgba(255,255,255,.03); color: var(--ash);
   margin-bottom: 14px;
 }
-.card-status.active   { border-color: var(--gold); color: var(--gold); }
-.card-status.upcoming { border-color: var(--ash);  color: var(--ash); }
-.card-status.done     { border-color: var(--smoke); color: var(--smoke); }
+.card-status-dot {
+  width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0;
+  background: var(--ash);
+}
+.card-status.active   { color: var(--gold); }
+.card-status.active .card-status-dot   { background: var(--gold); }
+.card-status.upcoming { color: var(--ash); }
+.card-status.upcoming .card-status-dot { background: var(--ash); }
+.card-status.done     { color: var(--smoke); }
+.card-status.done .card-status-dot     { background: var(--smoke); }
 
 /* ── Scroll reveal ── */
-.rv { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.25,.46,.45,.94), transform .7s cubic-bezier(.25,.46,.45,.94); }
+.rv {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s cubic-bezier(.25,.46,.45,.94), transform .7s cubic-bezier(.25,.46,.45,.94);
+  transition-delay: var(--stagger-delay, 0ms);
+}
 .rv.in { opacity: 1; transform: none; }
+.rv.featured-enter { transform: translateY(40px); }
+.rv.wide-enter { transform: translateY(30px); }
 
 /* ── EMPTY STATE ── */
 .wip-card.add-new {
@@ -491,20 +629,34 @@ footer {
 @media(max-width:900px){
   #nav { padding: 18px 20px; }
   #nav.frosted { padding: 13px 20px; }
-  .page-header { padding: 120px 20px 56px; }
-  .wip-grid { padding: 0 20px 80px; grid-template-columns: 1fr; }
+  .page-header { padding: 120px 20px 0; }
+  .wip-grid { padding: 0 20px 80px; grid-template-columns: 1fr; background: none; gap: 2px; }
+  .wip-card.slot-featured, .wip-card.slot-wide { grid-column: span 1; }
+  .wip-card.slot-wide { flex-direction: column; gap: 16px; padding: 28px 20px; }
+  .wip-card.slot-standard .card-type { position: static; writing-mode: horizontal-tb; transform: none; }
   .wip-divider { margin: 0 20px; margin-bottom: 48px; }
   #setup-banner { margin: 0 20px 32px; }
   footer { flex-direction:column; gap:16px; text-align:center; padding:28px 20px; }
   #admin-bar { padding: 12px 20px; flex-wrap: wrap; gap: 8px; }
   #modal { padding: 28px 20px; }
+  .ph-glow { width: 100%; }
+}
+@media(max-width:768px){
+  body { cursor: auto; }
+  .ph-title { font-size: clamp(40px, 10vw, 64px); }
 }
 @media(max-width:480px){
-  .ph-title { font-size: clamp(28px, 9vw, 40px); }
+  .ph-title { font-size: clamp(32px, 9vw, 48px); }
+  .ph-stats { gap: 28px; }
 }
 </style>
 </head>
 <body>
+
+<!-- ═══ CURSOR ═══ -->
+<canvas id="cursor-canvas"></canvas>
+<div id="c-dot"></div>
+<div id="c-ring"></div>
 
 <!-- ═══ NAV ═══ -->
 <nav id="nav">
@@ -514,34 +666,49 @@ footer {
 
 <!-- ═══ PAGE HEADER ═══ -->
 <div class="page-header">
-  <div class="ph-status">
-    <span class="ph-live-dot"></span>
-    <span class="ph-status-label">Live updates</span>
-    <span class="ph-status-divider">·</span>
-    <span class="ph-status-date">March 2026</span>
-  </div>
-  <h1 class="ph-title">The Work<br><em>in Progress.</em></h1>
-  <div class="ph-progress-wrap">
-    <div class="ph-progress-meta">
-      <span class="ph-progress-lbl">Production phase</span>
-      <span class="ph-progress-pct">70%</span>
+  <div class="ph-masthead rv">
+    <div class="ph-glow"></div>
+    <span class="ph-issue">Issue 001</span>
+
+    <div class="ph-status">
+      <span class="ph-live-dot"></span>
+      <span class="ph-status-label">Live updates</span>
+      <span class="ph-status-divider">·</span>
+      <span class="ph-status-date">March 2026</span>
     </div>
-    <div class="ph-progress-track">
-      <div class="ph-progress-fill" id="ph-fill" style="width:0"></div>
+
+    <h1 class="ph-title">The Work<br><em>in Progress.</em></h1>
+
+    <div class="ph-rule"></div>
+
+    <div class="ph-stats" id="ph-stats">
+      <div class="ph-stat">
+        <span class="ph-stat-num" data-count="400" data-suffix="">0</span>
+        <span class="ph-stat-lbl">pages designed</span>
+      </div>
+      <div class="ph-stat">
+        <span class="ph-stat-num" data-count="12" data-suffix="">0</span>
+        <span class="ph-stat-lbl">monthly cycles</span>
+      </div>
+      <div class="ph-stat">
+        <span class="ph-stat-num">Q2</span>
+        <span class="ph-stat-lbl">2026 launch</span>
+      </div>
     </div>
-  </div>
-  <div class="ph-stats">
-    <div class="ph-stat">
-      <span class="ph-stat-num">400</span>
-      <span class="ph-stat-lbl">pages designed</span>
-    </div>
-    <div class="ph-stat">
-      <span class="ph-stat-num">12</span>
-      <span class="ph-stat-lbl">monthly cycles</span>
-    </div>
-    <div class="ph-stat">
-      <span class="ph-stat-num">Q2</span>
-      <span class="ph-stat-lbl">2026 launch</span>
+
+    <div class="ph-rule"></div>
+
+    <div class="ph-timeline-wrap">
+      <div class="ph-tl-labels">
+        <span class="ph-tl-label passed">Concept</span>
+        <span class="ph-tl-label passed">Design</span>
+        <span class="ph-tl-label active">Production</span>
+        <span class="ph-tl-label">Launch</span>
+      </div>
+      <div class="ph-timeline-track">
+        <div class="ph-timeline-fill" id="ph-fill"></div>
+      </div>
+      <div class="ph-progress-pct">70% complete</div>
     </div>
   </div>
 </div>
@@ -817,12 +984,34 @@ function renderPosts() {
   }
 
   grid.innerHTML = sorted.map((p, i) => cardHTML(p, i, sorted.length)).join('');
+
+  // Apply scroll reveal + stagger delays
+  grid.querySelectorAll('.wip-card').forEach((card, i) => {
+    const delay = (i % 6) * 80;
+    card.style.setProperty('--stagger-delay', delay + 'ms');
+    card.classList.add('rv');
+    if (card.classList.contains('slot-featured')) card.classList.add('featured-enter');
+    if (card.classList.contains('slot-wide'))     card.classList.add('wide-enter');
+    rvObs.observe(card);
+  });
+}
+
+// ─── Slot helper ───────────────────────────────────────
+function getSlot(idx) {
+  const mod = idx % 6;
+  if (mod === 0) return 'featured';
+  if (mod === 5) return 'wide';
+  return 'standard';
 }
 
 function cardHTML(p, idx, total) {
   const sl      = STATUS_LABELS[p.status] || '';
-  const statEl  = sl ? `<div class="card-status ${esc(p.status)}">${esc(sl)}</div>` : '';
+  const slot    = getSlot(idx);
+  const cardNum = String(idx + 1).padStart(2, '0');
+
+  const statEl  = sl ? `<div class="card-status ${esc(p.status)}"><span class="card-status-dot"></span>${esc(sl)}</div>` : '';
   const typeEl  = `<div class="card-type"><span class="card-dot"></span>${esc(p.type||'Update')}</div>`;
+  const numEl   = `<span class="card-num">${cardNum}</span>`;
   const titleEl = `<h2 class="card-title">${italicize(p.title||'')}</h2>`;
   const bodyEl  = p.body ? `<p class="card-body">${esc(p.body)}</p>` : '';
   const dateEl  = p.date ? `<div class="card-date">${esc(p.date)}</div>` : '';
@@ -853,28 +1042,41 @@ function cardHTML(p, idx, total) {
         <div class="card-gallery-thumbs">${thumbs}</div>`;
     }
     return `
-<div class="wip-card has-image" data-id="${escAttr(p.id)}">
+<div class="wip-card has-image slot-${slot}" data-id="${escAttr(p.id)}">
   ${adminOverlay}
   ${media}
-  <div class="card-content">${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
+  <div class="card-content">${numEl}${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
 </div>`;
   }
 
   if (p.kind === 'video') {
     const embed = buildVideoEmbed(p.videoUrl);
     return `
-<div class="wip-card has-video" data-id="${escAttr(p.id)}">
+<div class="wip-card has-video slot-${slot}" data-id="${escAttr(p.id)}">
   ${adminOverlay}
   <div class="card-video-wrap">${embed}</div>
-  <div class="card-content">${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
+  <div class="card-content">${numEl}${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
 </div>`;
   }
 
-  // text
-  return `
-<div class="wip-card" data-id="${escAttr(p.id)}">
+  // text — wide card has horizontal layout
+  if (slot === 'wide') {
+    return `
+<div class="wip-card slot-wide" data-id="${escAttr(p.id)}">
   ${adminOverlay}
-  ${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}
+  <div class="card-wide-left">
+    ${numEl}${typeEl}${statEl}${titleEl}
+  </div>
+  <div class="card-wide-right">
+    ${bodyEl}${dateEl}
+  </div>
+</div>`;
+  }
+
+  return `
+<div class="wip-card slot-${slot}" data-id="${escAttr(p.id)}">
+  ${adminOverlay}
+  ${numEl}${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}
 </div>`;
 }
 
@@ -1223,16 +1425,109 @@ window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('frosted', scrollY > 50);
 }, { passive: true });
 
-// ─── Progress bar animation ─────────────────────────────
-setTimeout(() => {
-  const fill = document.getElementById('ph-fill');
-  if (fill) fill.style.width = '70%';
-}, 300);
+// ─── CURSOR (dot + ring) ───────────────────────────────
+(function(){
+  const dot  = document.getElementById('c-dot');
+  const ring = document.getElementById('c-ring');
+  if (!dot || !ring) return;
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+  (function loop(){
+    rx+=(mx-rx)*.15; ry+=(my-ry)*.15;
+    dot.style.left  = mx+'px'; dot.style.top  = my+'px';
+    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,label,.ctrl-btn,.tpl-btn').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-expand'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-expand'));
+  });
+})();
+
+// ─── GOLDEN CLOUD CURSOR CANVAS ───────────────────────
+(function(){
+  const canvas = document.getElementById('cursor-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  const particles = [];
+
+  document.addEventListener('mousemove', e => {
+    const count = 4 + Math.floor(Math.random() * 3); // 4-6
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 0.2 + Math.random() * 0.6;
+      particles.push({
+        x:     e.clientX,
+        y:     e.clientY,
+        vx:    Math.cos(angle) * speed * 0.8,
+        vy:    Math.sin(angle) * speed * 0.8 + 0.15,
+        size:  1.5 + Math.random() * 4.5,
+        alpha: 0.7 + Math.random() * 0.3,
+        hue:   38 + Math.random() * 14,
+      });
+    }
+  });
+
+  (function frame(){
+    ctx.clearRect(0, 0, W, H);
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.alpha -= 0.018;
+      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      grad.addColorStop(0, `hsla(${p.hue},85%,62%,${p.alpha})`);
+      grad.addColorStop(1, `hsla(${p.hue},70%,45%,0)`);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  })();
+})();
+
+// ─── Stats counter animation ──────────────────────────
+function animateCounter(el, target, duration) {
+  const start = performance.now();
+  (function tick(now){
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(ease * target);
+    if (t < 1) requestAnimationFrame(tick);
+  })(start);
+}
+
+// ─── Header IntersectionObserver (stats + timeline) ───
+const statsEl = document.getElementById('ph-stats');
+if (statsEl) {
+  const statsObs = new IntersectionObserver(entries => {
+    if (!entries[0].isIntersecting) return;
+    statsObs.disconnect();
+    statsEl.querySelectorAll('[data-count]').forEach(el => {
+      animateCounter(el, parseInt(el.dataset.count, 10), 1400);
+    });
+    setTimeout(() => {
+      const fill = document.getElementById('ph-fill');
+      if (fill) fill.style.width = '70%';
+    }, 200);
+  }, { threshold: 0.2 });
+  statsObs.observe(statsEl);
+}
 
 // ─── Scroll reveal ─────────────────────────────────────
 const rvObs = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rvObs.unobserve(e.target); } });
-}, { threshold: 0.08 });
+}, { threshold: 0.06 });
 document.querySelectorAll('.rv').forEach(el => rvObs.observe(el));
 
 // ─── Init ──────────────────────────────────────────────
