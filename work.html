@@ -221,160 +221,199 @@ a { text-decoration: none; color: inherit; }
 }
 #setup-banner.hidden { display: none; }
 
-/* ── GRID (EDITORIAL) ── */
+/* ── GRID ── */
 .wip-grid {
   padding: 0 56px 120px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--ink);
+  gap: 20px;
 }
 
 /* ── CARD BASE ── */
 .wip-card {
   background: var(--surface);
-  padding: 32px;
-  transition: background .3s var(--silk), transform .3s var(--silk), box-shadow .3s var(--silk);
-  position: relative;
+  border-radius: 4px;
   overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform .38s var(--silk), box-shadow .38s var(--silk);
 }
 .wip-card:hover {
-  background: var(--lift);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,.4);
-  z-index: 2;
-}
-/* Gold accent line animates on hover */
-.wip-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 2px; height: 0;
-  background: var(--gold);
-  transition: height .4s var(--silk);
-}
-.wip-card:hover::before { height: 100%; }
-/* Ornamental quotemark (text cards) */
-.wip-card.slot-standard::after,
-.wip-card.slot-accent::after {
-  content: '\201C';
-  position: absolute; bottom: -20px; right: 12px;
-  font-family: var(--serif); font-size: 120px; line-height: 1;
-  color: rgba(201,168,76,.04); pointer-events: none; z-index: 0;
+  transform: translateY(-6px) scale(1.012);
+  box-shadow: 0 24px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(201,168,76,.12);
+  z-index: 5;
 }
 
-/* Card number */
-.card-num {
-  font-family: var(--ui); font-size: 9px; letter-spacing: .18em;
-  color: var(--smoke); margin-bottom: 4px; display: block;
+/* ── CARD HEADER STRIP ── */
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 22px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  flex-shrink: 0;
 }
-/* Card type label */
-.card-type {
-  font-family: var(--ui); font-size: 9px; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--ash); margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
+.card-header-num {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .26em;
+  color: rgba(158,148,178,.5); font-weight: 400;
 }
-.card-dot {
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--ash); flex-shrink: 0;
+.card-type-badge {
+  font-family: var(--ui); font-size: 7px; letter-spacing: .22em;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 20px;
+  background: rgba(201,168,76,.07); color: var(--gold-lo);
+  border: 1px solid rgba(201,168,76,.1);
 }
-/* Standard: type label in top-right (rotated) */
-.wip-card.slot-standard .card-type {
-  position: absolute; top: 20px; right: 12px;
-  writing-mode: vertical-rl; text-orientation: mixed;
-  transform: rotate(180deg);
-  margin-bottom: 0; font-size: 8px; gap: 0;
-}
-.wip-card.slot-standard .card-type .card-dot { display: none; }
 
+/* ── CARD INNER (content zone) ── */
+.card-inner {
+  padding: 22px 22px 18px;
+  flex: 1; position: relative; overflow: hidden;
+}
+/* Huge background number as design element */
+.card-inner::before {
+  content: attr(data-num);
+  position: absolute; bottom: -18px; right: 12px;
+  font-family: var(--serif); font-size: 100px; line-height: 1; font-weight: 300;
+  color: rgba(201,168,76,.035); pointer-events: none; z-index: 0;
+  user-select: none;
+}
 .card-title {
-  font-family: var(--serif); font-size: 22px; font-weight: 300;
-  line-height: 1.25; color: var(--cream); margin-bottom: 12px;
+  font-family: var(--serif); font-size: 21px; font-weight: 300;
+  line-height: 1.28; color: var(--cream); margin-bottom: 12px;
   position: relative; z-index: 1;
 }
 .card-title em { font-style: italic; color: var(--gold); }
 .card-body {
-  font-size: 14px; line-height: 1.85; color: var(--ash);
-  letter-spacing: .02em; position: relative; z-index: 1;
-}
-.card-date {
-  margin-top: 20px;
-  font-family: var(--ui); font-size: 9px; letter-spacing: .16em;
-  text-transform: uppercase; color: var(--ash);
+  font-size: 13px; line-height: 1.82; color: var(--ash);
+  letter-spacing: .018em; position: relative; z-index: 1;
 }
 
-/* ── SLOT VARIANTS ── */
+/* ── CARD FOOTER ── */
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 22px 16px;
+  border-top: 1px solid rgba(255,255,255,.03);
+  flex-shrink: 0; gap: 8px;
+}
+
+/* ── STATUS PILL ── */
+.card-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--ui); font-size: 8px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--smoke);
+}
+.card-status-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  background: var(--smoke);
+}
+.card-status.active   { color: var(--gold); }
+.card-status.active   .card-status-dot { background: var(--gold); box-shadow: 0 0 6px rgba(201,168,76,.7); }
+.card-status.done     { color: var(--smoke); }
+.card-status.done     .card-status-dot { background: var(--smoke); }
+.card-date {
+  font-family: var(--ui); font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(158,148,178,.4);
+}
+
+/* ── SLOT: FEATURED (2-col) ── */
 .wip-card.slot-featured {
   grid-column: span 2;
-  min-height: 340px;
-  background: linear-gradient(135deg, var(--surface) 0%, rgba(28,24,36,1) 100%);
+  min-height: 380px;
+  background: linear-gradient(150deg, #16131f 0%, #0e0c14 100%);
+  border: 1px solid rgba(201,168,76,.07);
 }
-.wip-card.slot-featured::before { background: linear-gradient(to bottom, var(--gold-hi), var(--gold-lo)); }
-.wip-card.slot-featured::after {
+.wip-card.slot-featured .card-header {
+  background: linear-gradient(to right, rgba(201,168,76,.05), transparent);
+  border-bottom-color: rgba(201,168,76,.1);
+}
+.wip-card.slot-featured .card-type-badge {
+  background: rgba(201,168,76,.12); color: var(--gold);
+  border-color: rgba(201,168,76,.22);
+}
+.wip-card.slot-featured .card-inner::before { font-size: 148px; }
+.wip-card.slot-featured .card-title { font-size: 34px; line-height: 1.12; }
+/* Animated left glow bar */
+.wip-card.slot-featured::before {
   content: '';
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,168,76,.012) 40px);
+  position: absolute; top: 0; left: 0; width: 3px; height: 0;
+  background: linear-gradient(to bottom, var(--gold-hi), var(--gold-lo));
+  transition: height .65s var(--silk); z-index: 2;
 }
-.wip-card.slot-featured .card-title {
-  font-size: 36px; line-height: 1.15;
-}
-.wip-card.slot-featured .card-body { display: block; }
+.wip-card.slot-featured:hover::before { height: 100%; }
 
+/* ── SLOT: WIDE (full 3-col band) ── */
 .wip-card.slot-wide {
   grid-column: span 3;
-  display: flex; align-items: flex-start; gap: 48px;
-  padding: 32px 48px;
-  border-top: 1px solid var(--gold-lo);
+  flex-direction: row; align-items: stretch;
+  background: transparent; border-radius: 0;
+  border: none;
+  border-top: 1px solid rgba(201,168,76,.15);
+  overflow: visible;
+  min-height: 0;
 }
-.wip-card.slot-wide::before { height: 100%; width: 2px; top: 0; }
-.wip-card.slot-wide .card-wide-left { flex: 1.2; min-width: 0; }
-.wip-card.slot-wide .card-wide-right { flex: 1; min-width: 0; }
-.wip-card.slot-wide .card-title { font-size: 26px; }
-.wip-card.slot-wide .card-date { margin-top: 0; }
+.wip-card.slot-wide:hover {
+  transform: none;
+  box-shadow: none;
+  background: rgba(255,255,255,.012);
+  border-radius: 2px;
+}
+.card-wide-num {
+  width: 72px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 32px; font-weight: 300;
+  color: rgba(201,168,76,.18); border-right: 1px solid rgba(255,255,255,.04);
+  padding: 28px 0;
+}
+.card-wide-type {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-family: var(--ui); font-size: 7px; letter-spacing: .24em;
+  text-transform: uppercase; color: rgba(158,148,178,.35);
+  padding: 28px 16px; flex-shrink: 0;
+  border-right: 1px solid rgba(255,255,255,.04);
+}
+.card-wide-body {
+  flex: 1; padding: 26px 36px;
+  display: flex; flex-direction: column; justify-content: center; min-width: 0;
+}
+.card-wide-meta {
+  display: flex; flex-direction: column; align-items: flex-end;
+  justify-content: space-between;
+  padding: 26px 32px; min-width: 140px; flex-shrink: 0;
+  border-left: 1px solid rgba(255,255,255,.04);
+}
+.wip-card.slot-wide .card-title { font-size: 22px; margin-bottom: 8px; }
+.wip-card.slot-wide .card-body  { font-size: 13px; }
 
-/* Image card variant */
-.wip-card.has-image { padding: 0; }
+/* ── IMAGE / VIDEO VARIANTS ── */
+.wip-card.has-image,
+.wip-card.has-video { flex-direction: column; }
 .wip-card.has-image .card-img {
-  width: 100%; aspect-ratio: 4/3;
-  object-fit: cover; display: block;
-  filter: saturate(.7) brightness(.85);
-  transition: filter .5s var(--silk);
+  width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+  filter: saturate(.7) brightness(.85); transition: filter .5s var(--silk); flex-shrink: 0;
 }
-.wip-card.has-image:hover .card-img {
-  filter: saturate(.9) brightness(.95);
-}
-.wip-card.has-image .card-content { padding: 24px 28px 28px; }
-
-/* Video card variant */
-.wip-card.has-video { padding: 0; }
-.wip-card.has-video .card-content { padding: 24px 28px 28px; }
-.card-video-wrap { width: 100%; aspect-ratio: 16/9; display: block; background: var(--deep); }
+.wip-card.has-image:hover .card-img { filter: saturate(.9) brightness(.95); }
+.wip-card.has-image .card-content,
+.wip-card.has-video .card-content { padding: 20px 22px 16px; flex: 1; display: flex; flex-direction: column; }
+.card-video-wrap { width: 100%; aspect-ratio: 16/9; display: block; background: var(--deep); flex-shrink: 0; }
 .card-video-wrap iframe,
 .card-video-wrap video { width: 100%; height: 100%; display: block; border: none; }
 .card-no-media {
   aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
-  background: var(--lift);
+  background: var(--lift); flex-shrink: 0;
 }
 .card-no-media span { font-size: 10px; letter-spacing: .1em; color: var(--smoke); text-transform: uppercase; }
 
-/* Status badge — pill with colored dot */
-.card-status {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--ui); font-size: 8px; letter-spacing: .18em;
-  text-transform: uppercase; padding: 3px 8px 3px 5px;
-  background: rgba(255,255,255,.03); color: var(--ash);
-  margin-bottom: 14px;
+/* ── CAROUSEL DOTS (mobile only) ── */
+.carousel-dots {
+  display: none;
+  justify-content: center; align-items: center; gap: 6px;
+  padding: 16px 0 48px;
 }
-.card-status-dot {
-  width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0;
-  background: var(--ash);
+.carousel-dot {
+  width: 18px; height: 2px; border-radius: 1px;
+  background: var(--edge); transition: background .3s, width .3s, opacity .3s;
+  cursor: pointer; flex-shrink: 0;
 }
-.card-status.active   { color: var(--gold); }
-.card-status.active .card-status-dot   { background: var(--gold); }
-.card-status.upcoming { color: var(--ash); }
-.card-status.upcoming .card-status-dot { background: var(--ash); }
-.card-status.done     { color: var(--smoke); }
-.card-status.done .card-status-dot     { background: var(--smoke); }
+.carousel-dot.active { background: var(--gold); width: 28px; }
 
 /* ── Scroll reveal ── */
 .rv {
@@ -630,10 +669,6 @@ footer {
   #nav { padding: 18px 20px; }
   #nav.frosted { padding: 13px 20px; }
   .page-header { padding: 120px 20px 0; }
-  .wip-grid { padding: 0 20px 80px; grid-template-columns: 1fr; background: none; gap: 2px; }
-  .wip-card.slot-featured, .wip-card.slot-wide { grid-column: span 1; }
-  .wip-card.slot-wide { flex-direction: column; gap: 16px; padding: 28px 20px; }
-  .wip-card.slot-standard .card-type { position: static; writing-mode: horizontal-tb; transform: none; }
   .wip-divider { margin: 0 20px; margin-bottom: 48px; }
   #setup-banner { margin: 0 20px 32px; }
   footer { flex-direction:column; gap:16px; text-align:center; padding:28px 20px; }
@@ -641,13 +676,69 @@ footer {
   #modal { padding: 28px 20px; }
   .ph-glow { width: 100%; }
 }
+
+/* ── MOBILE CAROUSEL ── */
 @media(max-width:768px){
   body { cursor: auto; }
   .ph-title { font-size: clamp(40px, 10vw, 64px); }
+
+  /* Horizontal snap scroll */
+  .wip-grid {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    padding: 0 20px 16px;
+    /* First card padding: extra left space so user can see there's more */
+    padding-left: 20px;
+  }
+  .wip-grid::after {
+    content: '';
+    flex: 0 0 8px; /* trailing gutter */
+  }
+  .wip-grid::-webkit-scrollbar { display: none; }
+
+  /* Every card = one snap item */
+  .wip-card {
+    flex: 0 0 82vw;
+    scroll-snap-align: start;
+    min-height: 300px;
+  }
+  /* Disable slot spanning — all equal width in carousel */
+  .wip-card.slot-featured { grid-column: unset; min-height: 340px; }
+  .wip-card.slot-wide {
+    grid-column: unset;
+    flex-direction: column; border-top: none; border-radius: 4px;
+    border-left: 3px solid rgba(201,168,76,.2);
+    overflow: hidden;
+  }
+  .wip-card.slot-wide .card-wide-num {
+    width: auto; justify-content: flex-start;
+    padding: 20px 22px; border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+  .wip-card.slot-wide .card-wide-type { display: none; }
+  .wip-card.slot-wide .card-wide-body { padding: 20px 22px; }
+  .wip-card.slot-wide .card-wide-meta {
+    flex-direction: row; border-left: none;
+    border-top: 1px solid rgba(255,255,255,.04);
+    padding: 14px 22px; min-width: unset;
+    align-items: center;
+  }
+  /* Disable hover scale on touch */
+  .wip-card:hover { transform: none; box-shadow: none; }
+
+  /* Show dots */
+  .carousel-dots { display: flex; }
 }
+
 @media(max-width:480px){
   .ph-title { font-size: clamp(32px, 9vw, 48px); }
   .ph-stats { gap: 28px; }
+  .wip-card { flex: 0 0 88vw; }
 }
 </style>
 </head>
@@ -724,6 +815,9 @@ footer {
 <div class="wip-grid" id="wip-grid">
   <!-- posty renderowane przez JS -->
 </div>
+
+<!-- ═══ CAROUSEL DOTS (mobile) ═══ -->
+<div class="carousel-dots" id="carousel-dots"></div>
 
 <div class="wip-divider"></div>
 
@@ -980,14 +1074,40 @@ function renderPosts() {
         <div class="add-icon">+</div>
         <div class="add-text">Brak postów — wejdź w tryb admina żeby dodać</div>
       </div>`;
+    $('carousel-dots').innerHTML = '';
     return;
   }
 
   grid.innerHTML = sorted.map((p, i) => cardHTML(p, i, sorted.length)).join('');
 
-  // Apply scroll reveal + stagger delays
+  // Carousel dots
+  const dotsEl = $('carousel-dots');
+  dotsEl.innerHTML = sorted.map((_, i) =>
+    `<span class="carousel-dot${i===0?' active':''}" data-idx="${i}"></span>`
+  ).join('');
+  dotsEl.querySelectorAll('.carousel-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      const cards = grid.querySelectorAll('.wip-card');
+      const idx   = parseInt(dot.dataset.idx, 10);
+      if (cards[idx]) cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    });
+  });
+  // Update active dot on scroll
+  grid.addEventListener('scroll', () => {
+    const cards = grid.querySelectorAll('.wip-card');
+    let closestIdx = 0, minDist = Infinity;
+    cards.forEach((card, i) => {
+      const dist = Math.abs(card.getBoundingClientRect().left - grid.getBoundingClientRect().left);
+      if (dist < minDist) { minDist = dist; closestIdx = i; }
+    });
+    dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === closestIdx)
+    );
+  }, { passive: true });
+
+  // Scroll reveal + stagger
   grid.querySelectorAll('.wip-card').forEach((card, i) => {
-    const delay = (i % 6) * 80;
+    const delay = (i % 6) * 75;
     card.style.setProperty('--stagger-delay', delay + 'ms');
     card.classList.add('rv');
     if (card.classList.contains('slot-featured')) card.classList.add('featured-enter');
@@ -1010,11 +1130,9 @@ function cardHTML(p, idx, total) {
   const cardNum = String(idx + 1).padStart(2, '0');
 
   const statEl  = sl ? `<div class="card-status ${esc(p.status)}"><span class="card-status-dot"></span>${esc(sl)}</div>` : '';
-  const typeEl  = `<div class="card-type"><span class="card-dot"></span>${esc(p.type||'Update')}</div>`;
-  const numEl   = `<span class="card-num">${cardNum}</span>`;
+  const dateEl  = p.date ? `<div class="card-date">${esc(p.date)}</div>` : '';
   const titleEl = `<h2 class="card-title">${italicize(p.title||'')}</h2>`;
   const bodyEl  = p.body ? `<p class="card-body">${esc(p.body)}</p>` : '';
-  const dateEl  = p.date ? `<div class="card-date">${esc(p.date)}</div>` : '';
 
   const adminOverlay = `
     <div class="card-admin-overlay">
@@ -1028,13 +1146,26 @@ function cardHTML(p, idx, total) {
       </div>
     </div>`;
 
+  // ── Wide card: horizontal band ──
+  if (slot === 'wide' && p.kind === 'text') {
+    return `
+<div class="wip-card slot-wide" data-id="${escAttr(p.id)}">
+  ${adminOverlay}
+  <div class="card-wide-num">${cardNum}</div>
+  <div class="card-wide-type">${esc(p.type||'Update')}</div>
+  <div class="card-wide-body">${titleEl}${bodyEl}</div>
+  <div class="card-wide-meta">${statEl}${dateEl}</div>
+</div>`;
+  }
+
+  // ── Image card ──
   if (p.kind === 'image') {
     const imgs = (p.images && p.images.length) ? p.images : (p.imageUrl ? [p.imageUrl] : []);
     let media;
     if (!imgs.length) {
       media = `<div class="card-no-media"><span>Brak zdjęcia</span></div>`;
     } else if (imgs.length === 1) {
-      media = `<img class="card-gallery-main" src="${escAttr(imgs[0])}" alt="${escAttr(p.title)}" loading="lazy">`;
+      media = `<img class="card-img" src="${escAttr(imgs[0])}" alt="${escAttr(p.title)}" loading="lazy">`;
     } else {
       const thumbs = imgs.map((u, i) => `<img class="card-gallery-thumb${i===0?' active':''}" src="${escAttr(u)}" alt="" loading="lazy" onclick="switchGallery('${escAttr(p.id)}',this,'${escAttr(u)}')">`).join('');
       media = `
@@ -1045,38 +1176,47 @@ function cardHTML(p, idx, total) {
 <div class="wip-card has-image slot-${slot}" data-id="${escAttr(p.id)}">
   ${adminOverlay}
   ${media}
-  <div class="card-content">${numEl}${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
+  <div class="card-content" style="padding:18px 22px 14px;flex:1;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <span style="font-family:var(--ui);font-size:9px;letter-spacing:.26em;color:rgba(158,148,178,.5)">${cardNum}</span>
+      <span class="card-type-badge">${esc(p.type||'Photo')}</span>
+    </div>
+    ${titleEl}${bodyEl}
+    <div class="card-footer" style="margin-top:auto;padding:10px 0 0;">${statEl}${dateEl}</div>
+  </div>
 </div>`;
   }
 
+  // ── Video card ──
   if (p.kind === 'video') {
     const embed = buildVideoEmbed(p.videoUrl);
     return `
 <div class="wip-card has-video slot-${slot}" data-id="${escAttr(p.id)}">
   ${adminOverlay}
   <div class="card-video-wrap">${embed}</div>
-  <div class="card-content">${numEl}${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}</div>
-</div>`;
-  }
-
-  // text — wide card has horizontal layout
-  if (slot === 'wide') {
-    return `
-<div class="wip-card slot-wide" data-id="${escAttr(p.id)}">
-  ${adminOverlay}
-  <div class="card-wide-left">
-    ${numEl}${typeEl}${statEl}${titleEl}
-  </div>
-  <div class="card-wide-right">
-    ${bodyEl}${dateEl}
+  <div class="card-content" style="padding:18px 22px 14px;flex:1;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <span style="font-family:var(--ui);font-size:9px;letter-spacing:.26em;color:rgba(158,148,178,.5)">${cardNum}</span>
+      <span class="card-type-badge">${esc(p.type||'Video')}</span>
+    </div>
+    ${titleEl}${bodyEl}
+    <div class="card-footer" style="margin-top:auto;padding:10px 0 0;">${statEl}${dateEl}</div>
   </div>
 </div>`;
   }
 
+  // ── Standard / Featured text card ──
   return `
 <div class="wip-card slot-${slot}" data-id="${escAttr(p.id)}">
   ${adminOverlay}
-  ${numEl}${typeEl}${statEl}${titleEl}${bodyEl}${dateEl}
+  <div class="card-header">
+    <span class="card-header-num">${cardNum}</span>
+    <span class="card-type-badge">${esc(p.type||'Update')}</span>
+  </div>
+  <div class="card-inner" data-num="${cardNum}">
+    ${titleEl}${bodyEl}
+  </div>
+  <div class="card-footer">${statEl}${dateEl}</div>
 </div>`;
 }
 
