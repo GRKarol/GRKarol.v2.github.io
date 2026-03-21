@@ -97,6 +97,19 @@ a { text-decoration: none; color: inherit; }
 .nav-logo {
   font-family: var(--serif); font-size: 18px; font-weight: 600;
   letter-spacing: .22em; color: var(--gold); text-transform: uppercase;
+  display: flex; align-items: center; gap: 12px; text-decoration: none;
+}
+.nav-lion {
+  width: 34px; height: 37px; flex-shrink: 0;
+  opacity: .9; transition: opacity .3s;
+}
+.nav-lion:hover { opacity: 1; }
+.nav-brand-wrap {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+}
+.nav-brand-sub {
+  font-family: var(--ui); font-size: 8px; font-weight: 300;
+  letter-spacing: .28em; color: var(--gold-lo); text-transform: uppercase;
 }
 .nav-back {
   font-family: var(--ui); font-size: 10px; font-weight: 400;
@@ -689,6 +702,59 @@ footer {
 #toast.ok { border-color: var(--gold-lo); color: var(--gold); }
 #toast.err { border-color: #b85840; color: #d4694e; }
 
+/* ── ORGANIC SOUL STYLING ── */
+
+/* Dispatch card — increase border radius */
+.dispatch-card { border-radius: 6px; }
+.dispatch-card.dc-featured { border-radius: 8px; }
+
+/* Navigation arrows — rounded */
+.strip-arrow { border-radius: 50%; }
+
+/* Strip dots — already round, add subtle glow */
+.strip-dot.active {
+  box-shadow: 0 0 8px rgba(201,168,76,.4);
+}
+
+/* Timeline dots — pill style */
+.tl-dot { border-radius: 50%; }
+.tl-node { border-radius: 4px; }
+
+/* Page header — subtle wave bottom */
+.page-header {
+  position: relative;
+}
+
+/* Setup banner — rounded */
+#setup-banner { border-radius: 6px; }
+
+/* Footer — slightly warmer */
+footer { position: relative; }
+
+/* Badge pill already rounded — enhance */
+.dc-badge {
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* Divider — add decorative element */
+.wip-divider {
+  border-radius: 1px;
+  position: relative;
+}
+.wip-divider::after {
+  content: '◆';
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  font-size: 8px; color: var(--gold-lo);
+  background: var(--ink); padding: 0 12px;
+}
+
+/* Modal — rounded */
+#modal { border-radius: 8px; }
+
+/* Admin bar — rounded top */
+#admin-bar { border-radius: 12px 12px 0 0; }
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   #nav { padding: 18px 20px; }
@@ -728,7 +794,15 @@ footer {
 
 <!-- ═══ NAV ═══ -->
 <nav id="nav">
-  <a href="index.html" class="nav-logo">Progressio</a>
+  <div class="nav-logo">
+    <a href="https://grankerslinks.giize.com" target="_blank" rel="noopener" aria-label="Grankers Team">
+      <img src="/grankers-lion.svg" alt="Grankers" class="nav-lion">
+    </a>
+    <a href="index.html" class="nav-brand-wrap">
+      <span>Progressio</span>
+      <span class="nav-brand-sub">by Grankers</span>
+    </a>
+  </div>
   <a href="index.html" class="nav-back">← Back</a>
 </nav>
 
