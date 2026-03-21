@@ -158,11 +158,11 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 .sh-tag {
   font-family: var(--ui); font-size: 9px;
-  letter-spacing: .44em; text-transform: uppercase; color: var(--gold-lo);
+  letter-spacing: .44em; text-transform: uppercase; color: var(--gold);
   display: flex; align-items: center; gap: 14px;
   margin-bottom: 28px;
 }
-.sh-tag::before { content:''; width:44px; height:1px; background:var(--gold-lo); }
+.sh-tag::before { content:''; width:44px; height:1px; background:var(--gold); }
 .story-hero h1 {
   font-family: var(--serif);
   font-size: clamp(48px, 7vw, 100px);
@@ -465,13 +465,16 @@ footer {
     grid-template-columns: 1fr !important;
     min-height: auto;
   }
-  .chapter.flip .ch-text,
-  .chapter.flip .ch-stage { order: unset; }
-  .ch-stage { min-height: 240px; }
+  /* Show decorative stage (big number) BEFORE text on mobile */
+  .ch-stage { order: -1 !important; min-height: 240px; }
+  .ch-text { order: 0 !important; }
   .ch-art-n { font-size: 100px; }
   .ch-text { padding: 56px 24px !important; }
   .ch-cards { grid-template-columns: 1fr; }
   .ch-specs { grid-template-columns: 1fr 1fr; }
+
+  /* JOIN WAITLIST button — smaller on mobile */
+  .nav-btn { padding: 9px 16px; font-size: 9px; letter-spacing: .18em; }
 
   .story-cta { padding: 72px 24px; }
   footer { flex-direction:column; gap:12px; text-align:center; padding:28px 24px; }
@@ -491,7 +494,7 @@ footer {
 <nav id="nav">
   <div class="nav-logo">
     <a href="https://grankerslinks.giize.com" target="_blank" rel="noopener" aria-label="Grankers Team">
-      <img src="/grankers-lion.svg" alt="Grankers" class="nav-lion">
+      <img src="/grankers-lion.png" alt="Grankers" class="nav-lion">
     </a>
     <a href="index.html" class="nav-brand-wrap">
       <span>Progressio</span>

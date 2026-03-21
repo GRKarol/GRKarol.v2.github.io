@@ -1291,7 +1291,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 .wl-sp-count {
   font-family: var(--serif); font-size: clamp(40px, 4vw, 68px); font-weight: 300;
-  color: var(--gold); letter-spacing: -.02em; line-height: 1;
+  color: var(--gold-hi); letter-spacing: -.02em; line-height: 1;
 }
 .wl-sp-text {
   display: flex; flex-direction: column; gap: 4px;
@@ -1332,8 +1332,8 @@ footer {
 .ft-links { display: flex; gap: 24px; align-items: center; }
 .ft-link { font-family: var(--ui); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--smoke); transition: color .3s; }
 .ft-link:hover { color: var(--parch); }
-.ft-link-dim { color: var(--edge); font-size: 9px; letter-spacing: .14em; }
-.ft-link-dim:hover { color: var(--smoke); }
+.ft-link-dim { color: var(--smoke); font-size: 10px; letter-spacing: .18em; }
+.ft-link-dim:hover { color: var(--parch); }
 
 /* ============================================================
    REVEAL
@@ -1486,23 +1486,9 @@ footer {
 .story-ticker::before { left: 0; background: linear-gradient(to right, var(--ink), transparent); }
 .story-ticker::after { right: 0; background: linear-gradient(to left, var(--ink), transparent); }
 
-/* Progress section: curved top edge */
+/* Progress section */
 .progress-section {
   position: relative;
-}
-.progress-section::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 40px;
-  background: var(--ink);
-  clip-path: ellipse(60% 100% at 50% 0%);
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Waitlist: subtle arc top */
-.waitlist {
-  clip-path: polygon(0 20px, 2% 0%, 98% 0%, 100% 20px, 100% 100%, 0 100%);
 }
 
 /* Decorative gold rule after story problem */
@@ -1561,7 +1547,7 @@ footer { border-top: 1px solid var(--edge); }
 <nav id="nav">
   <div class="nav-logo">
     <a href="https://grankerslinks.giize.com" target="_blank" rel="noopener" aria-label="Grankers Team">
-      <img src="/grankers-lion.svg" alt="Grankers" class="nav-lion">
+      <img src="/grankers-lion.png" alt="Grankers" class="nav-lion">
     </a>
     <div class="nav-brand-wrap">
       <span>Progressio</span>
