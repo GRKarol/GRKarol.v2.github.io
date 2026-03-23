@@ -467,6 +467,15 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   overflow: hidden;
 }
 .is-page + .is-page { padding-left: 12px; }
+.is-page-left {
+  background: linear-gradient(to right, #e2d8c8, #ede5d5);
+  border-right: 1px solid rgba(0,0,0,.08);
+}
+.is-spine-shadow {
+  width: 6px; flex-shrink: 0;
+  background: linear-gradient(to right, rgba(0,0,0,.15) 0%, rgba(0,0,0,.04) 70%, transparent 100%);
+  z-index: 2;
+}
 .is-p-header {
   font-family: 'Cormorant Garamond', serif;
   font-size: 6px; letter-spacing: .18em; text-transform: uppercase;
@@ -1621,12 +1630,20 @@ footer { border-top: 1px solid var(--edge); }
           <!-- Inner page (visible when cover opens) — single right-hand page -->
           <div class="bf bf-inner-spread">
             <div class="is-pages">
-              <!-- Single full-width page: Opening quotes (right page after cover opens) -->
+              <!-- Left page: inside front cover / blank endpaper -->
+              <div class="is-page is-page-left">
+                <p class="is-p-header">Progressio</p>
+              </div>
+              <!-- Center spine shadow -->
+              <div class="is-spine-shadow"></div>
+              <!-- Right page: Opening quotes -->
               <div class="is-page">
                 <p class="is-p-header">Opening</p>
                 <p class="is-p-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="is-p-author">~ W. Churchill</span></p>
                 <p class="is-p-quote">"Success is the sum of small efforts repeated day after day."<span class="is-p-author">~ R. Collier</span></p>
                 <p class="is-p-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="is-p-author">~ N. Hill</span></p>
+                <p class="is-p-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
+                <p class="is-p-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
               </div>
             </div>
           </div>
@@ -1882,6 +1899,8 @@ footer { border-top: 1px solid var(--edge); }
       <p class="bk-p-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="bk-p-quote-author">~ Winston Churchill</span></p>
       <p class="bk-p-quote">"Success is the sum of small efforts repeated day after day."<span class="bk-p-quote-author">~ Robert Collier</span></p>
       <p class="bk-p-quote">"Whatever the mind of man can conceive and believe, it can achieve."<span class="bk-p-quote-author">~ Napoleon Hill</span></p>
+      <p class="bk-p-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
+      <p class="bk-p-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
     </div>
     <!-- Right page: Owner Details -->
     <div class="book-page">
