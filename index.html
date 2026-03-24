@@ -270,15 +270,21 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .book-3d * { pointer-events: none; }
 
 /* ── Opening animation states ── */
-/* State: cover-open — whole 3D book fades out, open spread takes over */
+/* State: cover-open — cover flips first, THEN 3D book fades, open spread sweeps in */
 .book-3d.book-cover-open {
   opacity: 0 !important;
-  transform: rotateX(4deg) rotateY(-18deg) scale(0.96) !important;
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
+  transform: rotateX(4deg) rotateY(-18deg) scale(0.97) !important;
+  /* delay fade so cover flip plays first */
+  transition: opacity 0.2s ease 0.35s, transform 0.4s ease !important;
   cursor: pointer !important;
   pointer-events: all !important;
 }
-/* State: cover closing — book fades back in */
+/* Cover flips immediately on click — backface-visibility:hidden makes it vanish at 90° */
+.book-3d.book-cover-open .bf-front {
+  transform: translateZ(22px) rotateY(-175deg);
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+}
+/* State: cover closing — cover instantly reappears, then rotates back */
 .book-3d.book-cover-closing .bf-front {
   transform: translateZ(22px);
   opacity: 1;
@@ -295,10 +301,11 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   width: 482px; height: 392px;
   opacity: 0;
   pointer-events: none;   /* clicks pass through to book-3d underneath */
-  transform: translate(-50%, -50%) scale(0.88) rotateX(6deg);
+  /* start slightly scaled down; right page visible, left page swept in separately */
+  transform: translate(-50%, -50%) scale(0.93) rotateX(6deg);
   transition:
-    opacity 0.45s ease 0.2s,
-    transform 0.55s cubic-bezier(.22,.68,0,1.1) 0.2s;
+    opacity 0.4s ease 0.3s,
+    transform 0.5s cubic-bezier(.22,.68,0,1.1) 0.3s;
   box-shadow:
     0 32px 90px rgba(0,0,0,.75),
     0 8px 24px rgba(0,0,0,.5),
@@ -309,7 +316,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   opacity: 1;
   transform: translate(-50%, -50%) scale(1) rotateX(2deg);
 }
-/* Left page: title / endpaper */
+/* Left page: title / endpaper — sweeps from right like a turning cover */
 .bos-left {
   flex: 1;
   background: #ede5d4;
@@ -317,6 +324,18 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   align-items: center; justify-content: center;
   text-align: center;
   padding: 36px 22px;
+  transform-origin: right center;
+  /* start folded: edge-on, invisible */
+  transform: perspective(900px) rotateY(-90deg);
+  opacity: 0;
+  transition:
+    transform 0.5s cubic-bezier(.4,0,.2,1) 0.4s,
+    opacity 0.06s ease 0.4s;
+}
+/* When open: left page sweeps into place */
+.book-3d.book-cover-open ~ .book-open-spread .bos-left {
+  transform: perspective(900px) rotateY(0deg);
+  opacity: 1;
 }
 .bos-left-title {
   font-family: 'Cinzel', serif;
@@ -1640,18 +1659,14 @@ footer { border-top: 1px solid var(--edge); }
             <div class="bos-left-title">Progressio</div>
             <div class="bos-left-sub">System of Rebuild</div>
             <div class="bos-left-rule"></div>
-            <div class="bos-left-year">Grankers · 2026</div>
+            <div class="bos-left-year">Grankers</div>
           </div>
           <!-- Spine -->
           <div class="bos-spine"></div>
           <!-- Right page: opening quotes -->
           <div class="bos-right">
             <div class="bos-right-header">Opening</div>
-            <p class="bos-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="bos-author">~ W. Churchill</span></p>
-            <p class="bos-quote">"Success is the sum of small efforts repeated day after day."<span class="bos-author">~ R. Collier</span></p>
-            <p class="bos-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="bos-author">~ N. Hill</span></p>
-            <p class="bos-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
-            <p class="bos-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
+            <p class="bos-quote">"Victory is not for those who desire it.<br>It is for those who strive for it."</p>
           </div>
         </div>
 
@@ -1888,11 +1903,9 @@ footer { border-top: 1px solid var(--edge); }
   <div class="book-spread bk-active">
     <!-- Left page: Quotes -->
     <div class="book-page bk-quotes-page">
-      <p class="bk-p-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="bk-p-quote-author">~ Winston Churchill</span></p>
-      <p class="bk-p-quote">"Success is the sum of small efforts repeated day after day."<span class="bk-p-quote-author">~ Robert Collier</span></p>
-      <p class="bk-p-quote">"Whatever the mind of man can conceive and believe, it can achieve."<span class="bk-p-quote-author">~ Napoleon Hill</span></p>
-      <p class="bk-p-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
-      <p class="bk-p-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
+      <p class="bk-p-quote">"Success is going from failure to failure<br>without loss of enthusiasm."<span class="bk-p-quote-author">~ Winston Churchill</span></p>
+      <p class="bk-p-quote">"Success is the sum of small efforts<br>repeated day after day."<span class="bk-p-quote-author">~ Robert Collier</span></p>
+      <p class="bk-p-quote">"Whatever the mind of man can conceive<br>and believe, it can achieve."<span class="bk-p-quote-author">~ Napoleon Hill</span></p>
     </div>
     <!-- Right page: Owner Details -->
     <div class="book-page">
