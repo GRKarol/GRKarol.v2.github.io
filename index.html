@@ -251,6 +251,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   display: flex; align-items: center; justify-content: center;
 }
 .book-float {
+  position: relative;
   animation: bookFloat 7s ease-in-out infinite;
 }
 @keyframes bookFloat {
@@ -269,27 +270,116 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .book-3d * { pointer-events: none; }
 
 /* ── Opening animation states ── */
-/* State: cover-open (first click) — face-on so BOTH pages are visible */
+/* State: cover-open — whole 3D book fades out, open spread takes over */
 .book-3d.book-cover-open {
-  transform: rotateX(4deg) rotateY(0deg) !important;
-  transition: transform 0.5s cubic-bezier(.4,0,.2,1) !important;
+  opacity: 0 !important;
+  transform: rotateX(4deg) rotateY(-18deg) scale(0.96) !important;
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
   cursor: pointer !important;
+  pointer-events: all !important;
 }
-/* Cover rotates fully open (like a real book) and fades so back face never shows */
-.book-3d.book-cover-open .bf-front {
-  transform: translateZ(22px) rotateY(-175deg);
-  opacity: 0;
-  transition:
-    transform 0.75s cubic-bezier(.4,0,.2,1) 0.05s,
-    opacity 0.05s linear 0.42s;
-}
-/* State: cover closing — cover instantly reappears, then rotates back */
+/* State: cover closing — book fades back in */
 .book-3d.book-cover-closing .bf-front {
   transform: translateZ(22px);
   opacity: 1;
   transition:
     opacity 0.05s linear 0s,
     transform 0.4s cubic-bezier(.4,0,.2,1) 0.05s;
+}
+
+/* ── Open book spread (sibling of book-3d, shown when cover-open) ── */
+.book-open-spread {
+  position: absolute;
+  top: 50%; left: 50%;
+  display: flex;
+  width: 482px; height: 392px;
+  opacity: 0;
+  pointer-events: none;   /* clicks pass through to book-3d underneath */
+  transform: translate(-50%, -50%) scale(0.88) rotateX(6deg);
+  transition:
+    opacity 0.45s ease 0.2s,
+    transform 0.55s cubic-bezier(.22,.68,0,1.1) 0.2s;
+  box-shadow:
+    0 32px 90px rgba(0,0,0,.75),
+    0 8px 24px rgba(0,0,0,.5),
+    0 0 0 1px rgba(201,168,76,.12);
+  z-index: 3;
+}
+.book-3d.book-cover-open ~ .book-open-spread {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotateX(2deg);
+}
+/* Left page: title / endpaper */
+.bos-left {
+  flex: 1;
+  background: #ede5d4;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 36px 22px;
+}
+.bos-left-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; letter-spacing: .28em; text-transform: uppercase;
+  color: #2e2416; margin-bottom: 6px;
+}
+.bos-left-sub {
+  font-family: 'Cormorant', serif;
+  font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
+  color: #7a6844; margin-bottom: 14px;
+}
+.bos-left-rule {
+  width: 36px; height: 1px; background: rgba(0,0,0,.25);
+  margin: 0 auto 14px;
+}
+.bos-left-year {
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: .2em; color: #9a8060;
+}
+/* Spine */
+.bos-spine {
+  width: 14px; flex-shrink: 0;
+  background: linear-gradient(to right,
+    #7a5e20 0%, #b8996a 35%, #c9a84c 50%, #b8996a 65%, #7a5e20 100%
+  );
+  box-shadow:
+    inset 2px 0 5px rgba(0,0,0,.35),
+    inset -2px 0 5px rgba(0,0,0,.35);
+}
+/* Right page: opening quotes */
+.bos-right {
+  flex: 1;
+  background: #f5efe3;
+  padding: 26px 22px 20px;
+  display: flex; flex-direction: column;
+}
+.bos-right-header {
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: .26em; text-transform: uppercase;
+  color: #888; padding-bottom: 7px;
+  border-bottom: 1px solid rgba(0,0,0,.15);
+  margin-bottom: 10px;
+}
+.bos-quote {
+  font-family: 'Cormorant', serif;
+  font-size: 8.5px; line-height: 1.65; font-style: italic;
+  color: #2e2416; margin-bottom: 10px;
+}
+.bos-author {
+  display: block; font-style: normal;
+  font-size: 7px; color: #888;
+  letter-spacing: .1em; margin-top: 2px; text-align: right;
+}
+/* Mobile: shrink open spread */
+@media(max-width: 768px) {
+  .book-open-spread {
+    width: min(88vw, 420px);
+    height: auto;
+    min-height: 300px;
+  }
+  .bos-left, .bos-right { padding: 20px 14px; }
+  .bos-left-title { font-size: 10px; }
+  .bos-quote { font-size: 7.5px; }
 }
 
 /* ── Faces ── */
@@ -407,82 +497,6 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   position: absolute; right: 0; top: 0; bottom: 0; width: 18px;
   background: linear-gradient(to left, rgba(0,0,0,.55) 0%, rgba(0,0,0,.18) 50%, transparent 100%);
   z-index: 10;
-}
-
-/* ── Inner open-book spread (visible when cover flips open) ── */
-.bf-inner-spread {
-  top: 0; left: 0; width: 291px; height: 408px;
-  transform: translateZ(20px);
-  overflow: hidden;
-  display: flex;
-  /* no pseudo-element shadows — each page has its own background */
-}
-
-/* Left page: title / endpaper */
-.inner-page-left {
-  flex: 1;
-  background: #ede5d4;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center;
-  padding: 20px 8px;
-  box-sizing: border-box;
-}
-.ipl-title {
-  font-family: 'Cinzel', serif;
-  font-size: 8.5px; letter-spacing: .26em; text-transform: uppercase;
-  color: #2e2416; margin-bottom: 4px;
-}
-.ipl-sub {
-  font-family: 'Cormorant', serif;
-  font-size: 5.5px; letter-spacing: .18em; text-transform: uppercase;
-  color: #7a6844; margin-bottom: 8px;
-}
-.ipl-rule {
-  width: 28px; height: 1px; background: rgba(0,0,0,.22);
-  margin: 0 auto 8px;
-}
-.ipl-year {
-  font-family: 'Cinzel', serif;
-  font-size: 5px; letter-spacing: .16em;
-  color: #9a8060;
-}
-
-/* Center spine gutter */
-.inner-gutter {
-  width: 5px; flex-shrink: 0;
-  background: linear-gradient(to right,
-    rgba(0,0,0,.18) 0%,
-    rgba(0,0,0,.06) 50%,
-    rgba(0,0,0,.10) 100%
-  );
-}
-
-/* Right page: opening quotes */
-.inner-page-right {
-  flex: 1;
-  background: #f5efe3;
-  padding: 14px 9px 10px;
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-.ipr-header {
-  font-family: 'Cinzel', serif;
-  font-size: 5.5px; letter-spacing: .22em; text-transform: uppercase;
-  color: #888; padding-bottom: 4px;
-  border-bottom: 1px solid rgba(0,0,0,.14);
-  margin-bottom: 6px;
-}
-.ipr-quote {
-  font-family: 'Cormorant', serif;
-  font-size: 5.5px; line-height: 1.55; font-style: italic;
-  color: #2e2416; margin-bottom: 6px;
-}
-.ipr-author {
-  display: block; font-style: normal;
-  font-size: 4.5px; color: #888;
-  letter-spacing: .1em; margin-top: 1px; text-align: right;
 }
 
 /* ── Face content ── */
@@ -1602,27 +1616,6 @@ footer { border-top: 1px solid var(--edge); }
           <div class="bf bf-top"></div>
           <!-- Bottom edge -->
           <div class="bf bf-bottom"></div>
-          <!-- Inner open-book spread (revealed when cover flips open) -->
-          <div class="bf bf-inner-spread">
-            <!-- Left page: title / endpaper -->
-            <div class="inner-page-left">
-              <div class="ipl-title">Progressio</div>
-              <div class="ipl-sub">System of Rebuild</div>
-              <div class="ipl-rule"></div>
-              <div class="ipl-year">Grankers · 2026</div>
-            </div>
-            <!-- Center spine gutter -->
-            <div class="inner-gutter"></div>
-            <!-- Right page: opening quotes -->
-            <div class="inner-page-right">
-              <div class="ipr-header">Opening</div>
-              <p class="ipr-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="ipr-author">~ W. Churchill</span></p>
-              <p class="ipr-quote">"Success is the sum of small efforts repeated day after day."<span class="ipr-author">~ R. Collier</span></p>
-              <p class="ipr-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="ipr-author">~ N. Hill</span></p>
-              <p class="ipr-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
-              <p class="ipr-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
-            </div>
-          </div>
           <!-- Back cover -->
           <div class="bf bf-back">
             <div class="bk-glow"></div>
@@ -1639,6 +1632,29 @@ footer { border-top: 1px solid var(--edge); }
             </div>
           </div>
         </div>
+
+        <!-- Open book spread — appears when cover-open state (CSS sibling selector) -->
+        <div class="book-open-spread" id="bookOpenSpread">
+          <!-- Left page: title / endpaper -->
+          <div class="bos-left">
+            <div class="bos-left-title">Progressio</div>
+            <div class="bos-left-sub">System of Rebuild</div>
+            <div class="bos-left-rule"></div>
+            <div class="bos-left-year">Grankers · 2026</div>
+          </div>
+          <!-- Spine -->
+          <div class="bos-spine"></div>
+          <!-- Right page: opening quotes -->
+          <div class="bos-right">
+            <div class="bos-right-header">Opening</div>
+            <p class="bos-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="bos-author">~ W. Churchill</span></p>
+            <p class="bos-quote">"Success is the sum of small efforts repeated day after day."<span class="bos-author">~ R. Collier</span></p>
+            <p class="bos-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="bos-author">~ N. Hill</span></p>
+            <p class="bos-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
+            <p class="bos-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
+          </div>
+        </div>
+
         <div class="book-hint">drag · click to open</div>
       </div>
     </div>
