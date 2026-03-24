@@ -269,19 +269,19 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .book-3d * { pointer-events: none; }
 
 /* ── Opening animation states ── */
-/* State: cover-open (first click) */
+/* State: cover-open (first click) — face-on so BOTH pages are visible */
 .book-3d.book-cover-open {
-  transform: rotateX(2deg) rotateY(-10deg) !important;
-  transition: transform 0.45s cubic-bezier(.4,0,.2,1) !important;
+  transform: rotateX(4deg) rotateY(0deg) !important;
+  transition: transform 0.5s cubic-bezier(.4,0,.2,1) !important;
   cursor: pointer !important;
 }
-/* Cover rotates away AND fades out at the halfway point so back face never shows */
+/* Cover rotates fully open (like a real book) and fades so back face never shows */
 .book-3d.book-cover-open .bf-front {
-  transform: translateZ(22px) rotateY(-170deg);
+  transform: translateZ(22px) rotateY(-175deg);
   opacity: 0;
   transition:
-    transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s,
-    opacity 0.05s linear 0.38s;
+    transform 0.75s cubic-bezier(.4,0,.2,1) 0.05s,
+    opacity 0.05s linear 0.42s;
 }
 /* State: cover closing — cover instantly reappears, then rotates back */
 .book-3d.book-cover-closing .bf-front {
@@ -409,91 +409,80 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   z-index: 10;
 }
 
-/* ── Inner page (visible when cover opens — single right-hand page) ── */
+/* ── Inner open-book spread (visible when cover flips open) ── */
 .bf-inner-spread {
   top: 0; left: 0; width: 291px; height: 408px;
   transform: translateZ(20px);
-  background: linear-gradient(
-    to right,
-    #e8dfd0 0%, #f0e8d8 8%,
-    #f8f3eb 100%
-  );
   overflow: hidden;
-}
-/* Spine / left-edge shadow (simulates shadow from opened cover) */
-.bf-inner-spread::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0; width: 48px;
-  background: linear-gradient(to right, rgba(0,0,0,.18) 0%, rgba(0,0,0,.06) 60%, transparent 100%);
-}
-/* Right-edge page curl shadow */
-.bf-inner-spread::after {
-  content: '';
-  position: absolute; right: 0; top: 0; bottom: 0; width: 16px;
-  background: linear-gradient(to left, rgba(0,0,0,.06), transparent);
+  display: flex;
+  /* no pseudo-element shadows — each page has its own background */
 }
 
-/* ── Inner spread page content ── */
-.is-pages {
-  position: absolute; inset: 0; display: flex; z-index: 1;
+/* Left page: title / endpaper */
+.inner-page-left {
+  flex: 1;
+  background: #ede5d4;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 20px 8px;
+  box-sizing: border-box;
 }
-.is-page {
-  flex: 1; padding: 14px 10px 10px;
-  display: flex; flex-direction: column; gap: 5px;
-  overflow: hidden;
-}
-.is-page + .is-page { padding-left: 12px; }
-.is-page-left {
-  background: linear-gradient(to right, #e8e0d0, #f0e8d8);
-  border-right: 1px solid rgba(0,0,0,.1);
-  justify-content: center; align-items: center; text-align: center;
-}
-.is-left-title {
+.ipl-title {
   font-family: 'Cinzel', serif;
-  font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
-  color: #3a2e1a; margin-bottom: 3px;
+  font-size: 8.5px; letter-spacing: .26em; text-transform: uppercase;
+  color: #2e2416; margin-bottom: 4px;
 }
-.is-left-sub {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 5px; letter-spacing: .18em; text-transform: uppercase;
-  color: #8a7a5a; margin-bottom: 6px;
+.ipl-sub {
+  font-family: 'Cormorant', serif;
+  font-size: 5.5px; letter-spacing: .18em; text-transform: uppercase;
+  color: #7a6844; margin-bottom: 8px;
 }
-.is-left-rule {
-  width: 24px; height: 1px; background: rgba(0,0,0,.2); margin: 0 auto 6px;
+.ipl-rule {
+  width: 28px; height: 1px; background: rgba(0,0,0,.22);
+  margin: 0 auto 8px;
 }
-.is-spine-shadow {
-  width: 6px; flex-shrink: 0;
-  background: linear-gradient(to right, rgba(0,0,0,.15) 0%, rgba(0,0,0,.04) 70%, transparent 100%);
-  z-index: 2;
+.ipl-year {
+  font-family: 'Cinzel', serif;
+  font-size: 5px; letter-spacing: .16em;
+  color: #9a8060;
 }
-.is-p-header {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 6px; letter-spacing: .18em; text-transform: uppercase;
+
+/* Center spine gutter */
+.inner-gutter {
+  width: 5px; flex-shrink: 0;
+  background: linear-gradient(to right,
+    rgba(0,0,0,.18) 0%,
+    rgba(0,0,0,.06) 50%,
+    rgba(0,0,0,.10) 100%
+  );
+}
+
+/* Right page: opening quotes */
+.inner-page-right {
+  flex: 1;
+  background: #f5efe3;
+  padding: 14px 9px 10px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.ipr-header {
+  font-family: 'Cinzel', serif;
+  font-size: 5.5px; letter-spacing: .22em; text-transform: uppercase;
   color: #888; padding-bottom: 4px;
-  border-bottom: 1px solid rgba(0,0,0,.12);
-  margin-bottom: 3px;
+  border-bottom: 1px solid rgba(0,0,0,.14);
+  margin-bottom: 6px;
 }
-.is-p-quote {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 5.5px; line-height: 1.5; font-style: italic;
-  color: #333; margin-bottom: 5px;
+.ipr-quote {
+  font-family: 'Cormorant', serif;
+  font-size: 5.5px; line-height: 1.55; font-style: italic;
+  color: #2e2416; margin-bottom: 6px;
 }
-.is-p-author {
-  display: block; font-style: normal; font-size: 5px;
-  color: #888; letter-spacing: .1em; margin-top: 1px; text-align: right;
-}
-.is-p-body {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 5.5px; line-height: 1.5; color: #444; margin-bottom: 5px;
-}
-.is-p-line {
-  height: 1px; background: rgba(0,0,0,.15);
-  margin: 5px 0 7px;
-}
-.is-p-label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 5px; letter-spacing: .12em; text-transform: uppercase;
-  color: #666; margin-bottom: 3px;
+.ipr-author {
+  display: block; font-style: normal;
+  font-size: 4.5px; color: #888;
+  letter-spacing: .1em; margin-top: 1px; text-align: right;
 }
 
 /* ── Face content ── */
@@ -1613,27 +1602,25 @@ footer { border-top: 1px solid var(--edge); }
           <div class="bf bf-top"></div>
           <!-- Bottom edge -->
           <div class="bf bf-bottom"></div>
-          <!-- Inner page (visible when cover opens) — single right-hand page -->
+          <!-- Inner open-book spread (revealed when cover flips open) -->
           <div class="bf bf-inner-spread">
-            <div class="is-pages">
-              <!-- Left page: endpaper with title -->
-              <div class="is-page is-page-left">
-                <div class="is-left-title">Progressio</div>
-                <div class="is-left-sub">System of Rebuild</div>
-                <div class="is-left-rule"></div>
-                <p class="is-p-body">Grankers · 2026</p>
-              </div>
-              <!-- Center spine shadow -->
-              <div class="is-spine-shadow"></div>
-              <!-- Right page: Opening quotes -->
-              <div class="is-page">
-                <p class="is-p-header">Opening</p>
-                <p class="is-p-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="is-p-author">~ W. Churchill</span></p>
-                <p class="is-p-quote">"Success is the sum of small efforts repeated day after day."<span class="is-p-author">~ R. Collier</span></p>
-                <p class="is-p-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="is-p-author">~ N. Hill</span></p>
-                <p class="is-p-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
-                <p class="is-p-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
-              </div>
+            <!-- Left page: title / endpaper -->
+            <div class="inner-page-left">
+              <div class="ipl-title">Progressio</div>
+              <div class="ipl-sub">System of Rebuild</div>
+              <div class="ipl-rule"></div>
+              <div class="ipl-year">Grankers · 2026</div>
+            </div>
+            <!-- Center spine gutter -->
+            <div class="inner-gutter"></div>
+            <!-- Right page: opening quotes -->
+            <div class="inner-page-right">
+              <div class="ipr-header">Opening</div>
+              <p class="ipr-quote">"Success is going from failure to failure without loss of enthusiasm."<span class="ipr-author">~ W. Churchill</span></p>
+              <p class="ipr-quote">"Success is the sum of small efforts repeated day after day."<span class="ipr-author">~ R. Collier</span></p>
+              <p class="ipr-quote">"Whatever the mind can conceive and believe, it can achieve."<span class="ipr-author">~ N. Hill</span></p>
+              <p class="ipr-quote">"Knowledge without action is just information. Action without knowledge is chaos."</p>
+              <p class="ipr-quote">"Victory is not for those who desire it. It is for those who strive for it."</p>
             </div>
           </div>
           <!-- Back cover -->
