@@ -301,11 +301,12 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   width: 482px; height: 392px;
   opacity: 0;
   pointer-events: none;   /* clicks pass through to book-3d underneath */
-  /* start slightly scaled down; right page visible, left page swept in separately */
-  transform: translate(-50%, -50%) scale(0.93) rotateX(6deg);
+  /* start as a thin sliver at the spine, then spread open like a real book */
+  transform: translate(-50%, -50%) scaleX(0.06) rotateX(8deg);
+  transform-origin: center center;
   transition:
-    opacity 0.4s ease 0.3s,
-    transform 0.5s cubic-bezier(.22,.68,0,1.1) 0.3s;
+    opacity 0.45s ease 0.25s,
+    transform 0.65s cubic-bezier(.22,.68,0,1.12) 0.25s;
   box-shadow:
     0 32px 90px rgba(0,0,0,.75),
     0 8px 24px rgba(0,0,0,.5),
@@ -314,9 +315,9 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 .book-3d.book-cover-open ~ .book-open-spread {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1) rotateX(2deg);
+  transform: translate(-50%, -50%) scaleX(1) rotateX(2deg);
 }
-/* Left page: title / endpaper — sweeps from right like a turning cover */
+/* Left page: title / endpaper — no separate anim, spreads with container */
 .bos-left {
   flex: 1;
   background: #ede5d4;
@@ -324,18 +325,6 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   align-items: center; justify-content: center;
   text-align: center;
   padding: 36px 22px;
-  transform-origin: right center;
-  /* start folded toward the right (as if the cover was closed on the right side) */
-  transform: perspective(900px) rotateY(90deg);
-  opacity: 0;
-  transition:
-    transform 0.5s cubic-bezier(.4,0,.2,1) 0.4s,
-    opacity 0.06s ease 0.4s;
-}
-/* When open: left page sweeps from right to left into place */
-.book-3d.book-cover-open ~ .book-open-spread .bos-left {
-  transform: perspective(900px) rotateY(0deg);
-  opacity: 1;
 }
 .bos-left-title {
   font-family: 'Cinzel', serif;
@@ -1001,6 +990,44 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .ss-sub {
   font-family: var(--serif); font-size: clamp(13px, 1.1vw, 20px); font-style: italic;
   color: var(--gold-lo); margin-top: 6px; line-height: 1.4;
+}
+
+/* ── Video section ── */
+.story-video {
+  background: var(--ink);
+  border-bottom: 1px solid var(--edge);
+  padding: clamp(48px, 7vw, 80px) clamp(24px, 8vw, 120px);
+  display: flex; justify-content: center;
+}
+.sv-wrap {
+  position: relative;
+  width: 100%; max-width: 860px;
+  aspect-ratio: 16 / 9;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  overflow: hidden;
+}
+.sv-iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: 0;
+}
+.sv-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+  background: var(--surface);
+}
+.sv-play {
+  width: 72px; height: 72px;
+  border: 1px solid rgba(201,168,76,.35); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); font-size: 26px;
+  padding-left: 5px; /* optical center */
+}
+.sv-label {
+  font-family: var(--ui); font-size: 10px;
+  letter-spacing: .35em; text-transform: uppercase;
+  color: var(--smoke);
 }
 
 /* Act 3: The ticker */
@@ -1699,6 +1726,31 @@ footer { border-top: 1px solid var(--edge); }
     <div class="sp-turn"></div>
     <p class="sp-answer">The problem was never motivation.</p>
     <p class="sp-answer sp-gold">You needed a system built for the full year.</p>
+  </div>
+
+  <!-- Video -->
+  <div class="story-video rv">
+    <div class="sv-wrap">
+      <!--
+        WKLEJ LINK DO YOUTUBE:
+        Zmień src="" na np. src="https://www.youtube.com/embed/TWÓJ_ID_VIDEO"
+        a potem usuń cały div.sv-placeholder poniżej.
+      -->
+      <iframe
+        class="sv-iframe"
+        id="progressioVideo"
+        src=""
+        title="Progressio — Official Video"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+      <!-- Remove this block once the video src above is set -->
+      <div class="sv-placeholder" id="svPlaceholder">
+        <div class="sv-play">▶</div>
+        <span class="sv-label">Video — coming soon</span>
+      </div>
+    </div>
   </div>
 
   <!-- Act 2: The numbers that prove it -->
