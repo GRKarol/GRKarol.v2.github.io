@@ -325,35 +325,35 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   text-align: center;
   padding: 36px 22px;
   transform-origin: right center;
-  /* start folded: edge-on, invisible */
-  transform: perspective(900px) rotateY(-90deg);
+  /* start folded toward the right (as if the cover was closed on the right side) */
+  transform: perspective(900px) rotateY(90deg);
   opacity: 0;
   transition:
     transform 0.5s cubic-bezier(.4,0,.2,1) 0.4s,
     opacity 0.06s ease 0.4s;
 }
-/* When open: left page sweeps into place */
+/* When open: left page sweeps from right to left into place */
 .book-3d.book-cover-open ~ .book-open-spread .bos-left {
   transform: perspective(900px) rotateY(0deg);
   opacity: 1;
 }
 .bos-left-title {
   font-family: 'Cinzel', serif;
-  font-size: 13px; letter-spacing: .28em; text-transform: uppercase;
-  color: #2e2416; margin-bottom: 6px;
+  font-size: 16px; letter-spacing: .28em; text-transform: uppercase;
+  color: #2e2416; margin-bottom: 7px;
 }
 .bos-left-sub {
   font-family: 'Cormorant', serif;
-  font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
-  color: #7a6844; margin-bottom: 14px;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: #7a6844; margin-bottom: 16px;
 }
 .bos-left-rule {
   width: 36px; height: 1px; background: rgba(0,0,0,.25);
-  margin: 0 auto 14px;
+  margin: 0 auto 16px;
 }
 .bos-left-year {
   font-family: 'Cinzel', serif;
-  font-size: 8px; letter-spacing: .2em; color: #9a8060;
+  font-size: 10px; letter-spacing: .2em; color: #9a8060;
 }
 /* Spine */
 .bos-spine {
@@ -365,40 +365,46 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
     inset 2px 0 5px rgba(0,0,0,.35),
     inset -2px 0 5px rgba(0,0,0,.35);
 }
-/* Right page: opening quotes */
+/* Right page: single centered quote */
 .bos-right {
   flex: 1;
   background: #f5efe3;
   padding: 26px 22px 20px;
   display: flex; flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 .bos-right-header {
   font-family: 'Cinzel', serif;
-  font-size: 8px; letter-spacing: .26em; text-transform: uppercase;
-  color: #888; padding-bottom: 7px;
+  font-size: 10px; letter-spacing: .26em; text-transform: uppercase;
+  color: #888; padding-bottom: 8px;
   border-bottom: 1px solid rgba(0,0,0,.15);
-  margin-bottom: 10px;
+  margin-bottom: 18px;
+  align-self: stretch; text-align: center;
 }
 .bos-quote {
   font-family: 'Cormorant', serif;
-  font-size: 8.5px; line-height: 1.65; font-style: italic;
+  font-size: 14px; line-height: 1.75; font-style: italic;
   color: #2e2416; margin-bottom: 10px;
 }
 .bos-author {
   display: block; font-style: normal;
-  font-size: 7px; color: #888;
-  letter-spacing: .1em; margin-top: 2px; text-align: right;
+  font-size: 11px; color: #888;
+  letter-spacing: .1em; margin-top: 4px; text-align: center;
 }
 /* Mobile: shrink open spread */
 @media(max-width: 768px) {
   .book-open-spread {
-    width: min(88vw, 420px);
+    width: min(90vw, 440px);
     height: auto;
-    min-height: 300px;
+    min-height: 260px;
   }
-  .bos-left, .bos-right { padding: 20px 14px; }
-  .bos-left-title { font-size: 10px; }
-  .bos-quote { font-size: 7.5px; }
+  .bos-left, .bos-right { padding: 18px 14px; }
+  .bos-left-title { font-size: 14px; }
+  .bos-left-sub { font-size: 9px; }
+  .bos-quote { font-size: 12px; }
+  .bos-right-header { font-size: 9px; }
 }
 
 /* ── Faces ── */
@@ -637,7 +643,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   text-align: center; margin-bottom: clamp(10px,1.5vh,22px); line-height: 1.2;
 }
 .bk-p-body {
-  font-size: clamp(10px,1.1vw,13px); line-height: 1.75;
+  font-size: clamp(12px,1.1vw,14px); line-height: 1.75;
   text-align: center; margin-bottom: 16px; color: #222;
 }
 .bk-p-body.left-align { text-align: left; }
@@ -646,7 +652,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   margin: 10px 0 20px;
 }
 .bk-p-italic {
-  font-size: clamp(9px,1vw,12px); font-style: italic; line-height: 1.8;
+  font-size: clamp(11px,1vw,13px); font-style: italic; line-height: 1.8;
   text-align: center; color: #333; margin: 0 0 24px;
 }
 .bk-p-cta {
@@ -692,8 +698,8 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
 .bk-p-quote {
-  font-size: clamp(11px,1.15vw,14px); font-style: italic; line-height: 1.85;
-  text-align: center; margin: 0 0 clamp(20px,3vh,36px); color: #222;
+  font-size: clamp(13px,1.3vw,16px); font-style: italic; line-height: 1.85;
+  text-align: center; margin: 0 0 clamp(18px,3vh,32px); color: #222;
 }
 .bk-p-quote-author {
   display: block; font-style: normal; font-size: .88em; color: #666; margin-top: 6px;
@@ -702,7 +708,7 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 .bk-pactum-page { display: flex; flex-direction: column; }
 .bk-p-h1-pactum { border-bottom: 2px solid #111; padding-bottom: 10px; }
 .bk-pact-text {
-  font-size: clamp(8px,0.85vw,11px); font-style: italic; line-height: 1.75;
+  font-size: clamp(10px,0.9vw,12px); font-style: italic; line-height: 1.75;
   text-align: center; color: #222; margin-bottom: clamp(8px,1.2vh,16px); flex: 1;
 }
 .bk-pact-text p { margin: 0 0 clamp(5px,0.8vh,9px); }
@@ -761,11 +767,11 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   display: flex; flex-direction: column; gap: 1px;
 }
 .bk-rule-body strong {
-  font-family: Georgia, serif; font-size: clamp(8px, 0.85vw, 10.5px);
+  font-family: Georgia, serif; font-size: clamp(10px, 0.9vw, 12px);
   font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #111;
 }
 .bk-rule-body span {
-  font-family: Georgia, serif; font-size: clamp(8px, 0.85vw, 10.5px);
+  font-family: Georgia, serif; font-size: clamp(10px, 0.9vw, 12px);
   line-height: 1.5; color: #444;
 }
 .bk-foundations-page .bk-p-cta {
