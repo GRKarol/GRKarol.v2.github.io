@@ -1016,34 +1016,52 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   display: flex; justify-content: center;
 }
 .sv-wrap {
-  position: relative;
   width: 100%; max-width: 860px;
-  aspect-ratio: 16 / 9;
   background: var(--surface);
   border: 1px solid var(--edge);
   overflow: hidden;
 }
-.sv-iframe {
+.sv-video-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.sv-video-box > div,
+.sv-video-box iframe {
   position: absolute; inset: 0;
   width: 100%; height: 100%; border: 0;
 }
-.sv-placeholder {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 20px;
-  background: var(--surface);
+.sv-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: var(--ink);
+  border-top: 1px solid var(--edge);
 }
-.sv-play {
-  width: 72px; height: 72px;
-  border: 1px solid rgba(201,168,76,.35); border-radius: 50%;
+.sv-btn-play {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,.4);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  color: var(--gold); font-size: 26px;
-  padding-left: 5px; /* optical center */
+  flex-shrink: 0;
+  transition: border-color .2s, background .2s;
 }
-.sv-label {
-  font-family: var(--ui); font-size: 10px;
-  letter-spacing: .35em; text-transform: uppercase;
-  color: var(--smoke);
+.sv-btn-play:hover:not(:disabled) {
+  background: rgba(201,168,76,.08);
+  border-color: var(--gold);
+}
+.sv-btn-play:disabled { opacity: .35; cursor: default; }
+.sv-volume {
+  flex: 1;
+  accent-color: var(--gold);
+  height: 2px;
+  cursor: pointer;
+  max-width: 180px;
 }
 
 /* Act 3: The ticker */
@@ -1747,15 +1765,17 @@ footer { border-top: 1px solid var(--edge); }
   <!-- Video -->
   <div class="story-video rv">
     <div class="sv-wrap">
-      <iframe
-        class="sv-iframe"
-        id="progressioVideo"
-        src="https://www.youtube.com/embed/LuQN0XQbogI"
-        title="Progressio — Official Video"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
+      <div class="sv-video-box">
+        <div id="progressioVideo"></div>
+      </div>
+      <div class="sv-controls" id="svControls">
+        <button class="sv-btn-play" id="svPlayBtn" aria-label="Play" disabled>
+          <svg class="sv-icon-play" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="sv-icon-stop" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="display:none"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+        </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14" style="color:var(--smoke);flex-shrink:0"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <input class="sv-volume" id="svVolume" type="range" min="0" max="100" value="80" aria-label="Głośność">
+      </div>
     </div>
   </div>
 
@@ -2571,5 +2591,51 @@ document.getElementById('email-inp').addEventListener('keydown',e=>{ if(e.key===
 ║  5. Replace YOUR_SUPABASE_URL + YOUR_SUPABASE_ANON_KEY  ║
 ╚═══════════════════════════════════════════════════════════╝
 -->
+<!-- YouTube IFrame API — minimal custom player -->
+<script>
+(function(){
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+
+  var ytPlayer, playing = false;
+  var playBtn  = document.getElementById('svPlayBtn');
+  var volSlider = document.getElementById('svVolume');
+
+  window.onYouTubeIframeAPIReady = function() {
+    ytPlayer = new YT.Player('progressioVideo', {
+      videoId: 'LuQN0XQbogI',
+      playerVars: {
+        controls: 0,
+        disablekb: 1,
+        modestbranding: 1,
+        rel: 0,
+        showinfo: 0,
+        iv_load_policy: 3
+      },
+      events: {
+        onReady: function(e) {
+          e.target.setVolume(parseInt(volSlider.value, 10));
+          playBtn.disabled = false;
+        },
+        onStateChange: function(e) {
+          playing = (e.data === YT.PlayerState.PLAYING);
+          playBtn.querySelector('.sv-icon-play').style.display  = playing ? 'none' : '';
+          playBtn.querySelector('.sv-icon-stop').style.display = playing ? ''     : 'none';
+        }
+      }
+    });
+  };
+
+  playBtn.addEventListener('click', function() {
+    if (!ytPlayer) return;
+    playing ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
+  });
+
+  volSlider.addEventListener('input', function() {
+    if (ytPlayer) ytPlayer.setVolume(parseInt(this.value, 10));
+  });
+})();
+</script>
 </body>
 </html>
