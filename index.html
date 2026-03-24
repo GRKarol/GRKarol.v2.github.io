@@ -275,52 +275,26 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
   transition: transform 0.45s cubic-bezier(.4,0,.2,1) !important;
   cursor: pointer !important;
 }
-.book-3d.book-cover-open .bf-cover-card {
+/* Cover rotates away AND fades out at the halfway point so back face never shows */
+.book-3d.book-cover-open .bf-front {
   transform: translateZ(22px) rotateY(-170deg);
-  transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
+  opacity: 0;
+  transition:
+    transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s,
+    opacity 0.05s linear 0.38s;
 }
-/* State: cover closing */
-.book-3d.book-cover-closing .bf-cover-card {
+/* State: cover closing — cover instantly reappears, then rotates back */
+.book-3d.book-cover-closing .bf-front {
   transform: translateZ(22px);
-  transition: transform 0.4s cubic-bezier(.4,0,.2,1);
-}
-
-/* ── Cover card: wraps front face + inside face, rotates as one physical cover ── */
-.bf-cover-card {
-  position: absolute;
-  top: 0; left: 0; width: 291px; height: 408px;
-  transform-origin: 0% 50%;
-  transform: translateZ(22px);
-  transform-style: preserve-3d;
-  transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
-}
-
-/* ── Inside of front cover (back face of card, revealed when cover opens) ── */
-.bf-cover-inside {
-  position: absolute;
-  top: 0; left: 0; width: 291px; height: 408px;
-  transform-origin: 0% 50%;
-  transform: rotateY(180deg) translateZ(1px);
-  backface-visibility: hidden;
-  background:
-    linear-gradient(160deg, #1c1508 0%, #140f04 40%, #0e0a02 100%);
-  overflow: hidden;
-  transition: transform 0.65s cubic-bezier(.4,0,.2,1) 0.1s;
-}
-.bf-cover-inside::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(201,168,76,.06) 0%, transparent 70%);
-}
-.bf-cover-inside::after {
-  content: '';
-  position: absolute; right: 0; top: 0; bottom: 0; width: 14px;
-  background: linear-gradient(to left, rgba(0,0,0,.4) 0%, transparent 100%);
+  opacity: 1;
+  transition:
+    opacity 0.05s linear 0s,
+    transform 0.4s cubic-bezier(.4,0,.2,1) 0.05s;
 }
 
 /* ── Faces ── */
 .bf { position: absolute; }
-/* Front (front face of .bf-cover-card — no independent transform needed) */
+/* Front cover */
 .bf-front {
   top: 0; left: 0; width: 291px; height: 408px;
   background:
@@ -333,7 +307,8 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
       rgba(0,0,0,.025) 4px, rgba(0,0,0,.025) 5px
     ),
     #13100d;
-  transform: translateZ(1px);
+  transform: translateZ(22px);
+  transform-origin: 0% 50%;
   overflow: hidden;
   backface-visibility: hidden;
   box-shadow:
@@ -469,8 +444,22 @@ button { border: none; background: none; font-family: inherit; cursor: pointer; 
 }
 .is-page + .is-page { padding-left: 12px; }
 .is-page-left {
-  background: linear-gradient(to right, #e2d8c8, #ede5d5);
-  border-right: 1px solid rgba(0,0,0,.08);
+  background: linear-gradient(to right, #e8e0d0, #f0e8d8);
+  border-right: 1px solid rgba(0,0,0,.1);
+  justify-content: center; align-items: center; text-align: center;
+}
+.is-left-title {
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+  color: #3a2e1a; margin-bottom: 3px;
+}
+.is-left-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5px; letter-spacing: .18em; text-transform: uppercase;
+  color: #8a7a5a; margin-bottom: 6px;
+}
+.is-left-rule {
+  width: 24px; height: 1px; background: rgba(0,0,0,.2); margin: 0 auto 6px;
 }
 .is-spine-shadow {
   width: 6px; flex-shrink: 0;
@@ -1426,17 +1415,15 @@ footer {
   .bf-front, .bf-back { width: 350px; height: 490px; }
   .bf-inner-spread { width: 350px; height: 490px; }
   .bf-front, .bf-back { width: 350px; height: 490px; }
-  .bf-front { transform: translateZ(1px); }
+  .bf-front { transform: translateZ(28px); }
   .bf-back { transform: rotateY(180deg) translateZ(28px); }
   .bf-inner-spread { width: 350px; height: 490px; transform: translateZ(26px); }
   .bf-spine { height: 490px; width: 56px; transform: translateX(-28px) rotateY(-90deg); }
   .bf-pages { left: 294px; height: 490px; width: 56px; transform: translateX(28px) rotateY(90deg); }
   .bf-top { width: 350px; height: 56px; transform: translateY(-28px) rotateX(90deg); }
   .bf-bottom { top: 434px; width: 350px; height: 56px; transform: translateY(28px) rotateX(-90deg); }
-  .bf-cover-card { width: 350px; height: 490px; transform: translateZ(28px); }
-  .bf-cover-inside { width: 350px; height: 490px; transform: rotateY(180deg) translateZ(1px); }
-  .book-3d.book-cover-open .bf-cover-card { transform: translateZ(28px) rotateY(-170deg); }
-  .book-3d.book-cover-closing .bf-cover-card { transform: translateZ(28px); }
+  .book-3d.book-cover-open .bf-front { transform: translateZ(28px) rotateY(-170deg); }
+  .book-3d.book-cover-closing .bf-front { transform: translateZ(28px); }
 }
 
 /* ── Rotating word ── */
@@ -1605,21 +1592,16 @@ footer { border-top: 1px solid var(--edge); }
     <div class="book-scene">
       <div class="book-float">
         <div class="book-3d" id="book3d">
-          <!-- Cover card: front face + inside face rotate together as one physical cover -->
-          <div class="bf-cover-card">
-            <!-- Front cover (front face of card) -->
-            <div class="bf bf-front">
-              <div class="bk-glow"></div>
-              <div class="bk-content">
-                <div class="bk-line-v down"></div>
-                <div class="bk-brand">Progressio</div>
-                <div class="bk-rule"></div>
-                <div class="bk-subtitle">System of Rebuild</div>
-                <div class="bk-line-v up"></div>
-              </div>
+          <!-- Front cover -->
+          <div class="bf bf-front">
+            <div class="bk-glow"></div>
+            <div class="bk-content">
+              <div class="bk-line-v down"></div>
+              <div class="bk-brand">Progressio</div>
+              <div class="bk-rule"></div>
+              <div class="bk-subtitle">System of Rebuild</div>
+              <div class="bk-line-v up"></div>
             </div>
-            <!-- Inside of front cover (back face of card, revealed when cover opens) -->
-            <div class="bf bf-cover-inside"></div>
           </div>
           <!-- Spine -->
           <div class="bf bf-spine">
@@ -1634,9 +1616,12 @@ footer { border-top: 1px solid var(--edge); }
           <!-- Inner page (visible when cover opens) — single right-hand page -->
           <div class="bf bf-inner-spread">
             <div class="is-pages">
-              <!-- Left page: inside front cover / blank endpaper -->
+              <!-- Left page: endpaper with title -->
               <div class="is-page is-page-left">
-                <p class="is-p-header">Progressio</p>
+                <div class="is-left-title">Progressio</div>
+                <div class="is-left-sub">System of Rebuild</div>
+                <div class="is-left-rule"></div>
+                <p class="is-p-body">Grankers · 2026</p>
               </div>
               <!-- Center spine shadow -->
               <div class="is-spine-shadow"></div>
