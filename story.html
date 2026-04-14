@@ -487,6 +487,26 @@ footer {
   .ch-specs { grid-template-columns: 1fr; }
   .story-hero h1 { font-size: 42px; }
 }
+
+/* ── TEAM VISUAL ── */
+.team-visual {
+  padding: 72px 0;
+}
+.tv-img-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 40px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.tv-img {
+  width: 100%;
+  display: block;
+  border-radius: 4px;
+}
+@media(max-width:768px){
+  .tv-img-wrap { padding: 0 24px; }
+}
 </style>
 </head>
 <body>
@@ -496,7 +516,7 @@ footer {
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo">
-    <a href="https://grankerslinks.giize.com" target="_blank" rel="noopener" aria-label="Grankers Team">
+    <a href="https://grankerslinks.giize.com" target="_blank" rel="nofollow noopener noreferrer" aria-label="Grankers Team">
       <img src="/grankers-lion.png" alt="Grankers" class="nav-lion">
     </a>
     <a href="index.html" class="nav-brand-wrap">
@@ -516,6 +536,13 @@ footer {
   <h1>Five chapters.<br><em>One journal.</em></h1>
   <p>Why do people who want it most keep stopping? The answer changed everything.</p>
 </section>
+
+<!-- TEAM VISUAL -->
+<div class="team-visual rv">
+  <div class="tv-img-wrap">
+    <img src="/grankers-team.jpg" alt="Grankers Team" class="tv-img" loading="lazy">
+  </div>
+</div>
 
 <!-- CHAPTER I -->
 <section class="chapter" id="ch1">
