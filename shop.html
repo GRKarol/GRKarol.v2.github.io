@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Shop — Grankers Team</title>
+
+<!-- ═══ SEO: wewnętrzna, nie indeksowana ═══ -->
+<meta name="robots" content="noindex, nofollow">
+
+<!-- ═══ FAVICON ═══ -->
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#c9a84c">
+
+<!-- ═══ FONTS ═══ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+<style>
+/* ═══ DESIGN TOKENS ═══ */
+:root {
+  --ink:     #07060a;
+  --deep:    #0c0b0f;
+  --surface: #131118;
+  --lift:    #1b1820;
+  --edge:    #252030;
+  --gold:    #c9a84c;
+  --gold-hi: #e8cc7a;
+  --gold-lo: #7a5e20;
+  --smoke:   #9e94b2;
+  --ash:     #b5aac5;
+  --parch:   #ede0c4;
+  --cream:   #f8f0de;
+  --white:   #fdfaf4;
+
+  --serif:  'Cormorant', Georgia, serif;
+  --cinzel: 'Cinzel', serif;
+  --mono:   'Tenor Sans', sans-serif;
+  --ui:     'Jost', sans-serif;
+
+  --silk:   cubic-bezier(.25,.46,.45,.94);
+  --spring: cubic-bezier(.22,.68,0,1.2);
+  --snap:   cubic-bezier(.77,0,.175,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--parch);
+  font-family: var(--ui);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.placeholder-label {
+  font-family: var(--cinzel);
+  font-size: clamp(.65rem, 1.5vw, .75rem);
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.placeholder-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 300;
+  color: var(--white);
+  text-align: center;
+}
+
+.placeholder-note {
+  font-family: var(--ui);
+  font-size: .875rem;
+  color: var(--smoke);
+  letter-spacing: .05em;
+}
+
+.back-link {
+  margin-top: 2rem;
+  font-family: var(--cinzel);
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  text-decoration: none;
+  border-bottom: 1px solid var(--edge);
+  padding-bottom: 2px;
+  transition: color .3s var(--silk), border-color .3s var(--silk);
+}
+.back-link:hover { color: var(--gold); border-color: var(--gold-lo); }
+</style>
+</head>
+<body>
+
+  <span class="placeholder-label">Grankers Team</span>
+  <h1 class="placeholder-title">Shop</h1>
+  <p class="placeholder-note">— w budowie —</p>
+  <a href="index.html" class="back-link">← Wróć do strony głównej</a>
+
+</body>
+</html>
