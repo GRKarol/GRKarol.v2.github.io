@@ -3,25 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Progressio — Grankers Team</title>
-
+<title>Shop — Progressio by Grankers Team</title>
 <meta name="robots" content="noindex, nofollow">
 
-<!-- ═══ FAVICON ═══ -->
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#c9a84c">
 
-<!-- ═══ FONTS ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&family=Tenor+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================================
-   DESIGN TOKENS
-============================================================ */
 :root {
   --ink:      #07060a;
   --deep:     #0c0b0f;
@@ -31,1604 +25,785 @@
   --gold:     #c9a84c;
   --gold-hi:  #e8cc7a;
   --gold-lo:  #7a5e20;
-  --gold-dim: #3a2c10;
   --smoke:    #9e94b2;
   --ash:      #b5aac5;
   --parch:    #ede0c4;
   --cream:    #f8f0de;
-  --white:    #fdfaf4;
 
-  /* Paper palette */
   --paper-1:  #fefcf7;
-  --paper-2:  #f8f2e4;
-  --paper-3:  #f0e6ce;
-  --paper-4:  #e8d9b8;
-  --paper-ink: #1a1209;
-  --paper-mid: #5c4a2a;
-  --paper-faint: #9c8660;
+  --paper-2:  #f6eedd;
+  --paper-3:  #eee0c6;
+  --paper-4:  #e4d2b0;
+  --paper-ink:#1a1209;
+  --paper-mid:#5c4a2a;
+  --paper-dim:#9c8660;
 
   --serif:  'Cormorant', Georgia, serif;
   --cinzel: 'Cinzel', Georgia, serif;
-  --mono:   'Tenor Sans', sans-serif;
   --ui:     'Jost', sans-serif;
-
   --silk:   cubic-bezier(.25,.46,.45,.94);
-  --spring: cubic-bezier(.22,.68,0,1.2);
   --snap:   cubic-bezier(.77,0,.175,1);
 }
 
-/* ============================================================
-   BASE
-============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
-body {
-  background: var(--ink);
-  color: var(--parch);
-  font-family: var(--ui);
-  font-weight: 300;
-  overflow-x: hidden;
-  line-height: 1;
-}
-::selection { background: rgba(201,168,76,.2); color: var(--gold-hi); }
+html { font-size: 16px; }
+body { background: var(--ink); color: var(--parch); font-family: var(--ui); font-weight: 300; overflow-x: hidden; }
 a { text-decoration: none; color: inherit; }
 button { border: none; background: none; font-family: inherit; cursor: pointer; }
-img { display: block; max-width: 100%; }
 
-/* ============================================================
-   SVG FILTERS (paper texture)
-============================================================ */
-#svg-filters { position: absolute; width: 0; height: 0; overflow: hidden; }
-
-/* ============================================================
-   GRAIN OVERLAY
-============================================================ */
+/* ── Grain ── */
 #grain {
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 9999;
-  opacity: .03;
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: .03;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E");
-  animation: grainShift 8s steps(1) infinite;
+  animation: grain 8s steps(1) infinite;
 }
-@keyframes grainShift {
-  0%   { background-position: 0 0 }
-  12%  { background-position: -30px 40px }
-  25%  { background-position: 60px -20px }
-  50%  { background-position: 40px 30px }
-  75%  { background-position: 20px -60px }
-  100% { background-position: 0 0 }
+@keyframes grain {
+  0%{background-position:0 0}25%{background-position:60px -20px}50%{background-position:40px 30px}75%{background-position:20px -60px}
 }
 
-/* ============================================================
-   CURSOR (desktop only)
-============================================================ */
-#c-dot, #c-ring {
-  position: fixed; pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  will-change: transform;
-}
-#c-dot {
-  width: 7px; height: 7px;
-  background: var(--gold); border-radius: 50%;
-  transition: width .2s, height .2s, opacity .2s;
-}
-#c-ring {
-  width: 34px; height: 34px;
-  border: 1px solid rgba(201,168,76,.35); border-radius: 50%;
-  transition: width .4s var(--silk), height .4s var(--silk), opacity .3s;
-}
-body:not(.has-mouse) #c-dot,
-body:not(.has-mouse) #c-ring { display: none; }
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
+/* ── Nav ── */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-  padding: 28px 48px;
+  position: sticky; top: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
-  transition: background .5s var(--silk), padding .4s var(--silk);
-}
-.nav.scrolled {
-  background: rgba(7,6,10,.88);
+  padding: 16px clamp(20px, 5vw, 64px);
+  background: rgba(7,6,10,.92);
   backdrop-filter: blur(12px);
-  padding: 18px 48px;
-  border-bottom: 1px solid rgba(255,255,255,.04);
+  border-bottom: 1px solid var(--edge);
 }
 .nav-logo {
-  font-family: var(--cinzel);
-  font-size: .7rem; letter-spacing: .32em;
-  text-transform: uppercase;
-  color: var(--gold);
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--serif); font-size: 18px; font-weight: 600;
+  letter-spacing: .22em; color: var(--gold); text-transform: uppercase;
 }
-.nav-logo img { width: 28px; height: 28px; object-fit: contain; filter: brightness(1.1); }
-.nav-links {
-  display: flex; align-items: center; gap: 40px;
-  list-style: none;
-}
-.nav-links a {
-  font-family: var(--cinzel);
-  font-size: .62rem; letter-spacing: .24em;
-  text-transform: uppercase;
-  color: var(--smoke);
-  transition: color .3s var(--silk);
-}
-.nav-links a:hover, .nav-links a.active { color: var(--gold); }
-.nav-cart {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--cinzel); font-size: .62rem;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--smoke);
-  cursor: pointer;
-  transition: color .3s var(--silk);
-}
-.nav-cart:hover { color: var(--gold); }
-.cart-count {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--gold); color: var(--ink);
-  font-size: .55rem; font-weight: 500;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--ui);
-}
-
-/* ============================================================
-   SECTION UTILITIES
-============================================================ */
-.section { padding: clamp(80px, 12vw, 140px) clamp(24px, 6vw, 80px); }
-.section-inner { max-width: 1240px; margin: 0 auto; }
-.eyebrow {
-  display: inline-flex; align-items: center; gap: 14px;
-  font-family: var(--cinzel); font-size: .6rem;
-  letter-spacing: .3em; text-transform: uppercase;
-  color: var(--gold-lo); margin-bottom: 24px;
-}
-.eyebrow::before { content:''; width: 36px; height: 1px; background: var(--gold-lo); }
-.section-title {
-  font-family: var(--serif);
-  font-size: clamp(2.4rem, 5vw, 5rem);
-  font-weight: 300; line-height: .95;
-  letter-spacing: -.01em;
-}
-.divider {
-  width: 48px; height: 1px;
-  background: linear-gradient(90deg, var(--gold-lo), transparent);
-  margin: 32px 0;
-}
-
-/* Scroll reveal */
-.reveal {
-  opacity: 0; transform: translateY(28px);
-  transition: opacity .8s var(--silk), transform .8s var(--silk);
-}
-.reveal.in { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: .12s; }
-.reveal-delay-2 { transition-delay: .24s; }
-.reveal-delay-3 { transition-delay: .36s; }
-.reveal-delay-4 { transition-delay: .48s; }
-
-/* ============================================================
-   PAPER UTILITIES
-============================================================ */
-.paper {
-  background:
-    linear-gradient(
-      135deg,
-      var(--paper-1) 0%,
-      var(--paper-2) 35%,
-      var(--paper-3) 70%,
-      var(--paper-4) 100%
-    );
-  /* faint fiber overlay */
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)' opacity='.06'/%3E%3C/svg%3E"),
-    linear-gradient(135deg, var(--paper-1) 0%, var(--paper-2) 35%, var(--paper-3) 70%, var(--paper-4) 100%);
-  color: var(--paper-ink);
-  position: relative;
-}
-
-/* Depth shadow — looks like a stack of sheets */
-.paper-shadow {
-  filter:
-    drop-shadow(0 2px 4px rgba(0,0,0,.18))
-    drop-shadow(0 8px 24px rgba(0,0,0,.28))
-    drop-shadow(0 24px 56px rgba(0,0,0,.32));
-}
-
-/* Bent/curled bottom-right corner */
-.paper-curl::after {
-  content: '';
-  position: absolute; bottom: 0; right: 0;
-  width: 48px; height: 48px;
-  background: linear-gradient(225deg, var(--ink) 45%, var(--paper-4) 55%);
-  clip-path: polygon(100% 0, 100% 100%, 0 100%);
-  opacity: .35;
-}
-
-/* Stacked pages illusion */
-.paper-stack::before {
-  content: '';
-  position: absolute; bottom: -6px; left: 4px; right: -4px;
-  height: 100%; border-radius: inherit;
-  background: var(--paper-4);
-  z-index: -1;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,.2));
-}
-.paper-stack::after {
-  content: '';
-  position: absolute; bottom: -11px; left: 8px; right: -8px;
-  height: 100%; border-radius: inherit;
-  background: var(--paper-3);
-  z-index: -2;
-}
-
-/* Gold rule — like a journal line */
-.paper-rule {
-  width: 100%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(180,140,60,.3) 20%, rgba(180,140,60,.3) 80%, transparent);
-  margin: 16px 0;
-}
-
-/* Wax seal */
-.wax-seal {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: radial-gradient(circle at 38% 38%, #d4a853, #9a6a1a 60%, #6b4710);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--cinzel); font-size: .55rem;
-  letter-spacing: .15em; color: rgba(255,255,255,.8);
-  box-shadow: 0 3px 12px rgba(0,0,0,.4), inset 0 1px 3px rgba(255,255,255,.2);
-  flex-shrink: 0;
-}
-
-/* ============================================================
-   HERO
-============================================================ */
-.hero {
-  min-height: 100dvh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 0;
-  padding: 0 clamp(24px, 6vw, 80px);
-  padding-top: 100px;
-  overflow: hidden;
-  position: relative;
-}
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 55% 50%, rgba(201,168,76,.04) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* — Hero copy column — */
-.hero-copy { position: relative; z-index: 2; }
-.hero-copy .eyebrow { margin-bottom: 32px; }
-.hero-title {
-  font-family: var(--serif);
-  font-size: clamp(3.8rem, 8vw, 9rem);
-  font-weight: 600; line-height: .88;
-  letter-spacing: -.02em;
-  margin-bottom: 8px;
-}
-.hero-title span:nth-child(1) { display: block; color: var(--white); }
-.hero-title span:nth-child(2) { display: block; color: var(--gold); font-style: italic; }
-.hero-subtitle {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
-  color: var(--ash); font-weight: 300; line-height: 1.5;
-  max-width: 44ch;
-  margin-top: 28px; margin-bottom: 48px;
-}
-.hero-ctas {
-  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
-  margin-bottom: 56px;
-}
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--ui); font-size: .7rem; font-weight: 500;
-  letter-spacing: .24em; text-transform: uppercase;
-  color: var(--ink); background: var(--gold);
-  padding: 18px 44px;
-  position: relative; overflow: hidden;
-  transition: transform .3s var(--silk), box-shadow .3s var(--silk);
-}
-.btn-primary::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: var(--gold-hi);
-  transform: translateX(-101%);
-  transition: transform .4s var(--snap);
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(201,168,76,.3); }
-.btn-primary:hover::after { transform: none; }
-.btn-primary span { position: relative; z-index: 1; }
-.btn-ghost {
-  font-family: var(--cinzel); font-size: .6rem;
+.nav-lion { width: 34px; height: 37px; opacity: .9; }
+.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-link {
+  font-family: var(--cinzel); font-size: .58rem;
   letter-spacing: .22em; text-transform: uppercase;
-  color: var(--smoke);
-  border-bottom: 1px solid var(--edge);
-  padding-bottom: 3px;
-  transition: color .3s, border-color .3s;
+  color: var(--smoke); transition: color .3s;
 }
-.btn-ghost:hover { color: var(--gold); border-color: var(--gold-lo); }
-
-.hero-trust {
-  display: flex; align-items: center; gap: 20px;
-  font-family: var(--ui); font-size: .75rem; color: var(--smoke);
+.nav-link:hover { color: var(--gold); }
+.cart-btn {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--cinzel); font-size: .58rem;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--parch); transition: color .3s;
 }
-.hero-trust-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--edge); }
-
-/* — Hero visual column — */
-.hero-visual {
+.cart-btn:hover { color: var(--gold); }
+.cart-icon { width: 18px; height: 18px; position: relative; }
+.cart-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.cart-badge {
+  position: absolute; top: -5px; right: -6px;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: var(--gold); color: var(--ink);
+  font-family: var(--ui); font-size: .5rem; font-weight: 500;
   display: flex; align-items: center; justify-content: center;
-  position: relative; z-index: 2;
-  height: 100dvh;
+  transition: transform .3s var(--snap);
 }
-.hero-journal {
-  position: relative;
-  width: clamp(240px, 32vw, 420px);
-  aspect-ratio: 3/4;
-}
+.cart-badge.bump { transform: scale(1.4); }
 
-/* Journal body */
-.journal-body {
-  width: 100%; height: 100%;
-  border-radius: 4px 12px 12px 4px;
-  position: relative;
-  overflow: hidden;
-  transform: perspective(1200px) rotateY(-8deg) rotateX(3deg);
-  box-shadow:
-    -3px 0 0 rgba(0,0,0,.5),
-    4px 12px 48px rgba(0,0,0,.7),
-    12px 24px 80px rgba(0,0,0,.5);
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)' opacity='.04'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, var(--paper-1) 0%, var(--paper-2) 30%, var(--paper-3) 70%, var(--paper-4) 100%);
-  animation: floatJournal 6s ease-in-out infinite;
-}
-@keyframes floatJournal {
-  0%, 100% { transform: perspective(1200px) rotateY(-8deg) rotateX(3deg) translateY(0); }
-  50%       { transform: perspective(1200px) rotateY(-8deg) rotateX(3deg) translateY(-14px); }
-}
-
-/* Journal spine */
-.journal-spine {
-  position: absolute; top: 0; left: 0; bottom: 0;
-  width: 18px;
-  background: linear-gradient(180deg, #2a1f0e 0%, #1a1208 50%, #2a1f0e 100%);
-  border-right: 1px solid rgba(201,168,76,.15);
-  display: flex; align-items: center; justify-content: center;
-}
-.journal-spine-text {
-  font-family: var(--cinzel); font-size: 6px;
-  letter-spacing: .3em; color: rgba(201,168,76,.5);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: nowrap;
-}
-
-/* Journal cover content */
-.journal-cover-content {
-  position: absolute; inset: 0; left: 18px;
-  padding: clamp(20px, 4vw, 36px);
-  display: flex; flex-direction: column;
-  justify-content: space-between;
-}
-.jc-top {
-  display: flex; align-items: flex-start; justify-content: space-between;
-}
-.jc-number {
-  font-family: var(--cinzel); font-size: .55rem;
-  letter-spacing: .3em; color: var(--paper-faint);
-}
-.jc-logo-mark {
-  width: 32px; height: 32px;
-  border: 1px solid rgba(100,70,20,.3); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--cinzel); font-size: .5rem;
-  color: var(--paper-faint);
-}
-.jc-mid {
-  text-align: center;
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 12px;
-}
-.jc-title {
-  font-family: var(--cinzel); font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 400; letter-spacing: .18em;
-  color: var(--paper-ink); line-height: 1;
-}
-.jc-rule { width: 40%; height: 1px; background: rgba(100,70,20,.3); }
-.jc-subtitle {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(.7rem, 1.2vw, .95rem);
-  color: var(--paper-faint); letter-spacing: .05em;
-}
-.jc-lines { width: 100%; }
-.jc-line { height: 1px; background: rgba(100,70,20,.12); margin-bottom: 14px; }
-.jc-bottom {
-  display: flex; align-items: flex-end; justify-content: space-between;
-}
-.jc-year {
-  font-family: var(--mono); font-size: .7rem;
-  letter-spacing: .1em; color: var(--paper-faint);
-}
-.jc-brand {
-  font-family: var(--cinzel); font-size: .5rem;
-  letter-spacing: .2em; color: rgba(100,70,20,.4);
-  text-transform: uppercase;
-}
-
-/* Floating paper scraps */
-.paper-scrap {
-  position: absolute;
-  border-radius: 2px;
-  pointer-events: none;
-}
-.scrap-1 {
-  width: clamp(80px, 12vw, 140px);
-  height: clamp(100px, 16vw, 180px);
-  bottom: 12%; right: -8%;
-  transform: rotate(6deg);
-  animation: floatScrap1 7s ease-in-out infinite;
-}
-.scrap-2 {
-  width: clamp(60px, 9vw, 110px);
-  height: clamp(80px, 12vw, 140px);
-  top: 18%; left: -6%;
-  transform: rotate(-4deg);
-  animation: floatScrap2 9s ease-in-out infinite;
-}
-@keyframes floatScrap1 {
-  0%,100% { transform: rotate(6deg) translateY(0); }
-  50%      { transform: rotate(7.5deg) translateY(-10px); }
-}
-@keyframes floatScrap2 {
-  0%,100% { transform: rotate(-4deg) translateY(0); }
-  50%      { transform: rotate(-5.5deg) translateY(12px); }
-}
-.scrap-inner {
-  width: 100%; height: 100%;
-  padding: 14px 12px;
-  display: flex; flex-direction: column; gap: 7px;
-}
-.scrap-line-label {
-  font-family: var(--cinzel); font-size: .42rem;
-  letter-spacing: .22em; color: var(--paper-faint);
-  text-transform: uppercase; margin-bottom: 4px;
-}
-.scrap-line { height: 1px; background: rgba(100,70,20,.15); }
-.scrap-checkbox-row {
-  display: flex; align-items: center; gap: 7px;
-  font-family: var(--serif); font-size: .6rem;
-  color: var(--paper-mid);
-}
-.scrap-box {
-  width: 9px; height: 9px;
-  border: 1px solid rgba(100,70,20,.4);
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .5rem;
-}
-.scrap-text-line { height: 1px; background: rgba(100,70,20,.1); flex: 1; }
-.scrap-handwrite {
-  font-family: var(--serif); font-style: italic;
-  font-size: .65rem; color: rgba(80,50,15,.6);
-  line-height: 1.6;
-}
-
-/* ============================================================
-   PROBLEM SECTION
-============================================================ */
-.problem {
-  background: var(--deep);
-  border-top: 1px solid var(--edge);
-  border-bottom: 1px solid var(--edge);
-}
-.problem-inner {
-  max-width: 760px; margin: 0 auto;
-  text-align: center;
-}
-.quote-mark {
-  font-family: var(--serif); font-size: 6rem;
-  color: var(--gold-dim); line-height: .6;
-  display: block; margin-bottom: 24px;
-}
-.problem-text {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
-  font-weight: 300; line-height: 1.7; color: var(--ash);
-}
-.problem-text strong { font-style: normal; color: var(--parch); font-weight: 400; }
-.problem-attribution {
-  margin-top: 40px;
-  font-family: var(--cinzel); font-size: .6rem;
-  letter-spacing: .28em; color: var(--gold-lo);
-  text-transform: uppercase;
-}
-
-/* ============================================================
-   PRODUCT SECTION (price + buy)
-============================================================ */
-.product-section {
+/* ── Product layout ── */
+.product-page {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  min-height: calc(100dvh - 70px);
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: clamp(32px, 5vw, 64px) clamp(20px, 5vw, 64px);
   gap: clamp(40px, 6vw, 100px);
   align-items: start;
 }
-.product-image-col {
-  display: flex; flex-direction: column; gap: 24px;
-  position: sticky; top: 100px;
-}
 
-/* Main product paper card */
-.product-paper-card {
-  border-radius: 4px;
-  padding: clamp(32px, 5vw, 56px);
-  position: relative;
-}
-.product-paper-card .paper-curl::after { width: 56px; height: 56px; }
+/* ── Left: product visual ── */
+.product-visual { position: sticky; top: 100px; }
 
-/* Stack of pages sticking out bottom */
-.product-stack-wrap {
+/* Journal stack */
+.journal-stack {
   position: relative;
-  /* space for pseudo-elements */
-  margin-bottom: 12px;
+  width: min(340px, 80vw);
+  margin: 0 auto;
 }
-.product-stack-wrap::before {
+/* back pages */
+.journal-stack::before,
+.journal-stack::after {
   content: '';
-  position: absolute; bottom: -8px; left: 6px; right: -6px;
-  height: calc(100% - 8px);
+  position: absolute;
+  border-radius: 3px 10px 10px 3px;
+}
+.journal-stack::before {
+  inset: 0; left: 8px; top: 8px;
   background: var(--paper-4);
-  border-radius: 4px;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,.25));
+  transform: rotate(1.5deg);
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.3));
+  z-index: 0;
+}
+.journal-stack::after {
+  inset: 0; left: 14px; top: 14px;
+  background: var(--paper-3);
+  transform: rotate(2.8deg);
   z-index: -1;
 }
-.product-stack-wrap::after {
-  content: '';
-  position: absolute; bottom: -14px; left: 12px; right: -12px;
-  height: calc(100% - 14px);
-  background: var(--paper-3);
-  border-radius: 4px;
-  z-index: -2;
+
+.journal-cover {
+  position: relative; z-index: 1;
+  border-radius: 3px 10px 10px 3px;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  filter:
+    drop-shadow(-2px 0 0 rgba(0,0,0,.6))
+    drop-shadow(6px 16px 40px rgba(0,0,0,.6))
+    drop-shadow(0 4px 12px rgba(0,0,0,.4));
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)' opacity='.05'/%3E%3C/svg%3E"),
+    linear-gradient(160deg, var(--paper-1) 0%, var(--paper-2) 40%, var(--paper-3) 75%, var(--paper-4) 100%);
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
 }
 
-/* Product paper inner layout */
-.ppc-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
+/* Spine */
+.journal-spine {
+  position: absolute; top: 0; left: 0; bottom: 0; width: 20px;
+  background: linear-gradient(180deg, #231808, #160f05, #231808);
+  border-right: 1px solid rgba(201,168,76,.12);
+  display: flex; align-items: center; justify-content: center;
+}
+.spine-text {
+  font-family: var(--cinzel); font-size: 6px; letter-spacing: .32em;
+  color: rgba(201,168,76,.45); writing-mode: vertical-rl;
+  transform: rotate(180deg); white-space: nowrap;
+}
+
+/* Cover face */
+.journal-face {
+  position: absolute; inset: 0; left: 20px;
+  padding: clamp(20px, 4vw, 36px);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.jf-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.jf-vol { font-family: var(--cinzel); font-size: .5rem; letter-spacing: .28em; color: var(--paper-dim); }
+.jf-mark {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid rgba(100,70,20,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--cinzel); font-size: .44rem; color: var(--paper-dim);
+}
+.jf-mid { text-align: center; }
+.jf-title {
+  font-family: var(--cinzel); font-size: clamp(1.3rem, 3.5vw, 2rem);
+  letter-spacing: .2em; color: var(--paper-ink); margin-bottom: 8px;
+}
+.jf-rule { width: 40%; height: 1px; background: rgba(100,70,20,.25); margin: 0 auto 8px; }
+.jf-sub {
+  font-family: var(--serif); font-style: italic;
+  font-size: .9rem; color: var(--paper-dim);
+}
+.jf-lines { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.jf-line { height: 1px; background: rgba(100,70,20,.1); }
+.jf-line:last-child { width: 60%; }
+.jf-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.jf-year { font-family: var(--cinzel); font-size: .6rem; letter-spacing: .12em; color: var(--paper-dim); }
+.jf-brand { font-family: var(--cinzel); font-size: .44rem; letter-spacing: .2em; color: rgba(100,70,20,.35); }
+
+/* Page previews */
+.page-thumbs {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px; margin-top: 20px;
+  width: min(340px, 80vw); margin-left: auto; margin-right: auto;
+}
+.thumb {
+  aspect-ratio: 3/4; border-radius: 2px; cursor: pointer; overflow: hidden;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.4));
+  transition: transform .3s var(--silk), filter .3s;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='.06'/%3E%3C/svg%3E"),
+    linear-gradient(160deg, var(--paper-1), var(--paper-3));
+}
+.thumb:hover { transform: translateY(-4px); filter: drop-shadow(0 8px 20px rgba(0,0,0,.5)); }
+.thumb-body { padding: 8px 6px; display: flex; flex-direction: column; gap: 6px; height: 100%; }
+.th-label { font-family: var(--cinzel); font-size: .36rem; letter-spacing: .18em; color: var(--paper-dim); }
+.th-line { height: 1px; background: rgba(100,70,20,.1); }
+.th-line.short { width: 65%; margin-top: auto; }
+
+/* ── Right: buy panel ── */
+.buy-panel { padding-top: 8px; }
+
+.breadcrumb {
+  font-family: var(--cinzel); font-size: .52rem;
+  letter-spacing: .2em; color: var(--smoke);
+  display: flex; align-items: center; gap: 8px;
   margin-bottom: 28px;
 }
-.ppc-edition {
-  font-family: var(--cinzel); font-size: .52rem;
-  letter-spacing: .28em; color: var(--paper-faint);
+.breadcrumb a { transition: color .3s; }
+.breadcrumb a:hover { color: var(--gold); }
+.breadcrumb span { color: var(--edge); }
+
+.product-title {
+  font-family: var(--serif); font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 300; line-height: .95; margin-bottom: 6px;
 }
-.ppc-page-num {
-  font-family: var(--mono); font-size: .65rem; color: var(--paper-faint);
-}
-.ppc-title {
-  font-family: var(--cinzel);
-  font-size: clamp(1.6rem, 3.5vw, 2.8rem);
-  letter-spacing: .12em; color: var(--paper-ink);
-  margin-bottom: 6px;
-}
-.ppc-sub {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(.85rem, 1.4vw, 1.1rem);
-  color: var(--paper-faint); margin-bottom: 28px;
-}
-.ppc-rules { margin-bottom: 28px; }
-.ppc-desc {
-  font-family: var(--serif); font-size: clamp(.85rem, 1.3vw, 1rem);
-  color: var(--paper-mid); line-height: 1.9; margin-bottom: 28px;
-}
-.ppc-specs {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px 20px; margin-bottom: 8px;
-}
-.ppc-spec-item {
-  display: flex; flex-direction: column; gap: 3px;
-}
-.ppc-spec-label {
-  font-family: var(--cinzel); font-size: .48rem;
-  letter-spacing: .22em; color: var(--paper-faint);
-  text-transform: uppercase;
-}
-.ppc-spec-val {
-  font-family: var(--serif); font-size: .85rem;
-  color: var(--paper-ink);
+.product-title em { font-style: italic; color: var(--gold); }
+.product-tagline {
+  font-family: var(--cinzel); font-size: .58rem;
+  letter-spacing: .28em; color: var(--smoke);
+  margin-bottom: 28px;
 }
 
-/* Thumbnails / page previews */
-.product-thumbs {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+.price-row {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px;
 }
-.product-thumb {
-  aspect-ratio: 3/4; border-radius: 2px;
-  overflow: hidden; cursor: pointer;
-  transition: transform .3s var(--silk), box-shadow .3s var(--silk);
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,.35));
+.price {
+  font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 400; color: var(--parch); line-height: 1;
 }
-.product-thumb:hover { transform: translateY(-4px); }
-.product-thumb-inner {
-  width: 100%; height: 100%;
-  padding: 8px 7px; display: flex; flex-direction: column; gap: 5px;
-}
-.thumb-title { font-family: var(--cinzel); font-size: .38rem; letter-spacing: .18em; color: var(--paper-faint); }
-.thumb-line { height: 1px; background: rgba(100,70,20,.12); }
-.thumb-rule { height: 1px; background: rgba(100,70,20,.08); margin-top: auto; }
-
-/* — Buy column — */
-.buy-col { display: flex; flex-direction: column; gap: 40px; }
-.buy-col .eyebrow { margin-bottom: 12px; }
-.buy-col .section-title { margin-bottom: 20px; }
-.buy-col-sub {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
-  color: var(--ash); line-height: 1.7; margin-bottom: 32px;
-}
-
-/* Price */
-.price-block {
-  display: flex; align-items: baseline; gap: 16px;
-  margin-bottom: 8px;
-}
-.price-main {
-  font-family: var(--serif); font-size: clamp(2.4rem, 4vw, 3.6rem);
-  font-weight: 600; color: var(--white); line-height: 1;
-}
-.price-currency {
-  font-family: var(--cinzel); font-size: .75rem;
-  letter-spacing: .1em; color: var(--smoke); align-self: flex-start;
-  margin-top: .4em;
+.price-cur { font-family: var(--cinzel); font-size: .7rem; color: var(--smoke); margin-top: .3em; }
+.price-tag {
+  font-family: var(--cinzel); font-size: .52rem; letter-spacing: .18em;
+  color: var(--gold); border: 1px solid var(--gold-lo);
+  padding: 3px 10px;
 }
 .price-note {
-  font-family: var(--ui); font-size: .75rem;
-  color: var(--smoke); letter-spacing: .05em;
-}
-.price-sub {
-  font-family: var(--cinzel); font-size: .58rem;
-  letter-spacing: .2em; color: var(--gold-lo);
-  text-transform: uppercase; margin-bottom: 32px;
+  font-family: var(--ui); font-size: .72rem; color: var(--smoke);
+  margin-bottom: 28px;
 }
 
-/* Buy form */
-.buy-form { display: flex; flex-direction: column; gap: 16px; }
-.field-label {
-  font-family: var(--cinzel); font-size: .56rem;
-  letter-spacing: .22em; color: var(--smoke);
-  text-transform: uppercase; display: block;
-  margin-bottom: 8px;
+.divider { height: 1px; background: var(--edge); margin: 24px 0; }
+
+/* Options */
+.option-label {
+  font-family: var(--cinzel); font-size: .54rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--smoke); display: block; margin-bottom: 10px;
 }
-.field-input {
-  width: 100%;
+.editions {
+  display: flex; gap: 10px; margin-bottom: 24px;
+}
+.edition-btn {
+  flex: 1; padding: 12px 8px; text-align: center;
+  border: 1px solid var(--edge); color: var(--smoke);
+  font-family: var(--cinzel); font-size: .56rem; letter-spacing: .16em;
+  transition: border-color .3s, color .3s, background .3s;
+  cursor: pointer; background: transparent;
+}
+.edition-btn.active, .edition-btn:hover {
+  border-color: var(--gold-lo); color: var(--parch);
+  background: rgba(201,168,76,.06);
+}
+.edition-btn.sold-out { opacity: .35; cursor: not-allowed; }
+
+/* Qty */
+.qty-row { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.qty-ctrl {
+  display: flex; align-items: center; border: 1px solid var(--edge);
+}
+.qty-btn {
+  width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--ui); font-size: 1.1rem; color: var(--smoke);
+  transition: color .2s, background .2s;
+}
+.qty-btn:hover { color: var(--parch); background: rgba(255,255,255,.04); }
+.qty-num {
+  width: 44px; text-align: center;
+  font-family: var(--cinzel); font-size: .7rem; letter-spacing: .1em; color: var(--parch);
+  border-left: 1px solid var(--edge); border-right: 1px solid var(--edge);
+  height: 38px; display: flex; align-items: center; justify-content: center;
+  user-select: none;
+}
+.qty-total {
+  font-family: var(--ui); font-size: .75rem; color: var(--smoke);
+}
+
+/* Buttons */
+.btn-add {
+  width: 100%; padding: 17px;
+  background: var(--gold); color: var(--ink);
+  font-family: var(--cinzel); font-size: .64rem; letter-spacing: .22em;
+  position: relative; overflow: hidden; margin-bottom: 10px;
+  transition: transform .25s var(--silk), box-shadow .25s;
+}
+.btn-add::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--gold-hi); transform: translateX(-101%);
+  transition: transform .35s var(--snap);
+}
+.btn-add:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,.25); }
+.btn-add:hover::after { transform: none; }
+.btn-add span { position: relative; z-index: 1; }
+.btn-wishlist {
+  width: 100%; padding: 14px;
+  border: 1px solid var(--edge); color: var(--smoke);
+  font-family: var(--cinzel); font-size: .6rem; letter-spacing: .2em;
+  transition: border-color .3s, color .3s;
+}
+.btn-wishlist:hover { border-color: var(--gold-lo); color: var(--parch); }
+
+/* Meta */
+.product-meta { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+.meta-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  font-family: var(--ui); font-size: .72rem;
+  padding-bottom: 10px; border-bottom: 1px solid rgba(37,32,48,.6);
+}
+.meta-row:last-child { border-bottom: none; }
+.meta-key { color: var(--smoke); }
+.meta-val { color: var(--parch); text-align: right; }
+
+/* Shipping note */
+.ship-note {
+  margin-top: 20px; padding: 14px 18px;
+  border: 1px solid var(--edge);
+  font-family: var(--ui); font-size: .72rem; color: var(--smoke); line-height: 1.6;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ship-note svg { flex-shrink: 0; margin-top: 1px; stroke: var(--gold-lo); fill: none; stroke-width: 1.5; }
+
+/* ── Cart drawer ── */
+.cart-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none; transition: opacity .35s var(--silk);
+}
+.cart-overlay.open { opacity: 1; pointer-events: all; }
+
+.cart-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 401;
+  width: min(420px, 100vw);
   background: var(--surface);
-  border: 1px solid var(--edge);
-  color: var(--parch);
-  font-family: var(--ui); font-size: .875rem;
-  padding: 14px 20px;
-  outline: none;
-  transition: border-color .3s var(--silk);
+  border-left: 1px solid var(--edge);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .4s var(--snap);
 }
-.field-input:focus { border-color: var(--gold-lo); }
-.field-input::placeholder { color: var(--smoke); opacity: .5; }
-.field-select {
-  width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--edge);
-  color: var(--parch);
-  font-family: var(--ui); font-size: .875rem;
-  padding: 14px 20px;
-  outline: none; cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239e94b2' fill='none' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 18px center;
-  background-size: 12px;
-  transition: border-color .3s var(--silk);
-}
-.field-select:focus { border-color: var(--gold-lo); }
+.cart-drawer.open { transform: none; }
 
-.buy-form .btn-primary { width: 100%; justify-content: center; padding: 20px 44px; font-size: .72rem; }
+.cart-head {
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--edge);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-head-title {
+  font-family: var(--cinzel); font-size: .7rem;
+  letter-spacing: .24em; color: var(--parch);
+}
+.cart-close {
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  color: var(--smoke); transition: color .2s;
+}
+.cart-close:hover { color: var(--parch); }
+.cart-close svg { stroke: currentColor; fill: none; stroke-width: 1.5; }
 
-/* Guarantee */
-.guarantee {
-  display: flex; align-items: flex-start; gap: 16px;
-  padding: 20px 24px;
-  border: 1px solid var(--edge);
-  background: rgba(255,255,255,.015);
+.cart-body { flex: 1; overflow-y: auto; padding: 24px 28px; }
+.cart-empty {
+  height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px; text-align: center;
 }
-.guarantee-icon {
-  font-family: var(--cinzel); font-size: 1.2rem; color: var(--gold);
-  flex-shrink: 0; margin-top: 2px;
+.cart-empty-icon { font-family: var(--serif); font-size: 3rem; color: var(--edge); }
+.cart-empty p { font-family: var(--ui); font-size: .78rem; color: var(--smoke); }
+
+.cart-items { display: flex; flex-direction: column; gap: 20px; }
+.cart-item {
+  display: grid; grid-template-columns: 56px 1fr auto;
+  gap: 14px; align-items: start;
+  padding-bottom: 20px; border-bottom: 1px solid var(--edge);
 }
-.guarantee-text strong {
-  display: block; font-family: var(--cinzel);
-  font-size: .58rem; letter-spacing: .18em;
-  color: var(--parch); margin-bottom: 6px;
+.cart-item:last-child { border-bottom: none; }
+
+/* cart item paper thumbnail */
+.ci-thumb {
+  aspect-ratio: 3/4; border-radius: 2px;
+  background: linear-gradient(160deg, var(--paper-1), var(--paper-3));
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.4));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--cinzel); font-size: .35rem;
+  letter-spacing: .12em; color: var(--paper-dim);
 }
-.guarantee-text p {
-  font-family: var(--ui); font-size: .78rem;
-  color: var(--smoke); line-height: 1.6;
+.ci-info { display: flex; flex-direction: column; gap: 5px; }
+.ci-name { font-family: var(--cinzel); font-size: .62rem; letter-spacing: .14em; color: var(--parch); }
+.ci-edition { font-family: var(--ui); font-size: .68rem; color: var(--smoke); }
+.ci-qty-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.ci-qty-btn {
+  width: 22px; height: 22px; border: 1px solid var(--edge);
+  color: var(--smoke); font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, color .2s;
+}
+.ci-qty-btn:hover { border-color: var(--gold-lo); color: var(--parch); }
+.ci-qty-num { font-family: var(--cinzel); font-size: .6rem; color: var(--parch); }
+.ci-remove {
+  font-family: var(--ui); font-size: .62rem; color: var(--smoke);
+  text-decoration: underline; text-underline-offset: 2px; cursor: pointer;
+  margin-top: 6px; display: block;
+  transition: color .2s;
+}
+.ci-remove:hover { color: var(--parch); }
+.ci-price {
+  font-family: var(--serif); font-size: 1rem; color: var(--parch); white-space: nowrap;
 }
 
-/* Trust strip */
-.trust-strip {
-  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+.cart-foot {
+  padding: 20px 28px;
+  border-top: 1px solid var(--edge);
 }
-.trust-item {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--cinzel); font-size: .55rem;
-  letter-spacing: .16em; color: var(--smoke);
-}
-.trust-item svg { color: var(--gold); flex-shrink: 0; }
-
-/* ============================================================
-   CONTENTS / FEATURES (paper cards grid)
-============================================================ */
-.contents-section { background: var(--deep); }
-.contents-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: clamp(20px, 3vw, 36px);
-  margin-top: 64px;
-}
-.content-card {
-  border-radius: 3px;
-  padding: clamp(24px, 3.5vw, 40px);
-  position: relative;
-  overflow: hidden;
-  transition: transform .4s var(--silk);
-}
-.content-card:hover { transform: translateY(-6px) rotate(0deg); }
-.content-card:nth-child(odd)  { transform: rotate(-.4deg); }
-.content-card:nth-child(even) { transform: rotate(.3deg); }
-.content-card:nth-child(odd):hover  { transform: translateY(-6px) rotate(-.4deg); }
-.content-card:nth-child(even):hover { transform: translateY(-6px) rotate(.3deg); }
-
-.cc-number {
-  font-family: var(--cinzel); font-size: .5rem;
-  letter-spacing: .28em; color: var(--paper-faint);
+.cart-subtotal {
+  display: flex; justify-content: space-between; align-items: baseline;
   margin-bottom: 16px;
 }
-.cc-title {
-  font-family: var(--cinzel); font-size: clamp(.9rem, 1.4vw, 1.1rem);
-  letter-spacing: .08em; color: var(--paper-ink);
-  margin-bottom: 12px; line-height: 1.3;
+.cart-subtotal-label {
+  font-family: var(--cinzel); font-size: .6rem; letter-spacing: .2em; color: var(--smoke);
 }
-.cc-body {
-  font-family: var(--serif); font-size: clamp(.85rem, 1.2vw, .95rem);
-  color: var(--paper-mid); line-height: 1.85;
+.cart-subtotal-val {
+  font-family: var(--serif); font-size: 1.4rem; color: var(--parch);
 }
+.cart-note { font-family: var(--ui); font-size: .68rem; color: var(--smoke); margin-bottom: 14px; }
+.btn-checkout {
+  width: 100%; padding: 16px;
+  background: var(--gold); color: var(--ink);
+  font-family: var(--cinzel); font-size: .62rem; letter-spacing: .22em;
+  transition: background .25s;
+}
+.btn-checkout:hover { background: var(--gold-hi); }
 
-/* Decorative lines inside cards */
-.cc-lines { margin: 16px 0; }
-.cc-line { height: 1px; background: rgba(100,70,20,.1); margin-bottom: 10px; }
-.cc-line:last-child { width: 60%; }
-
-/* ============================================================
-   FOR WHO SECTION
-============================================================ */
-.forwho-section {}
-.forwho-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(40px, 6vw, 100px);
-  align-items: center;
-  margin-top: 64px;
-}
-.forwho-list { display: flex; flex-direction: column; gap: 24px; }
-.forwho-item {
-  display: flex; gap: 20px; align-items: flex-start;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--edge);
-}
-.forwho-item:last-child { border-bottom: none; padding-bottom: 0; }
-.forwho-num {
-  font-family: var(--cinzel); font-size: .6rem;
-  letter-spacing: .2em; color: var(--gold-lo);
-  padding-top: 4px; flex-shrink: 0; width: 28px;
-}
-.forwho-text {
-  font-family: var(--serif); font-size: clamp(.9rem, 1.4vw, 1.05rem);
-  color: var(--ash); line-height: 1.75;
-}
-.forwho-text strong { color: var(--parch); font-weight: 400; }
-
-/* Big paper page visual */
-.forwho-paper {
-  border-radius: 4px;
-  padding: clamp(32px, 4vw, 52px);
-  position: relative;
-  transform: rotate(1.5deg);
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,.45)) drop-shadow(0 32px 80px rgba(0,0,0,.35));
-}
-.forwho-paper::before {
-  content: '';
-  position: absolute; top: 8px; left: -8px; right: 8px; bottom: -8px;
-  background: var(--paper-4); border-radius: 4px; z-index: -1;
-}
-.forwho-paper::after {
-  content: '';
-  position: absolute; top: 14px; left: -14px; right: 14px; bottom: -14px;
-  background: var(--paper-3); border-radius: 4px; z-index: -2;
-}
-.fp-heading {
-  font-family: var(--cinzel); font-size: .55rem;
-  letter-spacing: .28em; color: var(--paper-faint);
-  margin-bottom: 20px;
-}
-.fp-title {
-  font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.5rem);
-  font-weight: 300; color: var(--paper-ink);
-  line-height: 1.4; margin-bottom: 20px;
-}
-.fp-body {
-  font-family: var(--serif); font-size: .9rem;
-  color: var(--paper-mid); line-height: 1.9;
-}
-.fp-signature {
-  font-family: var(--serif); font-style: italic;
-  font-size: 1.1rem; color: var(--paper-faint);
-  margin-top: 28px; display: block;
-}
-
-/* ============================================================
-   OBJECTION SECTION
-============================================================ */
-.objection-section { background: var(--surface); }
-.objection-inner {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: clamp(40px, 6vw, 80px);
-  align-items: start;
-}
-.objection-paper {
-  width: clamp(180px, 22vw, 280px);
-  aspect-ratio: 2/3;
-  border-radius: 3px;
-  padding: 24px 20px;
-  position: relative;
-  flex-shrink: 0;
-  transform: rotate(-2deg);
-  filter: drop-shadow(0 8px 28px rgba(0,0,0,.4));
-}
-.objection-paper::after {
-  content: '';
-  position: absolute; top: 6px; left: 4px; right: -4px; bottom: -6px;
-  background: var(--paper-4); border-radius: 3px; z-index: -1;
-}
-.op-label {
-  font-family: var(--cinzel); font-size: .42rem;
-  letter-spacing: .24em; color: var(--paper-faint);
-  margin-bottom: 14px;
-}
-.op-lines { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-.op-line { height: 1px; background: rgba(100,70,20,.12); }
-.op-line.short { width: 70%; }
-.op-handwrite {
-  font-family: var(--serif); font-style: italic;
-  font-size: .75rem; color: rgba(80,50,15,.7);
-  line-height: 1.7;
-}
-.objection-copy { padding-top: 8px; }
-.objection-copy blockquote {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
-  color: var(--ash); line-height: 1.75;
-  border-left: 2px solid var(--gold-lo);
-  padding-left: 28px;
-  margin-bottom: 40px;
-}
-.objection-copy blockquote strong { font-style: normal; color: var(--parch); font-weight: 400; }
-
-/* ============================================================
-   STORY SECTION
-============================================================ */
-.story-section { background: var(--ink); }
-.story-inner {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: clamp(40px, 6vw, 100px);
-  align-items: start;
-}
-.story-author {
-  display: flex; flex-direction: column; gap: 20px;
-  position: sticky; top: 120px;
-}
-.story-photo-wrap {
-  width: 100%;
-  aspect-ratio: 3/4;
-  position: relative;
-  overflow: hidden;
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,.6));
-}
-.story-photo-placeholder {
-  width: 100%; height: 100%;
-  background: var(--surface);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--cinzel); font-size: .6rem;
-  letter-spacing: .2em; color: var(--smoke);
-}
-.story-author-name {
-  font-family: var(--cinzel); font-size: .9rem;
-  letter-spacing: .18em; color: var(--parch);
-}
-.story-author-role {
-  font-family: var(--ui); font-size: .75rem;
-  color: var(--smoke); letter-spacing: .06em;
-}
-.story-copy { display: flex; flex-direction: column; gap: 28px; }
-.story-copy p {
-  font-family: var(--serif); font-size: clamp(1rem, 1.5vw, 1.15rem);
-  color: var(--ash); line-height: 1.85; font-weight: 300;
-}
-.story-copy p strong { color: var(--parch); font-weight: 400; }
-.story-copy p em { font-style: italic; color: var(--parch); }
-
-/* ============================================================
-   FINAL CTA SECTION
-============================================================ */
-.cta-section {
-  background: var(--deep);
-  text-align: center;
-  border-top: 1px solid var(--edge);
-}
-.cta-inner { max-width: 760px; margin: 0 auto; }
-.cta-inner .section-title { text-align: center; margin-bottom: 24px; }
-.cta-inner .section-title em { font-style: italic; color: var(--gold); }
-.cta-body {
-  font-family: var(--serif); font-style: italic;
-  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
-  color: var(--ash); line-height: 1.75;
-  margin-bottom: 52px;
-}
-.cta-buttons { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
-
-/* ============================================================
-   FOOTER
-============================================================ */
+/* ── Footer ── */
 footer {
-  background: var(--ink);
   border-top: 1px solid var(--edge);
-  padding: 48px clamp(24px, 6vw, 80px);
-}
-.footer-inner {
-  max-width: 1240px; margin: 0 auto;
+  padding: 28px clamp(20px, 5vw, 64px);
   display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 24px;
+  flex-wrap: wrap; gap: 12px;
 }
 .footer-logo {
-  font-family: var(--cinzel); font-size: .62rem;
-  letter-spacing: .28em; color: var(--gold-lo);
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--serif); font-size: .9rem;
+  letter-spacing: .16em; color: var(--gold); text-transform: uppercase;
 }
-.footer-links {
-  display: flex; gap: 32px; list-style: none;
+.footer-logo img { width: 26px; height: 28px; opacity: .85; }
+.footer-copy { font-family: var(--ui); font-size: .68rem; color: var(--smoke); }
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .product-page { grid-template-columns: 1fr; }
+  .product-visual { position: static; }
+  .journal-stack { width: min(260px, 70vw); }
+  .page-thumbs { width: min(260px, 70vw); }
 }
-.footer-links a {
-  font-family: var(--cinzel); font-size: .54rem;
-  letter-spacing: .2em; color: var(--smoke);
-  transition: color .3s;
-}
-.footer-links a:hover { color: var(--gold); }
-.footer-copy {
-  font-family: var(--ui); font-size: .72rem;
-  color: var(--smoke); opacity: .5;
-}
-
-/* ============================================================
-   RESPONSIVE
-============================================================ */
-@media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; padding-top: 120px; }
-  .hero-visual { height: auto; padding: 40px 0 0; }
-  .hero-journal { width: clamp(200px, 55vw, 300px); }
-  .scrap-1, .scrap-2 { display: none; }
-
-  .product-section { grid-template-columns: 1fr; }
-  .product-image-col { position: static; }
-
-  .forwho-grid { grid-template-columns: 1fr; }
-  .forwho-paper { transform: none; margin: 0 auto; max-width: 460px; }
-
-  .objection-inner { grid-template-columns: 1fr; }
-  .objection-paper { display: none; }
-
-  .story-inner { grid-template-columns: 1fr; }
-  .story-author { position: static; flex-direction: row; align-items: center; }
-  .story-photo-wrap { width: 120px; height: 160px; flex-shrink: 0; }
-
-  .nav { padding: 20px 24px; }
-  .nav.scrolled { padding: 14px 24px; }
-  .nav-links { display: none; }
-}
-
-@media (max-width: 600px) {
-  .ppc-specs { grid-template-columns: 1fr; }
-  .product-thumbs { grid-template-columns: repeat(2, 1fr); }
-  .contents-grid { grid-template-columns: 1fr; }
-  .contents-grid .content-card { transform: none !important; }
-  .trust-strip { flex-direction: column; align-items: flex-start; }
-  .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+@media (max-width: 500px) {
+  .editions { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 
-<!-- Grain overlay -->
 <div id="grain" aria-hidden="true"></div>
 
-<!-- Custom cursor (desktop) -->
-<div id="c-dot" aria-hidden="true"></div>
-<div id="c-ring" aria-hidden="true"></div>
-
 <!-- ═══ NAVIGATION ═══ -->
-<nav class="nav" id="nav">
+<nav class="nav">
   <a href="index.html" class="nav-logo">
-    <img src="grankers-lion.svg" alt="Grankers">
-    Grankers Team
+    <img src="/grankers-lion.png" alt="Grankers" class="nav-lion">
+    Grankers
   </a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="story.html">Story</a></li>
-    <li><a href="shop.html" class="active">Shop</a></li>
-  </ul>
-  <div class="nav-cart" role="button" aria-label="Cart">
-    <span>Cart</span>
-    <span class="cart-count">0</span>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="story.html" class="nav-link">Story</a>
+    <button class="cart-btn" id="cartOpen" aria-label="Open cart">
+      <div class="cart-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </div>
+      Cart
+    </button>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<section class="hero">
-  <div class="hero-copy">
-    <p class="eyebrow reveal">Grankers Team</p>
-    <h1 class="hero-title reveal reveal-delay-1">
-      <span>Progressio</span>
-      <span>Journal</span>
-    </h1>
-    <p class="hero-subtitle reveal reveal-delay-2">
-      For those who read the books and only got the theory.<br>
-      One year. One system. One story — yours.
+<!-- ═══ PRODUCT PAGE ═══ -->
+<main class="product-page">
+
+  <!-- LEFT: visual -->
+  <div class="product-visual">
+    <div class="journal-stack">
+      <div class="journal-cover">
+        <div class="journal-spine">
+          <span class="spine-text">Progressio · Grankers</span>
+        </div>
+        <div class="journal-face">
+          <div class="jf-top">
+            <span class="jf-vol">Vol. I</span>
+            <div class="jf-mark">GT</div>
+          </div>
+          <div class="jf-mid">
+            <h2 class="jf-title">PROGRESSIO</h2>
+            <div class="jf-rule"></div>
+            <p class="jf-sub">Write Your Story</p>
+            <div class="jf-lines">
+              <div class="jf-line"></div>
+              <div class="jf-line"></div>
+              <div class="jf-line"></div>
+              <div class="jf-line"></div>
+              <div class="jf-line"></div>
+            </div>
+          </div>
+          <div class="jf-bottom">
+            <span class="jf-year">2025</span>
+            <span class="jf-brand">Grankers Team</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-thumbs">
+      <div class="thumb" title="Daily Planning">
+        <div class="thumb-body">
+          <span class="th-label">Daily</span>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line short"></div>
+        </div>
+      </div>
+      <div class="thumb" title="Habit Tracker">
+        <div class="thumb-body">
+          <span class="th-label">Habits</span>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line short"></div>
+        </div>
+      </div>
+      <div class="thumb" title="Monthly Review">
+        <div class="thumb-body">
+          <span class="th-label">Review</span>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line short"></div>
+        </div>
+      </div>
+      <div class="thumb" title="Letter to Self">
+        <div class="thumb-body">
+          <span class="th-label">Letter</span>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line"></div><div class="th-line"></div>
+          <div class="th-line short"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: buy panel -->
+  <div class="buy-panel">
+    <p class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <span style="color:var(--parch)">Progressio Journal</span>
     </p>
-    <div class="hero-ctas reveal reveal-delay-3">
-      <a href="#buy" class="btn-primary"><span>Order Now</span></a>
-      <a href="#contents" class="btn-ghost">See what's inside</a>
-    </div>
-    <div class="hero-trust reveal reveal-delay-4">
-      <span>Physical journal</span>
-      <span class="hero-trust-dot"></span>
-      <span>Ships worldwide</span>
-      <span class="hero-trust-dot"></span>
-      <span>Limited edition</span>
-    </div>
-  </div>
 
-  <div class="hero-visual">
-    <!-- Journal mock-up (pure CSS) -->
-    <div class="hero-journal">
-      <div class="paper-shadow" style="width:100%;height:100%;position:relative;">
-        <div class="journal-body">
-          <div class="journal-spine">
-            <span class="journal-spine-text">Progressio · Grankers Team</span>
-          </div>
-          <div class="journal-cover-content">
-            <div class="jc-top">
-              <span class="jc-number">Vol. I</span>
-              <div class="jc-logo-mark">GT</div>
-            </div>
-            <div class="jc-mid">
-              <h2 class="jc-title">PROGRESSIO</h2>
-              <div class="jc-rule"></div>
-              <p class="jc-subtitle">Write Your Story</p>
-              <div class="jc-lines">
-                <div class="jc-line"></div>
-                <div class="jc-line"></div>
-                <div class="jc-line"></div>
-                <div class="jc-line"></div>
-                <div class="jc-line" style="width:65%"></div>
-              </div>
-            </div>
-            <div class="jc-bottom">
-              <span class="jc-year">2025</span>
-              <span class="jc-brand">Grankers</span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <h1 class="product-title">Progressio<br><em>Journal</em></h1>
+    <p class="product-tagline">The Structured Year · First Edition</p>
+
+    <div class="price-row">
+      <span class="price-cur">$</span>
+      <span class="price" id="priceDisplay">—</span><!-- TODO: set price -->
+      <span class="price-tag">Launch Price</span>
+    </div>
+    <p class="price-note">Free worldwide shipping · Limited first run</p>
+
+    <div class="divider"></div>
+
+    <span class="option-label">Edition</span>
+    <div class="editions">
+      <button class="edition-btn active" data-edition="Cream Cover">
+        Cream Cover<br>
+        <span style="font-size:.48rem;color:var(--smoke)">Standard</span>
+      </button>
+      <button class="edition-btn sold-out" data-edition="Dark Edition" disabled>
+        Dark Edition<br>
+        <span style="font-size:.48rem;color:var(--smoke)">Coming soon</span>
+      </button>
     </div>
 
-    <!-- Floating paper scraps -->
-    <div class="paper-scrap scrap-1">
-      <div class="paper paper-shadow scrap-inner">
-        <span class="scrap-line-label">Daily Focus</span>
-        <div class="scrap-line"></div>
-        <div class="scrap-checkbox-row">
-          <div class="scrap-box">✓</div>
-          <span>Morning review</span>
-        </div>
-        <div class="scrap-checkbox-row">
-          <div class="scrap-box">✓</div>
-          <span>Top 3 goals</span>
-        </div>
-        <div class="scrap-checkbox-row">
-          <div class="scrap-box"></div>
-          <span>Evening reflect</span>
-        </div>
-        <div class="scrap-line" style="margin-top:8px"></div>
-        <span class="scrap-handwrite">"Keep going."</span>
+    <div class="qty-row">
+      <div class="qty-ctrl">
+        <button class="qty-btn" id="qtyDown" aria-label="Decrease">−</button>
+        <div class="qty-num" id="qtyDisplay">1</div>
+        <button class="qty-btn" id="qtyUp" aria-label="Increase">+</button>
+      </div>
+      <span class="qty-total" id="qtyTotal"></span>
+    </div>
+
+    <button class="btn-add" id="addToCart">
+      <span>Add to Cart</span>
+    </button>
+    <button class="btn-wishlist">Save for Later</button>
+
+    <div class="product-meta">
+      <div class="meta-row">
+        <span class="meta-key">Format</span>
+        <span class="meta-val">A5 · Hardcover</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key">Pages</span>
+        <span class="meta-val">365+ cream pages</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key">Paper weight</span>
+        <span class="meta-val">90 gsm</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key">Duration</span>
+        <span class="meta-val">One full year</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key">Availability</span>
+        <span class="meta-val" style="color:var(--gold)">In stock · Ships in 5–7 days</span>
       </div>
     </div>
-    <div class="paper-scrap scrap-2">
-      <div class="paper paper-shadow scrap-inner">
-        <span class="scrap-line-label">Letter to Self</span>
-        <div class="scrap-line"></div>
-        <span class="scrap-handwrite">"By next year<br>I will have…"</span>
-        <div class="scrap-line" style="margin-top:auto"></div>
-        <div class="scrap-line"></div>
-      </div>
+
+    <div class="ship-note">
+      <svg width="15" height="15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Orders ship from Warsaw, Poland. Estimated delivery 7–14 days internationally. All orders are tracked.</span>
     </div>
   </div>
-</section>
 
-<!-- ═══ PROBLEM / HOOK ═══ -->
-<section class="problem section">
-  <div class="problem-inner">
-    <span class="quote-mark reveal">"</span>
-    <p class="problem-text reveal reveal-delay-1">
-      I came home with <strong>brain fog</strong> after a full day with people.
-      Exhausted, no energy, one meal in — and the evening was supposed to be
-      for building something of my own. Instead — couch, nothing.
-      I knew I had goals. I knew what I wanted to build.
-      But between knowledge and action there was <strong>a wall of concrete.</strong>
-    </p>
-    <p class="problem-text reveal reveal-delay-2" style="margin-top:32px;font-size:clamp(.95rem,1.6vw,1.2rem)">
-      So I built Progressio — to make that wall stop existing.
-    </p>
-    <p class="problem-attribution reveal reveal-delay-3">— Karol, Founder · Grankers Team</p>
+</main>
+
+<!-- ═══ CART DRAWER ═══ -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+  <div class="cart-head">
+    <span class="cart-head-title">Your Cart</span>
+    <button class="cart-close" id="cartClose" aria-label="Close cart">
+      <svg width="18" height="18" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
   </div>
-</section>
-
-<!-- ═══ PRODUCT + BUY ═══ -->
-<section class="section" id="buy">
-  <div class="section-inner">
-    <div class="product-section">
-
-      <!-- LEFT: product visual -->
-      <div class="product-image-col reveal">
-        <div class="product-stack-wrap">
-          <div class="product-paper-card paper paper-curl">
-            <div class="ppc-header">
-              <span class="ppc-edition">First Edition · 2025</span>
-              <span class="ppc-page-num">p. 1</span>
-            </div>
-            <h2 class="ppc-title">PROGRESSIO</h2>
-            <p class="ppc-sub">The Structured Year Journal</p>
-            <div class="ppc-rules">
-              <div class="paper-rule"></div>
-              <div class="paper-rule"></div>
-            </div>
-            <p class="ppc-desc">
-              A physical journal designed to carry you through an entire year —
-              flexible enough for your goals, structured enough that you won't quit
-              after a month. Every page is a question, a task, a piece of your story.
-            </p>
-            <div class="ppc-specs">
-              <div class="ppc-spec-item">
-                <span class="ppc-spec-label">Format</span>
-                <span class="ppc-spec-val">A5 · Hardcover</span>
-              </div>
-              <div class="ppc-spec-item">
-                <span class="ppc-spec-label">Pages</span>
-                <span class="ppc-spec-val">365+ pages</span>
-              </div>
-              <div class="ppc-spec-item">
-                <span class="ppc-spec-label">Paper</span>
-                <span class="ppc-spec-val">90 gsm cream</span>
-              </div>
-              <div class="ppc-spec-item">
-                <span class="ppc-spec-label">Duration</span>
-                <span class="ppc-spec-val">One full year</span>
-              </div>
-            </div>
-            <div class="paper-rule" style="margin-top:16px"></div>
-          </div>
-        </div>
-
-        <!-- Page preview thumbnails -->
-        <div class="product-thumbs">
-          <div class="product-thumb">
-            <div class="paper product-thumb-inner">
-              <span class="thumb-title">Daily</span>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-rule"></div>
-            </div>
-          </div>
-          <div class="product-thumb">
-            <div class="paper product-thumb-inner">
-              <span class="thumb-title">Habits</span>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-rule"></div>
-            </div>
-          </div>
-          <div class="product-thumb">
-            <div class="paper product-thumb-inner">
-              <span class="thumb-title">Goals</span>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-rule"></div>
-            </div>
-          </div>
-          <div class="product-thumb">
-            <div class="paper product-thumb-inner">
-              <span class="thumb-title">Letter</span>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-line"></div>
-              <div class="thumb-rule"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: buy column -->
-      <div class="buy-col">
-        <div class="reveal">
-          <p class="eyebrow">Order</p>
-          <h2 class="section-title">Get your<br><em style="font-style:italic;color:var(--gold)">Progressio</em></h2>
-          <p class="buy-col-sub">
-            Not a promise of success — a tool that won't fail you
-            if you use it. Your physical record of real growth,
-            from day one.
-          </p>
-        </div>
-
-        <div class="reveal reveal-delay-1">
-          <div class="price-block">
-            <span class="price-currency">$</span>
-            <span class="price-main">—</span><!-- placeholder -->
-          </div>
-          <p class="price-note">Free worldwide shipping on launch</p>
-          <p class="price-sub">Launch price · Limited first run</p>
-        </div>
-
-        <form class="buy-form reveal reveal-delay-2" onsubmit="return false;">
-          <div>
-            <label class="field-label" for="email">Email address</label>
-            <input class="field-input" type="email" id="email" name="email" placeholder="your@email.com">
-          </div>
-          <div>
-            <label class="field-label" for="edition">Edition</label>
-            <select class="field-select" id="edition" name="edition">
-              <option value="standard">Standard — Cream cover</option>
-              <option value="dark">Dark Edition — coming soon</option>
-            </select>
-          </div>
-          <button type="submit" class="btn-primary">
-            <span>Reserve My Copy</span>
-          </button>
-        </form>
-
-        <div class="guarantee reveal reveal-delay-3">
-          <span class="guarantee-icon">◈</span>
-          <div class="guarantee-text">
-            <strong>Satisfaction Promise</strong>
-            <p>If Progressio doesn't change the way you approach your days
-               within 30 days, we'll make it right. No questions asked.</p>
-          </div>
-        </div>
-
-        <div class="trust-strip reveal reveal-delay-4">
-          <span class="trust-item">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Secure checkout
-          </span>
-          <span class="trust-item">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Ships worldwide
-          </span>
-          <span class="trust-item">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            30-day promise
-          </span>
-        </div>
-      </div>
-
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <span class="cart-empty-icon">◻</span>
+      <p>Your cart is empty.</p>
     </div>
+    <div class="cart-items" id="cartItems" style="display:none"></div>
   </div>
-</section>
-
-<!-- ═══ WHAT'S INSIDE ═══ -->
-<section class="contents-section section" id="contents">
-  <div class="section-inner">
-    <p class="eyebrow reveal">Inside Progressio</p>
-    <h2 class="section-title reveal reveal-delay-1">Every page is<br>a <em style="font-style:italic;color:var(--gold)">reason to return</em></h2>
-
-    <div class="contents-grid">
-
-      <div class="content-card paper paper-shadow reveal">
-        <p class="cc-number">01</p>
-        <h3 class="cc-title">Daily Planning Page</h3>
-        <div class="cc-lines"><div class="cc-line"></div><div class="cc-line"></div><div class="cc-line short"></div></div>
-        <p class="cc-body">Each morning starts with intention: your top 3 priorities, a reflection prompt, and space for the thoughts that arrive before the world gets loud.</p>
-      </div>
-
-      <div class="content-card paper paper-shadow reveal reveal-delay-1">
-        <p class="cc-number">02</p>
-        <h3 class="cc-title">Habit Tracker</h3>
-        <div class="cc-lines"><div class="cc-line"></div><div class="cc-line"></div><div class="cc-line short"></div></div>
-        <p class="cc-body">Not a checkbox you fill with guilt — a visual record of who you're becoming. Designed so the streak matters less than the pattern.</p>
-      </div>
-
-      <div class="content-card paper paper-shadow reveal reveal-delay-2">
-        <p class="cc-number">03</p>
-        <h3 class="cc-title">Letter to Future Self</h3>
-        <div class="cc-lines"><div class="cc-line"></div><div class="cc-line"></div><div class="cc-line short"></div></div>
-        <p class="cc-body">A sealed page. You write it on day one. You open it in twenty years. Not for social media — for the version of you that earned the right to read it.</p>
-      </div>
-
-      <div class="content-card paper paper-shadow reveal reveal-delay-3">
-        <p class="cc-number">04</p>
-        <h3 class="cc-title">Monthly Review</h3>
-        <div class="cc-lines"><div class="cc-line"></div><div class="cc-line"></div><div class="cc-line short"></div></div>
-        <p class="cc-body">Structured prompts that turn a month of noise into signal. What shifted. What broke. What you'd do differently. Evidence, not motivation.</p>
-      </div>
-
-      <div class="content-card paper paper-shadow reveal">
-        <p class="cc-number">05</p>
-        <h3 class="cc-title">Idea Capture</h3>
-        <div class="cc-lines"><div class="cc-line"></div><div class="cc-line"></div><div class="cc-line short"></div></div>
-        <p class="cc-body">The ones that come at 2 AM. The ones you forget by morning. There's a place for them here — so they don't disappear into a Notes app you never open.</p>
-      </div>
-
-      <div class="content-card paper paper-shadow reveal reveal-delay-1">
-        <p class="cc-number">06</p>
-        <h3 class="cc-title">Year in Review</h3>
-        <div class="cc-lines"><div class="cc-line"></div><div class="cc-line"></div><div class="cc-line short"></div></div>
-        <p class="cc-body">The last pages. A complete picture of who you were on January 1st and who you became. The physical history of your real development.</p>
-      </div>
-
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-subtotal">
+      <span class="cart-subtotal-label">Subtotal</span>
+      <span class="cart-subtotal-val" id="cartTotal">—</span>
     </div>
+    <p class="cart-note">Shipping calculated at checkout · Free on first orders</p>
+    <button class="btn-checkout">Proceed to Checkout</button>
   </div>
-</section>
-
-<!-- ═══ FOR WHO ═══ -->
-<section class="forwho-section section">
-  <div class="section-inner">
-    <p class="eyebrow reveal">Who it's for</p>
-    <h2 class="section-title reveal reveal-delay-1">You already know<br>the <em style="font-style:italic;color:var(--gold)">theory</em></h2>
-
-    <div class="forwho-grid">
-      <ul class="forwho-list">
-        <li class="forwho-item reveal">
-          <span class="forwho-num">01</span>
-          <p class="forwho-text">You've read <strong>Atomic Habits, Think and Grow Rich,</strong> something by Tim Ferriss — and you still feel like something's not working.</p>
-        </li>
-        <li class="forwho-item reveal reveal-delay-1">
-          <span class="forwho-num">02</span>
-          <p class="forwho-text">You <strong>have the knowledge.</strong> You don't have the system. You have the motivation. You don't have the tool.</p>
-        </li>
-        <li class="forwho-item reveal reveal-delay-2">
-          <span class="forwho-num">03</span>
-          <p class="forwho-text">You've tried a simple journal before — checked the boxes, put it on a shelf after a month because <strong>nothing was changing.</strong></p>
-        </li>
-        <li class="forwho-item reveal reveal-delay-3">
-          <span class="forwho-num">04</span>
-          <p class="forwho-text">You consume productivity content daily but feel the gap between <strong>watching and doing</strong> growing wider, not smaller.</p>
-        </li>
-      </ul>
-
-      <!-- Paper page visual -->
-      <div class="forwho-paper paper reveal reveal-delay-2">
-        <div class="wax-seal" style="margin-bottom:20px">GT</div>
-        <p class="fp-heading">Perfect Intro · Progressio</p>
-        <div class="paper-rule"></div>
-        <h3 class="fp-title">"For those who read the books and pulled out only theory."</h3>
-        <div class="paper-rule"></div>
-        <p class="fp-body">
-          Progressio is a ready system of templates that guides you through
-          an entire year — flexible for your goals, concrete enough that you
-          won't quit after a month, and leaving you a physical history of
-          your development from day one.
-        </p>
-        <p class="fp-body" style="margin-top:16px">
-          I don't promise you success. I promise you a tool that won't
-          fail you if you use it.
-        </p>
-        <span class="fp-signature">— Karol</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ OBJECTION KILLER ═══ -->
-<section class="objection-section section">
-  <div class="section-inner">
-    <p class="eyebrow reveal" style="margin-bottom:48px">The honest answer</p>
-    <div class="objection-inner">
-
-      <div class="objection-paper paper reveal">
-        <p class="op-label">Note to reader</p>
-        <div class="op-lines">
-          <div class="op-line"></div>
-          <div class="op-line"></div>
-          <div class="op-line short"></div>
-          <div class="op-line"></div>
-          <div class="op-line"></div>
-          <div class="op-line short"></div>
-          <div class="op-line"></div>
-        </div>
-        <p class="op-handwrite">
-          "I know what you're thinking. You've tried journals before and quit
-          after a month. This is different — you return not because you have
-          to, but because you're curious what comes next."
-        </p>
-      </div>
-
-      <div class="objection-copy reveal reveal-delay-1">
-        <h2 class="section-title" style="margin-bottom:32px">
-          You've tried<br>journals before.
-        </h2>
-        <blockquote>
-          "I know what you're thinking — you've tried journals and quit after a month.
-          In Progressio, you return <strong>not because you have to, but because you're
-          curious what comes next.</strong> You have space for moments you don't want to
-          forget, ideas that come in the middle of the night, failures you'd rather
-          analyse than suppress. And there's a page where you write a letter to
-          yourself — that you'll read in twenty years. <strong>This isn't a journal
-          you throw away after a week.</strong> It's something you return to because you
-          want to."
-        </blockquote>
-        <a href="#buy" class="btn-primary"><span>I'm ready — order now</span></a>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ═══ STORY / FOUNDER ═══ -->
-<section class="story-section section">
-  <div class="section-inner">
-    <p class="eyebrow reveal" style="margin-bottom:64px">The story behind it</p>
-    <div class="story-inner">
-
-      <div class="story-author reveal">
-        <div class="story-photo-wrap">
-          <!-- TODO: replace with actual photo -->
-          <div class="story-photo-placeholder">Photo</div>
-        </div>
-        <div>
-          <p class="story-author-name">Karol</p>
-          <p class="story-author-role">Founder, Grankers Team</p>
-        </div>
-      </div>
-
-      <div class="story-copy">
-        <p class="reveal">
-          I created Progressio because I had this problem myself.
-          <strong>I'd read dozens of self-improvement books, changed my mindset,
-          but never found one product that brought it all together
-          into a working system for an entire year.</strong>
-        </p>
-        <p class="reveal reveal-delay-1">
-          One day I saw an ad on TikTok — a simple journal with checkboxes.
-          Did you drink water? Check. What are you grateful for? Check.
-          I thought: <em>I can build something better.</em>
-        </p>
-        <p class="reveal reveal-delay-2">
-          I started in Canva in 2024. <strong>The first version was worthless</strong> —
-          I threw it out because I'd have felt guilty selling it to anyone.
-          The second was better. The third is the Progressio you hold now.
-        </p>
-        <p class="reveal reveal-delay-3">
-          <strong>I didn't create this for a business. I created it because
-          I needed it myself</strong> — and I believed others had exactly the same problem.
-        </p>
-        <div class="divider reveal reveal-delay-4"></div>
-        <p class="reveal reveal-delay-4" style="color:var(--smoke);font-size:.9rem">
-          Grankers Team · Warsaw, Poland
-        </p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ═══ FINAL CTA ═══ -->
-<section class="cta-section section">
-  <div class="cta-inner">
-    <p class="eyebrow reveal" style="justify-content:center;margin-bottom:32px">One more thing</p>
-    <h2 class="section-title reveal reveal-delay-1">
-      Your story<br>starts on <em>page one</em>
-    </h2>
-    <div class="divider reveal reveal-delay-2" style="margin:32px auto"></div>
-    <p class="cta-body reveal reveal-delay-2">
-      In twenty years you'll open Progressio and see
-      how much this changed your life. Not for likes.
-      Not for social media. For yourself.
-    </p>
-    <div class="cta-buttons reveal reveal-delay-3">
-      <a href="#buy" class="btn-primary"><span>Order Progressio</span></a>
-      <a href="story.html" class="btn-ghost">Read the story</a>
-    </div>
-  </div>
-</section>
+</aside>
 
 <!-- ═══ FOOTER ═══ -->
 <footer>
-  <div class="footer-inner">
-    <span class="footer-logo">Grankers Team</span>
-    <ul class="footer-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="story.html">Story</a></li>
-      <li><a href="shop.html">Shop</a></li>
-    </ul>
-    <span class="footer-copy">© 2025 Grankers Team</span>
-  </div>
+  <a href="index.html" class="footer-logo">
+    <img src="/grankers-lion.png" alt="Grankers">
+    Grankers Team
+  </a>
+  <span class="footer-copy">© 2025 Grankers Team · All rights reserved</span>
 </footer>
 
-<!-- ═══ SCRIPTS ═══ -->
 <script>
-/* ── Custom cursor ── */
-(function() {
-  const dot  = document.getElementById('c-dot');
-  const ring = document.getElementById('c-ring');
-  let mx = -100, my = -100, rx = -100, ry = -100;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left  = mx + 'px';
-    dot.style.top   = my + 'px';
-  }, { passive: true });
-  function animRing() {
-    rx += (mx - rx) * .12;
-    ry += (my - ry) * .12;
-    ring.style.left = rx + 'px';
-    ring.style.top  = ry + 'px';
-    requestAnimationFrame(animRing);
-  }
-  animRing();
-  document.body.classList.add('has-mouse');
-  document.querySelectorAll('a, button, [role="button"]').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      dot.style.transform  = 'translate(-50%,-50%) scale(0)';
-      ring.style.width     = '54px';
-      ring.style.height    = '54px';
-      ring.style.borderColor = 'rgba(201,168,76,.6)';
-    });
-    el.addEventListener('mouseleave', () => {
-      dot.style.transform  = 'translate(-50%,-50%) scale(1)';
-      ring.style.width     = '34px';
-      ring.style.height    = '34px';
-      ring.style.borderColor = 'rgba(201,168,76,.35)';
-    });
+/* ── Edition selector ── */
+document.querySelectorAll('.edition-btn:not(.sold-out)').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.edition-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
   });
-})();
+});
 
-/* ── Nav scroll ── */
-(function() {
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
-})();
+/* ── Quantity ── */
+const PRICE = null; /* TODO: set price number, e.g. 49 */
+let qty = 1;
+const qtyDisplay = document.getElementById('qtyDisplay');
+const qtyTotal   = document.getElementById('qtyTotal');
+const priceEl    = document.getElementById('priceDisplay');
 
-/* ── Scroll reveal ── */
-(function() {
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
-  }, { threshold: .12 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-})();
+function updateQty() {
+  qtyDisplay.textContent = qty;
+  if (PRICE) {
+    qtyTotal.textContent = qty > 1 ? `$${(PRICE * qty).toFixed(2)} total` : '';
+    priceEl.textContent  = PRICE.toFixed(2);
+  }
+}
+document.getElementById('qtyDown').addEventListener('click', () => { if (qty > 1) { qty--; updateQty(); } });
+document.getElementById('qtyUp').addEventListener('click',   () => { if (qty < 10) { qty++; updateQty(); } });
+updateQty();
+
+/* ── Cart state ── */
+let cartItems = [];
+
+function getEdition() {
+  return document.querySelector('.edition-btn.active')?.dataset.edition || 'Cream Cover';
+}
+
+function renderCart() {
+  const badge    = document.getElementById('cartBadge');
+  const empty    = document.getElementById('cartEmpty');
+  const itemsEl  = document.getElementById('cartItems');
+  const foot     = document.getElementById('cartFoot');
+  const totalEl  = document.getElementById('cartTotal');
+  const totalQty = cartItems.reduce((s, i) => s + i.qty, 0);
+
+  badge.textContent = totalQty;
+  badge.style.transform = totalQty > 0 ? 'scale(1)' : 'scale(0)';
+
+  if (cartItems.length === 0) {
+    empty.style.display = ''; itemsEl.style.display = 'none'; foot.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none'; itemsEl.style.display = ''; foot.style.display = '';
+
+  itemsEl.innerHTML = cartItems.map((item, idx) => `
+    <div class="cart-item">
+      <div class="ci-thumb">GT</div>
+      <div class="ci-info">
+        <span class="ci-name">Progressio</span>
+        <span class="ci-edition">${item.edition}</span>
+        <div class="ci-qty-row">
+          <button class="ci-qty-btn" onclick="changeItemQty(${idx},-1)">−</button>
+          <span class="ci-qty-num">${item.qty}</span>
+          <button class="ci-qty-btn" onclick="changeItemQty(${idx},1)">+</button>
+          <button class="ci-remove" onclick="removeItem(${idx})">Remove</button>
+        </div>
+      </div>
+      <span class="ci-price">${PRICE ? '$' + (PRICE * item.qty).toFixed(2) : '—'}</span>
+    </div>
+  `).join('');
+
+  const subtotal = PRICE ? cartItems.reduce((s,i) => s + PRICE * i.qty, 0) : null;
+  totalEl.textContent = subtotal !== null ? '$' + subtotal.toFixed(2) : '—';
+}
+
+window.changeItemQty = (idx, delta) => {
+  cartItems[idx].qty = Math.max(1, Math.min(10, cartItems[idx].qty + delta));
+  renderCart();
+};
+window.removeItem = idx => {
+  cartItems.splice(idx, 1);
+  renderCart();
+};
+
+/* ── Add to cart ── */
+document.getElementById('addToCart').addEventListener('click', () => {
+  const edition = getEdition();
+  const existing = cartItems.find(i => i.edition === edition);
+  if (existing) { existing.qty = Math.min(10, existing.qty + qty); }
+  else { cartItems.push({ edition, qty }); }
+  renderCart();
+
+  /* badge bounce */
+  const badge = document.getElementById('cartBadge');
+  badge.classList.add('bump');
+  setTimeout(() => badge.classList.remove('bump'), 300);
+
+  openCart();
+});
+
+/* ── Cart open/close ── */
+const overlay = document.getElementById('cartOverlay');
+const drawer  = document.getElementById('cartDrawer');
+function openCart()  { overlay.classList.add('open'); drawer.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeCart() { overlay.classList.remove('open'); drawer.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('cartOpen').addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+overlay.addEventListener('click', closeCart);
+
+renderCart();
 </script>
 
 </body>
