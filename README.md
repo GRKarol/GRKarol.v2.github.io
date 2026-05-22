@@ -4,6 +4,12 @@ Statyczna witryna marki **Grankers Team**, hostowana na GitHub Pages.
 Projekt nie używa frameworka — czysty HTML5, CSS3, Vanilla JS.
 
 ---
+## Strona landing
+https://www.grprogressio.giize.com/
+
+## Strona sklepu
+https://www.grprogressio.giize.com/shop.html
+
 
 ## Struktura plików
 
