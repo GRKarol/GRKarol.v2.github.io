@@ -7,993 +7,1040 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#c9a84c">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#09080d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════
+/* ─────────────────────────────────────────────
    TOKENS
-═══════════════════════════════════════════ */
-:root {
-  --ink:     #08070c;
-  --deep:    #0d0b12;
-  --surface: #14111a;
-  --lift:    #1d1928;
-  --edge:    #2c2640;
-  --gold:    #c9a84c;
-  --gold-hi: #e8cc7a;
-  --gold-lo: #7a5e20;
-  --gold-dim:#2e2010;
-  --smoke:   #8a80a0;
-  --ash:     #b0a4c2;
-  --parch:   #ede0c4;
-  --cream:   #f7eedb;
-  --white:   #fdf8ee;
+───────────────────────────────────────────── */
+:root{
+  --bg:    #09080d;
+  --bg2:   #0e0c14;
+  --line:  #201c2e;
+  --gold:  #c9a84c;
+  --dim:   #7a5e20;
+  --text:  #e4d8be;
+  --muted: #7a7090;
+  --faint: #3c3650;
 
-  --p1: #fefcf7; --p2: #f5edd8; --p3: #ecdfc4; --p4: #e0d0ac;
-  --p-ink: #1a120a; --p-mid: #6b5030; --p-dim: #a07850;
+  --p1: #fdf8ef; --p2: #f2e6cc; --p3: #e8d8b0; --p4: #dcc898;
+  --pi: #1c1208; --pm: #6b4f28; --pd: #a07848;
 
-  --serif: 'Cormorant', Georgia, serif;
-  --caps:  'Cinzel', serif;
-  --ui:    'Jost', sans-serif;
-
-  --ease:   cubic-bezier(.25,.46,.45,.94);
-  --spring: cubic-bezier(.22,.68,0,1.2);
-  --snap:   cubic-bezier(.77,0,.175,1);
+  --s:  'Cormorant', Georgia, serif;
+  --c:  'Cinzel', serif;
+  --u:  'Jost', sans-serif;
+  --t:  cubic-bezier(.25,.46,.45,.94);
 }
 
-/* ═══════════════════════════════════════════
-   BASE
-═══════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; scroll-behavior: smooth; }
-body {
-  background: var(--ink);
-  color: var(--parch);
-  font-family: var(--ui);
-  font-weight: 300;
-  overflow-x: hidden;
-  min-height: 100dvh;
-}
-a { text-decoration: none; color: inherit; }
-button { border: none; background: none; font-family: inherit; cursor: pointer; color: inherit; }
-input, select { font-family: inherit; }
-img { display: block; }
-::selection { background: rgba(201,168,76,.18); color: var(--gold-hi); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--u);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{border:none;background:none;font-family:inherit;cursor:pointer;color:inherit}
+input{font-family:inherit;background:none;border:none;outline:none;color:inherit}
+img{display:block}
+::selection{background:rgba(201,168,76,.15);color:var(--gold)}
 
-/* ═══════════════════════════════════════════
-   PAPER BACKGROUND
-═══════════════════════════════════════════ */
-.paper-bg {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  overflow: hidden;
+/* ─────────────────────────────────────────────
+   GRAIN
+───────────────────────────────────────────── */
+#grain{
+  position:fixed;inset:0;z-index:999;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:g 7s steps(1) infinite
 }
-/* Main sheet */
-.paper-bg::before {
-  content: '';
-  position: absolute;
-  width: 110%; height: 110%;
-  top: -5%; left: -5%;
-  background:
-    /* Crease shadows */
-    radial-gradient(ellipse 60% 40% at 35% 55%, rgba(0,0,0,.22) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 72% 38%, rgba(0,0,0,.18) 0%, transparent 65%),
-    radial-gradient(ellipse 30% 50% at 15% 80%, rgba(0,0,0,.14) 0%, transparent 60%),
-    /* Paper tone */
-    linear-gradient(158deg, #faf4e4 0%, #f0e5c8 28%, #e8d9b4 52%, #f2e8d0 74%, #eedfc0 100%);
-  transform: perspective(1800px) rotateX(3deg) rotateY(-1.5deg) rotate(.4deg);
-  opacity: .07;
-  filter: url(#crumple);
-}
-/* Second bent layer */
-.paper-bg::after {
-  content: '';
-  position: absolute;
-  width: 80%; height: 75%;
-  bottom: -10%; right: -8%;
-  background: linear-gradient(135deg, #fdf8ee 0%, #e8d9b4 60%, #d8c898 100%);
-  transform: perspective(1200px) rotateX(-6deg) rotateY(5deg) rotate(-2deg);
-  opacity: .04;
-  border-radius: 4px;
-  filter: url(#crumple);
-}
+@keyframes g{0%{background-position:0 0}25%{background-position:50px -30px}50%{background-position:-20px 50px}75%{background-position:30px -50px}}
 
-/* Grain overlay */
-#grain {
-  position: fixed; inset: 0; z-index: 1; pointer-events: none;
-  opacity: .028;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E");
-  animation: grain 9s steps(1) infinite;
-}
-@keyframes grain {
-  0%  { background-position: 0 0 }
-  20% { background-position: -40px 30px }
-  40% { background-position: 60px -20px }
-  60% { background-position: -30px 50px }
-  80% { background-position: 50px -40px }
-}
-
-/* SVG filters (hidden) */
-svg.filters { position: absolute; width: 0; height: 0; overflow: hidden; }
-
-/* ═══════════════════════════════════════════
+/* ─────────────────────────────────────────────
    NAV
-═══════════════════════════════════════════ */
-.nav {
-  position: sticky; top: 0; z-index: 300;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px clamp(20px, 5vw, 60px);
-  background: rgba(8,7,12,.85);
-  backdrop-filter: blur(20px) saturate(1.4);
-  border-bottom: 1px solid rgba(255,255,255,.05);
+───────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px clamp(20px,5vw,64px);
+  transition:background .5s var(--t),border-color .5s;
+  border-bottom:1px solid transparent;
 }
-.nav-logo {
-  display: flex; align-items: center; gap: 11px;
-  font-family: var(--serif); font-size: 1.05rem;
-  font-weight: 600; letter-spacing: .18em;
-  color: var(--gold); text-transform: uppercase;
-}
-.nav-logo img { width: 34px; height: 37px; opacity: .92; }
-.nav-center {
-  display: flex; gap: 36px;
-}
-.nav-link {
-  font-family: var(--caps); font-size: .56rem;
-  letter-spacing: .24em; color: var(--smoke);
-  text-transform: uppercase;
-  transition: color .3s;
-}
-.nav-link:hover, .nav-link.here { color: var(--gold); }
-.nav-right { display: flex; align-items: center; gap: 8px; }
-.cart-btn {
-  display: flex; align-items: center; gap: 9px;
-  padding: 8px 18px 8px 14px;
-  border-radius: 50px;
-  border: 1px solid var(--edge);
-  color: var(--ash);
-  font-family: var(--caps); font-size: .54rem; letter-spacing: .2em;
-  transition: border-color .3s, color .3s, background .3s;
-  position: relative;
-}
-.cart-btn:hover { border-color: var(--gold-lo); color: var(--parch); }
-.cart-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; }
-.cart-badge {
-  position: absolute; top: -4px; right: -4px;
-  min-width: 17px; height: 17px; border-radius: 50px;
-  background: var(--gold); color: var(--ink);
-  font-family: var(--ui); font-size: .5rem; font-weight: 500;
-  display: flex; align-items: center; justify-content: center;
-  padding: 0 4px;
-  transform: scale(0);
-  transition: transform .3s var(--spring);
-}
-.cart-badge.show { transform: scale(1); }
-.cart-badge.bump { animation: bump .35s var(--spring); }
-@keyframes bump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5)} }
+nav.solid{background:rgba(9,8,13,.92);backdrop-filter:blur(20px);border-color:var(--line)}
 
-/* ═══════════════════════════════════════════
-   PAGE WRAPPER
-═══════════════════════════════════════════ */
-.page-wrap {
-  position: relative; z-index: 2;
-  max-width: 1260px; margin: 0 auto;
-  padding: clamp(40px,6vw,80px) clamp(20px,5vw,60px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(40px,7vw,110px);
-  align-items: start;
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--s);font-size:1rem;font-weight:400;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+}
+.logo img{width:32px;height:35px;opacity:.9}
+
+.nav-mid{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;gap:40px;
+}
+.nav-mid a{
+  font-family:var(--c);font-size:.52rem;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--muted);
+  transition:color .3s
+}
+.nav-mid a:hover,.nav-mid a.here{color:var(--gold)}
+
+.cart-trigger{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--c);font-size:.52rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);
+  position:relative;transition:color .3s;
+  padding:8px 0;
+}
+.cart-trigger:hover{color:var(--text)}
+.cart-trigger svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5}
+.cbadge{
+  position:absolute;top:-2px;right:-10px;
+  min-width:16px;height:16px;border-radius:8px;
+  background:var(--gold);color:var(--bg);
+  font-family:var(--u);font-size:.48rem;font-weight:400;
+  display:flex;align-items:center;justify-content:center;padding:0 3px;
+  transform:scale(0);transition:transform .3s cubic-bezier(.22,.68,0,1.2);
+}
+.cbadge.on{transform:scale(1)}
+.cbadge.pop{animation:pop .35s cubic-bezier(.22,.68,0,1.2)}
+@keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
+.hero{
+  min-height:100dvh;
+  display:grid;
+  grid-template-rows:1fr auto;
+  padding:0 clamp(20px,5vw,64px);
+  padding-top:80px;
+  position:relative;overflow:hidden;
+}
+/* faint vertical rule on the right third */
+.hero::before{
+  content:'';
+  position:absolute;top:0;bottom:0;
+  left:calc(100% / 3 * 2);
+  width:1px;
+  background:linear-gradient(180deg,transparent,var(--line) 20%,var(--line) 80%,transparent);
+  pointer-events:none;
 }
 
-/* ═══════════════════════════════════════════
-   LEFT — VISUAL
-═══════════════════════════════════════════ */
-.visual-col { position: sticky; top: 90px; }
-
-/* Paper surface the journal rests on */
-.paper-surface {
-  position: relative;
-  padding: clamp(28px,4vw,48px) clamp(20px,3vw,36px) clamp(20px,3vw,36px);
-  border-radius: 20px;
-  overflow: visible;
-  margin-bottom: 20px;
+.hero-inner{
+  display:grid;
+  grid-template-columns:1fr clamp(120px,18vw,240px);
+  align-items:end;
+  padding-bottom:clamp(32px,5vw,56px);
+  gap:0;
 }
-/* The bent paper sheet under the journal */
-.paper-surface::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: 20px;
+.hero-text{}
+.hero-index{
+  font-family:var(--c);font-size:.48rem;letter-spacing:.4em;
+  color:var(--dim);display:block;margin-bottom:clamp(20px,3vh,36px);
+}
+.hero-title{
+  font-family:var(--s);font-weight:400;font-style:italic;
+  font-size:clamp(5rem,13.5vw,14rem);
+  line-height:.88;letter-spacing:-.02em;
+  color:var(--text);
+  /* subtle ink variation */
+  text-shadow:0 0 120px rgba(201,168,76,.06);
+}
+.hero-desc{
+  font-family:var(--c);font-size:.54rem;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--muted);
+  margin-top:clamp(16px,2.5vh,28px);
+  display:flex;align-items:center;gap:16px;
+}
+.hero-desc::before{content:'';width:32px;height:1px;background:var(--dim)}
+
+/* Small journal in hero corner */
+.hero-journal-mini{
+  align-self:end;
+  padding-bottom:clamp(32px,5vw,56px);
+  padding-left:32px;
+}
+.journal-mini{
+  width:100%;
+  aspect-ratio:3/4;
+  border-radius:2px 8px 8px 2px;
+  position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse 70% 55% at 70% 30%, rgba(0,0,0,.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 45% at 25% 80%, rgba(0,0,0,.1) 0%, transparent 55%),
-    linear-gradient(155deg, var(--p1) 0%, var(--p2) 35%, var(--p3) 70%, var(--p4) 100%);
-  filter: url(#paper);
-  box-shadow:
-    0 2px 8px rgba(0,0,0,.18),
-    0 8px 24px rgba(0,0,0,.22),
-    0 24px 64px rgba(0,0,0,.3),
-    0 64px 120px rgba(0,0,0,.2);
-  transform: perspective(1400px) rotateX(4deg) rotateY(-2deg);
-  transform-origin: bottom center;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='.05'/%3E%3C/svg%3E"),
+    linear-gradient(155deg,var(--p1),var(--p2) 40%,var(--p3) 75%,var(--p4));
+  cursor:pointer;
+  box-shadow:-2px 0 0 rgba(0,0,0,.6),4px 12px 40px rgba(0,0,0,.65),0 4px 16px rgba(0,0,0,.4);
+  animation:jf 8s ease-in-out infinite;
+  transition:box-shadow .4s var(--t),transform .4s var(--t);
 }
-/* Fold crease across the paper */
-.paper-surface::after {
-  content: '';
-  position: absolute;
-  top: 38%; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg,
-    transparent 5%,
-    rgba(0,0,0,.07) 25%,
-    rgba(0,0,0,.13) 50%,
-    rgba(0,0,0,.07) 75%,
-    transparent 95%
-  );
-  border-radius: 50%;
-  transform: perspective(600px) rotateX(2deg);
-  pointer-events: none; z-index: 5;
+.journal-mini:hover{
+  transform:translateY(-6px) rotate(-.5deg);
+  box-shadow:-2px 0 0 rgba(0,0,0,.7),8px 20px 60px rgba(0,0,0,.7),0 8px 24px rgba(0,0,0,.5);
+}
+@keyframes jf{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(.4deg)}}
+.journal-mini:hover{animation:none}
+.jm-spine{
+  position:absolute;top:0;left:0;bottom:0;width:14px;
+  background:linear-gradient(180deg,#221506,#120c03,#221506);
+}
+.jm-face{
+  position:absolute;inset:0;left:14px;
+  padding:14px 12px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  font-family:var(--c);font-size:.36rem;letter-spacing:.18em;color:var(--pd);
+}
+.jm-mid{text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.jm-t{font-size:.75rem;letter-spacing:.2em;color:var(--pi)}
+.jm-r{width:40%;height:1px;background:rgba(100,65,20,.22)}
+.jm-lines{width:100%;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.jm-l{height:1px;background:rgba(100,65,20,.1)}
+.jm-l.s{width:65%}
+.mini-hint{
+  display:block;text-align:center;
+  font-family:var(--c);font-size:.38rem;letter-spacing:.2em;
+  color:var(--faint);margin-top:10px;
 }
 
-/* Journal */
-.journal-wrap {
-  position: relative; z-index: 4;
-  width: min(260px, 72%);
-  margin: 0 auto;
-  cursor: pointer;
-  filter:
-    drop-shadow(-3px 0 0 rgba(0,0,0,.5))
-    drop-shadow(0 12px 40px rgba(0,0,0,.65))
-    drop-shadow(8px 20px 60px rgba(0,0,0,.45));
-  animation: floatJournal 7s ease-in-out infinite;
-  transition: filter .4s var(--ease);
+/* Hero bottom bar */
+.hero-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0;
+  border-top:1px solid var(--line);
 }
-.journal-wrap:hover {
-  filter:
-    drop-shadow(-3px 0 0 rgba(0,0,0,.6))
-    drop-shadow(0 20px 60px rgba(0,0,0,.75))
-    drop-shadow(12px 28px 80px rgba(0,0,0,.55));
+.hero-price{
+  font-family:var(--s);font-size:clamp(1.4rem,3vw,2.4rem);
+  font-weight:300;color:var(--text);
+  display:flex;align-items:baseline;gap:8px;
 }
-@keyframes floatJournal {
-  0%,100% { transform: translateY(0) rotate(-.5deg); }
-  50%      { transform: translateY(-12px) rotate(.3deg); }
+.hero-price sup{font-family:var(--c);font-size:.6rem;letter-spacing:.1em;color:var(--muted);margin-top:.4em}
+.hero-price .disc{color:var(--gold)}
+.hero-cta-link{
+  font-family:var(--c);font-size:.6rem;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--text);
+  border-bottom:1px solid var(--text);padding-bottom:3px;
+  transition:color .3s,border-color .3s;
 }
-/* Click hint */
-.journal-hint {
-  position: absolute; bottom: -28px; left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--caps); font-size: .44rem; letter-spacing: .3em;
-  color: var(--p-dim); white-space: nowrap;
-  opacity: 0; transition: opacity .4s;
+.hero-cta-link:hover{color:var(--gold);border-color:var(--gold)}
+.hero-meta{
+  font-family:var(--c);font-size:.48rem;letter-spacing:.22em;
+  color:var(--muted);text-align:right;line-height:1.8;
+  display:none;
 }
-.journal-wrap:hover .journal-hint { opacity: 1; }
 
-.journal-body {
-  aspect-ratio: 3/4; border-radius: 3px 10px 10px 3px; overflow: hidden;
+/* ─────────────────────────────────────────────
+   CONTENT SECTIONS WRAPPER
+───────────────────────────────────────────── */
+.content{padding:0 clamp(20px,5vw,64px)}
+
+/* Horizontal rule between sections */
+.hr{height:1px;background:var(--line);margin:0}
+.hr.gold{background:linear-gradient(90deg,var(--dim),transparent 80%)}
+
+/* Section header (running head style) */
+.s-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:clamp(16px,2.5vh,24px) 0;
+  border-bottom:1px solid var(--line);
+  margin-bottom:0;
+}
+.s-head-l{font-family:var(--c);font-size:.52rem;letter-spacing:.32em;color:var(--muted)}
+.s-head-r{font-family:var(--c);font-size:.52rem;letter-spacing:.22em;color:var(--faint)}
+
+/* ─────────────────────────────────────────────
+   PRODUCT SPREAD
+───────────────────────────────────────────── */
+.spread{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:60vh;
+}
+.spread-left{
+  padding:clamp(32px,5vw,72px) clamp(20px,3vw,48px) clamp(32px,5vw,72px) 0;
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:clamp(24px,3vh,36px);
+}
+.spread-right{
+  padding:clamp(32px,5vw,72px) 0 clamp(32px,5vw,72px) clamp(20px,3vw,48px);
+}
+
+/* Product title in spread */
+.prod-title{
+  font-family:var(--s);font-weight:300;
+  font-size:clamp(2rem,4.5vw,4rem);
+  line-height:1;letter-spacing:.01em;color:var(--text);
+}
+.prod-title em{font-style:italic;color:var(--gold)}
+.prod-edition{
+  font-family:var(--c);font-size:.5rem;letter-spacing:.3em;
+  color:var(--dim);text-transform:uppercase;
+}
+.prod-desc{
+  font-family:var(--s);font-size:clamp(.95rem,1.5vw,1.1rem);
+  line-height:1.85;color:var(--muted);max-width:52ch;font-weight:300;
+}
+.prod-desc strong{color:var(--text);font-weight:400}
+
+/* Specs table */
+.specs{width:100%;border-collapse:collapse}
+.specs tr{border-bottom:1px solid var(--line)}
+.specs tr:last-child{border-bottom:none}
+.specs td{padding:10px 0;font-family:var(--u);font-size:.78rem;line-height:1.4}
+.specs td:first-child{color:var(--muted);width:45%;letter-spacing:.04em}
+.specs td:last-child{color:var(--text);text-align:right}
+
+/* Large journal visual in spread */
+.journal-large{
+  width:min(280px,80%);
+  aspect-ratio:3/4;
+  border-radius:2px 10px 10px 2px;
+  position:relative;overflow:hidden;
+  cursor:pointer;
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)' opacity='.05'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, var(--p1) 0%, var(--p2) 40%, var(--p3) 72%, var(--p4) 100%);
-  position: relative;
+    linear-gradient(158deg,var(--p1),var(--p2) 35%,var(--p3) 70%,var(--p4));
+  box-shadow:
+    -3px 0 0 rgba(0,0,0,.55),
+    0 16px 48px rgba(0,0,0,.6),
+    8px 24px 72px rgba(0,0,0,.45);
+  transition:transform .5s var(--t),box-shadow .5s var(--t);
 }
-/* Stack pages peeking from under cover */
-.journal-body::before {
-  content: ''; position: absolute;
-  top: 3px; right: -5px; bottom: 3px;
-  width: 6px;
-  background: repeating-linear-gradient(
-    180deg,
-    #f2e8d0 0px, #f2e8d0 2px,
-    #e0d4b8 2px, #e0d4b8 3px
-  );
-  border-radius: 0 2px 2px 0;
+.journal-large::after{
+  /* pages sticking out */
+  content:'';
+  position:absolute;top:4px;right:-5px;bottom:4px;width:7px;
+  background:repeating-linear-gradient(180deg,#f0e8d0 0,#f0e8d0 2px,#ddd0b0 2px,#ddd0b0 3px);
+  border-radius:0 2px 2px 0;
 }
-.journal-spine {
-  position: absolute; top: 0; left: 0; bottom: 0; width: 18px;
-  background: linear-gradient(180deg, #251808, #160e05, #251808);
-  border-right: 1px solid rgba(201,168,76,.1);
-  display: flex; align-items: center; justify-content: center;
+.journal-large:hover{
+  transform:translateY(-8px) rotate(-.8deg);
+  box-shadow:-3px 0 0 rgba(0,0,0,.65),0 28px 72px rgba(0,0,0,.75),12px 36px 96px rgba(0,0,0,.5);
 }
-.spine-txt {
-  font-family: var(--caps); font-size: 5.5px; letter-spacing: .35em;
-  color: rgba(201,168,76,.4); writing-mode: vertical-rl;
-  transform: rotate(180deg); white-space: nowrap;
+.jl-spine{
+  position:absolute;top:0;left:0;bottom:0;width:18px;
+  background:linear-gradient(180deg,#231707,#140e04,#231707);
+  border-right:1px solid rgba(201,168,76,.08);
 }
-.journal-face {
-  position: absolute; inset: 0; left: 18px;
-  padding: clamp(16px,4vw,28px);
-  display: flex; flex-direction: column; justify-content: space-between;
+.jl-spine span{
+  position:absolute;top:50%;left:50%;transform:translateX(-50%) translateY(-50%) rotate(180deg);
+  font-family:var(--c);font-size:5px;letter-spacing:.35em;
+  color:rgba(201,168,76,.35);writing-mode:vertical-rl;white-space:nowrap;
 }
-.jf-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.jf-vol { font-family: var(--caps); font-size: .44rem; letter-spacing: .26em; color: var(--p-dim); }
-.jf-seal {
-  width: 24px; height: 24px; border-radius: 50%;
-  border: 1px solid rgba(120,80,30,.25);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--caps); font-size: .38rem; letter-spacing: .05em; color: var(--p-dim);
+.jl-face{
+  position:absolute;inset:0;left:18px;
+  padding:clamp(16px,3vw,28px);
+  display:flex;flex-direction:column;justify-content:space-between;
 }
-.jf-mid { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
-.jf-title { font-family: var(--caps); font-size: clamp(1rem,3.5vw,1.6rem); letter-spacing: .2em; color: var(--p-ink); }
-.jf-rule { width: 44%; height: 1px; background: rgba(100,65,20,.22); }
-.jf-sub { font-family: var(--serif); font-style: italic; font-size: .82rem; color: var(--p-dim); }
-.jf-lines { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
-.jf-line { height: 1px; background: rgba(100,65,20,.1); }
-.jf-line.short { width: 65%; }
-.jf-bottom { display: flex; justify-content: space-between; }
-.jf-year,.jf-brand { font-family: var(--caps); font-size: .42rem; letter-spacing: .16em; color: rgba(100,65,20,.35); }
+.jl-top,.jl-bot{display:flex;justify-content:space-between;align-items:flex-start;font-family:var(--c);font-size:.44rem;letter-spacing:.2em;color:var(--pd)}
+.jl-mid{text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.jl-h{font-family:var(--c);font-size:clamp(.9rem,2.5vw,1.4rem);letter-spacing:.2em;color:var(--pi)}
+.jl-rule{width:42%;height:1px;background:rgba(100,65,20,.22)}
+.jl-i{font-family:var(--s);font-style:italic;font-size:.85rem;color:var(--pd)}
+.jl-lines{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.jl-ln{height:1px;background:rgba(100,65,20,.1)}
+.jl-ln.sh{width:60%}
 
-/* Page thumbnails */
-.thumbs {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 10px;
-  margin-top: 40px;
+.preview-label{
+  font-family:var(--c);font-size:.46rem;letter-spacing:.24em;
+  color:var(--faint);margin-top:14px;
+  display:flex;align-items:center;gap:10px;
 }
-.thumb {
-  aspect-ratio: 3/4; border-radius: 6px; cursor: pointer; overflow: hidden;
-  background: linear-gradient(160deg, var(--p1), var(--p3));
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,.42));
-  transition: transform .35s var(--ease), filter .35s;
-  position: relative;
-}
-.thumb:hover { transform: translateY(-5px) scale(1.03); filter: drop-shadow(0 10px 24px rgba(0,0,0,.55)); }
-.thumb-inner { padding: 8px 7px; display: flex; flex-direction: column; gap: 6px; height: 100%; }
-.th-cap { font-family: var(--caps); font-size: .34rem; letter-spacing: .18em; color: var(--p-dim); }
-.th-l { height: 1px; background: rgba(100,65,20,.1); }
-.th-l.sh { width: 60%; margin-top: auto; }
-.thumb-label {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--caps); font-size: .38rem; letter-spacing: .14em; color: var(--p-dim);
-  background: rgba(245,235,210,.6); opacity: 0; transition: opacity .3s;
-  backdrop-filter: blur(2px);
-}
-.thumb:hover .thumb-label { opacity: 1; }
+.preview-label::after{content:'→';color:var(--dim)}
 
-/* ═══════════════════════════════════════════
-   RIGHT — BUY PANEL
-═══════════════════════════════════════════ */
-.buy-col { padding-top: 4px; }
+/* ─────────────────────────────────────────────
+   THUMBNAILS
+───────────────────────────────────────────── */
+.thumbs{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  margin-top:24px;
+}
+.th{
+  aspect-ratio:3/4;border-radius:3px;cursor:pointer;overflow:hidden;
+  background:linear-gradient(155deg,var(--p1),var(--p3));
+  box-shadow:0 4px 16px rgba(0,0,0,.45);
+  transition:transform .3s var(--t),box-shadow .3s;
+  position:relative;
+}
+.th:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.6)}
+.th-inner{padding:8px 6px;display:flex;flex-direction:column;gap:6px;height:100%}
+.th-cap{font-family:var(--c);font-size:.34rem;letter-spacing:.16em;color:var(--pd)}
+.th-l{height:1px;background:rgba(100,65,20,.1)}
+.th-l.s{width:62%;margin-top:auto}
+.th-overlay{
+  position:absolute;inset:0;
+  background:rgba(242,235,216,.65);backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--c);font-size:.38rem;letter-spacing:.14em;color:var(--pm);
+  opacity:0;transition:opacity .25s;
+}
+.th:hover .th-overlay{opacity:1}
 
-.breadcrumb {
-  display: flex; align-items: center; gap: 7px;
-  font-family: var(--caps); font-size: .5rem; letter-spacing: .18em; color: var(--smoke);
-  margin-bottom: 32px;
+/* ─────────────────────────────────────────────
+   CONTENTS LIST
+───────────────────────────────────────────── */
+.contents-section{
+  display:grid;
+  grid-template-columns:1fr 1fr;
 }
-.breadcrumb a:hover { color: var(--gold); }
-.breadcrumb .sep { color: var(--edge); }
+.contents-list{
+  padding:clamp(32px,5vw,72px) clamp(20px,3vw,48px) clamp(32px,5vw,72px) 0;
+  border-right:1px solid var(--line);
+}
+.contents-list ol{list-style:none;display:flex;flex-direction:column}
+.ci{
+  display:grid;
+  grid-template-columns:3ch 1fr auto;
+  gap:0 20px;align-items:baseline;
+  padding:clamp(14px,2vh,20px) 0;
+  border-bottom:1px solid var(--line);
+  transition:background .25s;
+}
+.ci:last-child{border-bottom:none}
+.ci-n{font-family:var(--c);font-size:.48rem;letter-spacing:.16em;color:var(--faint)}
+.ci-name{font-family:var(--s);font-size:clamp(1rem,1.8vw,1.3rem);font-weight:300;color:var(--text)}
+.ci-tag{font-family:var(--c);font-size:.42rem;letter-spacing:.14em;color:var(--muted);white-space:nowrap}
 
-.product-name {
-  font-family: var(--serif); font-size: clamp(2.6rem,5vw,4.2rem);
-  font-weight: 300; line-height: .92; letter-spacing: -.01em;
-  margin-bottom: 8px;
+/* Paper fragment in contents */
+.contents-paper{
+  padding:clamp(32px,5vw,72px) 0 clamp(32px,5vw,72px) clamp(20px,3vw,48px);
+  display:flex;align-items:center;justify-content:center;
 }
-.product-name em { font-style: italic; color: var(--gold); }
-.product-sub {
-  font-family: var(--caps); font-size: .55rem; letter-spacing: .28em;
-  color: var(--smoke); margin-bottom: 36px;
+.paper-frag{
+  width:min(280px,85%);
+  padding:clamp(24px,4vw,40px);
+  border-radius:4px;
+  position:relative;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23p)' opacity='.06'/%3E%3C/svg%3E"),
+    linear-gradient(150deg,var(--p1),var(--p2) 45%,var(--p3));
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.2),
+    0 12px 36px rgba(0,0,0,.3),
+    0 32px 72px rgba(0,0,0,.22);
+  transform:rotate(-1.5deg);
+  color:var(--pi);
 }
+/* Bent corner */
+.paper-frag::after{
+  content:'';position:absolute;bottom:0;right:0;
+  width:36px;height:36px;
+  background:linear-gradient(225deg,var(--bg2) 48%,var(--p3) 52%);
+  clip-path:polygon(100% 0,100% 100%,0 100%);
+  opacity:.5;
+}
+/* Stack pages behind */
+.paper-frag::before{
+  content:'';position:absolute;
+  top:6px;left:-5px;right:5px;bottom:-6px;
+  background:var(--p3);border-radius:4px;z-index:-1;
+  transform:rotate(.5deg);
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+}
+.pf-head{font-family:var(--c);font-size:.44rem;letter-spacing:.28em;color:var(--pd);margin-bottom:14px}
+.pf-rule{height:1px;background:rgba(100,65,20,.2);margin-bottom:16px}
+.pf-body{font-family:var(--s);font-size:.92rem;line-height:1.9;color:var(--pm);font-style:italic}
+.pf-sig{font-family:var(--s);font-style:italic;font-size:1.05rem;color:var(--pd);margin-top:16px;display:block}
 
-/* Price */
-.price-block { margin-bottom: 6px; }
-.price-line {
-  display: flex; align-items: baseline; gap: 10px;
+/* ─────────────────────────────────────────────
+   ORDER SECTION
+───────────────────────────────────────────── */
+.order-section{
+  display:grid;
+  grid-template-columns:1fr 1fr;
 }
-.price-cur { font-family: var(--caps); font-size: .75rem; letter-spacing: .06em; color: var(--smoke); padding-top: .4em; }
-.price-num {
-  font-family: var(--serif); font-size: clamp(2.4rem,5vw,3.4rem);
-  font-weight: 300; color: var(--white); line-height: 1;
-  transition: all .4s var(--ease);
+.order-left{
+  padding:clamp(32px,5vw,72px) clamp(20px,3vw,48px) clamp(32px,5vw,72px) 0;
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:clamp(24px,3vh,36px);
 }
-.price-num.discounted { color: var(--gold); }
-.price-original {
-  font-family: var(--serif); font-size: 1.1rem; color: var(--smoke);
-  text-decoration: line-through; opacity: 0; transition: opacity .4s;
+.order-title{
+  font-family:var(--s);font-weight:300;
+  font-size:clamp(2rem,4vw,3.5rem);
+  line-height:.96;color:var(--text);
 }
-.price-original.show { opacity: 1; }
-.price-note { font-family: var(--ui); font-size: .72rem; color: var(--smoke); margin-bottom: 10px; }
-.price-tag {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--caps); font-size: .48rem; letter-spacing: .18em;
-  color: var(--gold); border: 1px solid var(--gold-lo);
-  padding: 4px 12px; border-radius: 50px;
-  margin-bottom: 32px;
+.order-title em{font-style:italic;color:var(--gold)}
+.price-display{
+  display:flex;align-items:baseline;gap:10px;
+  font-family:var(--s);font-weight:300;
 }
+.pd-cur{font-family:var(--c);font-size:.7rem;letter-spacing:.1em;color:var(--muted);margin-top:.35em}
+.pd-amt{font-size:clamp(2rem,4.5vw,3.6rem);color:var(--text);line-height:1;transition:color .4s}
+.pd-amt.off{color:var(--gold)}
+.pd-orig{font-size:1.2rem;color:var(--muted);text-decoration:line-through;opacity:0;transition:opacity .4s}
+.pd-orig.show{opacity:1}
+.pd-note{font-family:var(--u);font-size:.72rem;color:var(--muted)}
 
-.separator { height: 1px; background: linear-gradient(90deg,var(--gold-dim),var(--edge),transparent); margin: 24px 0; }
+.order-right{
+  padding:clamp(32px,5vw,72px) 0 clamp(32px,5vw,72px) clamp(20px,3vw,48px);
+  display:flex;flex-direction:column;gap:clamp(20px,2.5vh,28px);
+}
+.f-label{
+  font-family:var(--c);font-size:.5rem;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px;
+}
 
 /* Edition */
-.field-label {
-  font-family: var(--caps); font-size: .52rem; letter-spacing: .22em;
-  color: var(--smoke); display: block; margin-bottom: 10px;
+.eds{display:flex;gap:1px}
+.ed{
+  flex:1;padding:14px 10px;text-align:center;
+  background:var(--bg2);border:1px solid var(--line);
+  font-family:var(--c);font-size:.5rem;letter-spacing:.16em;
+  color:var(--muted);line-height:1.7;
+  transition:border-color .25s,color .25s,background .25s;
 }
-.editions { display: flex; gap: 10px; margin-bottom: 24px; }
-.ed-btn {
-  flex: 1; padding: 13px 10px; text-align: center;
-  border: 1px solid var(--edge); border-radius: 12px;
-  font-family: var(--caps); font-size: .52rem; letter-spacing: .14em;
-  color: var(--smoke); line-height: 1.6;
-  transition: border-color .3s, color .3s, background .3s;
-}
-.ed-btn span { display: block; font-size: .42rem; color: var(--smoke); opacity: .6; margin-top: 2px; }
-.ed-btn:hover:not(:disabled) { border-color: var(--gold-lo); color: var(--ash); }
-.ed-btn.on { border-color: var(--gold); color: var(--parch); background: rgba(201,168,76,.07); }
-.ed-btn:disabled { opacity: .35; cursor: not-allowed; }
+.ed:not(:last-child){margin-right:-1px}
+.ed small{display:block;font-size:.4rem;color:var(--faint);margin-top:2px}
+.ed:hover:not(:disabled){border-color:var(--dim);color:var(--text)}
+.ed.on{border-color:var(--gold);color:var(--text);background:rgba(201,168,76,.06);z-index:1}
+.ed:disabled{opacity:.3;cursor:not-allowed}
 
 /* Quantity */
-.qty-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
-.qty-wrap {
-  display: flex; align-items: center;
-  border: 1px solid var(--edge); border-radius: 50px;
-  overflow: hidden;
+.qty-row{display:flex;align-items:center;gap:12px}
+.qty-ctrl{display:flex;align-items:center;border:1px solid var(--line);background:var(--bg2)}
+.qb{
+  width:40px;height:42px;font-size:1.1rem;color:var(--muted);
+  transition:color .2s,background .2s;
 }
-.qty-btn {
-  width: 40px; height: 40px;
-  font-size: 1.15rem; color: var(--smoke);
-  transition: color .2s, background .2s;
+.qb:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.qn{
+  min-width:48px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--c);font-size:.7rem;letter-spacing:.1em;color:var(--text);
+  border-left:1px solid var(--line);border-right:1px solid var(--line);
+  user-select:none;
 }
-.qty-btn:hover { color: var(--parch); background: rgba(255,255,255,.04); }
-.qty-num {
-  padding: 0 16px; font-family: var(--caps); font-size: .7rem;
-  letter-spacing: .1em; color: var(--parch);
-  border-left: 1px solid var(--edge); border-right: 1px solid var(--edge);
-  height: 40px; display: flex; align-items: center; min-width: 52px; justify-content: center;
-  user-select: none;
-}
-.qty-total { font-family: var(--ui); font-size: .74rem; color: var(--smoke); }
+.qty-tot{font-family:var(--u);font-size:.74rem;color:var(--muted)}
 
-/* Discount code */
-.discount-wrap {
-  display: flex; gap: 8px; margin-bottom: 24px;
-  position: relative;
+/* Discount */
+.disc-row{
+  display:flex;gap:0;
+  border:1px solid var(--line);background:var(--bg2);
 }
-.discount-input {
-  flex: 1;
-  background: var(--surface);
-  border: 1px solid var(--edge);
-  border-radius: 12px;
-  color: var(--parch); font-size: .82rem;
-  padding: 12px 18px;
-  outline: none; letter-spacing: .06em;
-  transition: border-color .3s;
-  text-transform: uppercase;
+.disc-in{
+  flex:1;padding:13px 16px;
+  font-size:.82rem;letter-spacing:.06em;
+  color:var(--text);text-transform:uppercase;
+  transition:background .25s;
 }
-.discount-input::placeholder { color: var(--smoke); opacity: .5; letter-spacing: .1em; text-transform: none; }
-.discount-input:focus { border-color: var(--gold-lo); }
-.discount-input.ok  { border-color: #5a9a6a; }
-.discount-input.err { border-color: #9a4a4a; }
-.discount-apply {
-  padding: 12px 20px; border-radius: 12px;
-  border: 1px solid var(--edge); color: var(--smoke);
-  font-family: var(--caps); font-size: .52rem; letter-spacing: .18em;
-  transition: border-color .3s, color .3s;
-  white-space: nowrap;
+.disc-in::placeholder{color:var(--faint);opacity:1;text-transform:none;letter-spacing:.04em}
+.disc-row:focus-within{border-color:var(--dim)}
+.disc-row.ok{border-color:#5a8a6a}
+.disc-row.err{border-color:#8a5a5a}
+.disc-btn{
+  padding:13px 18px;border-left:1px solid var(--line);
+  font-family:var(--c);font-size:.5rem;letter-spacing:.2em;
+  color:var(--muted);transition:color .25s,background .25s;
+  white-space:nowrap;
 }
-.discount-apply:hover { border-color: var(--gold-lo); color: var(--parch); }
-.discount-msg {
-  position: absolute; bottom: -20px; left: 2px;
-  font-family: var(--ui); font-size: .68rem;
-  opacity: 0; transition: opacity .3s;
+.disc-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.disc-msg{
+  font-family:var(--u);font-size:.7rem;opacity:0;transition:opacity .3s;margin-top:-12px;
 }
-.discount-msg.show { opacity: 1; }
-.discount-msg.ok  { color: #7abf8a; }
-.discount-msg.err { color: #bf7a7a; }
+.disc-msg.show{opacity:1}
+.disc-msg.ok{color:#7abf8a}
+.disc-msg.err{color:#bf7a7a}
 
-/* CTA buttons */
-.btn-primary {
-  width: 100%; padding: 17px;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-hi) 60%, var(--gold) 100%);
-  background-size: 200%;
-  border-radius: 50px;
-  color: var(--ink); font-family: var(--caps);
-  font-size: .64rem; letter-spacing: .22em;
-  position: relative; overflow: hidden;
-  transition: background-position .5s var(--ease), transform .25s, box-shadow .25s;
-  margin-bottom: 10px;
+/* CTA button */
+.cta{
+  display:block;width:100%;padding:18px;
+  background:var(--gold);color:var(--bg);
+  font-family:var(--c);font-size:.66rem;letter-spacing:.3em;
+  text-transform:uppercase;text-align:center;
+  position:relative;overflow:hidden;
+  transition:background .3s,transform .2s;
 }
-.btn-primary:hover {
-  background-position: right center;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(201,168,76,.3), 0 4px 12px rgba(0,0,0,.3);
+.cta::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.18) 50%,transparent 100%);
+  transform:translateX(-100%);transition:transform .6s var(--t);
 }
-.btn-primary:active { transform: translateY(0); }
-.btn-secondary {
-  width: 100%; padding: 15px;
-  border: 1px solid var(--edge); border-radius: 50px;
-  color: var(--smoke); font-family: var(--caps);
-  font-size: .6rem; letter-spacing: .2em;
-  transition: border-color .3s, color .3s;
+.cta:hover{background:#d4b458}
+.cta:hover::before{transform:translateX(100%)}
+.cta:active{transform:scale(.99)}
+.cta-ghost{
+  display:block;width:100%;padding:16px;
+  border:1px solid var(--line);
+  font-family:var(--c);font-size:.6rem;letter-spacing:.24em;
+  text-transform:uppercase;text-align:center;color:var(--muted);
+  transition:border-color .25s,color .25s;
 }
-.btn-secondary:hover { border-color: var(--gold-lo); color: var(--ash); }
+.cta-ghost:hover{border-color:var(--gold);color:var(--text)}
 
-/* Meta specs */
-.meta-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
-  margin-top: 28px;
-  border: 1px solid var(--edge); border-radius: 16px;
-  overflow: hidden;
+.ship-note{
+  font-family:var(--u);font-size:.7rem;color:var(--muted);
+  line-height:1.7;padding-top:4px;
+  border-top:1px solid var(--line);
 }
-.meta-cell {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--edge);
-  border-right: 1px solid var(--edge);
-}
-.meta-cell:nth-child(even) { border-right: none; }
-.meta-cell:nth-last-child(-n+2) { border-bottom: none; }
-.meta-k { font-family: var(--caps); font-size: .46rem; letter-spacing: .2em; color: var(--smoke); display: block; margin-bottom: 4px; }
-.meta-v { font-family: var(--serif); font-size: .95rem; color: var(--parch); }
 
-/* Shipping note */
-.ship {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 14px 18px; border-radius: 12px;
-  background: rgba(255,255,255,.02);
-  border: 1px solid rgba(255,255,255,.05);
-  margin-top: 16px;
-  font-family: var(--ui); font-size: .72rem; color: var(--smoke); line-height: 1.65;
+/* ─────────────────────────────────────────────
+   CART PANEL
+───────────────────────────────────────────── */
+.veil{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+  opacity:0;pointer-events:none;transition:opacity .35s var(--t);
 }
-.ship svg { flex-shrink:0; margin-top:2px; stroke:var(--gold-lo); fill:none; stroke-width:1.5; }
+.veil.on{opacity:1;pointer-events:all}
 
-/* ═══════════════════════════════════════════
-   CART DRAWER
-═══════════════════════════════════════════ */
-.cart-veil {
-  position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,.55); backdrop-filter: blur(6px);
-  opacity: 0; pointer-events: none; transition: opacity .4s var(--ease);
+.cart-panel{
+  position:fixed;top:0;right:0;bottom:0;z-index:501;
+  width:min(420px,100vw);
+  background:var(--bg2);
+  border-left:1px solid var(--line);
+  display:flex;flex-direction:column;
+  transform:translateX(105%);
+  transition:transform .45s cubic-bezier(.77,0,.175,1);
 }
-.cart-veil.open { opacity: 1; pointer-events: all; }
+.cart-panel.on{transform:none}
 
-.cart-panel {
-  position: fixed; top: 0; right: 0; bottom: 0; z-index: 501;
-  width: min(430px, 100vw);
-  background: var(--deep);
-  border-left: 1px solid var(--edge);
-  display: flex; flex-direction: column;
-  transform: translateX(105%);
-  transition: transform .45s var(--snap);
+.cart-hd{
+  padding:20px 24px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
 }
-.cart-panel.open { transform: none; }
+.cart-hd-t{font-family:var(--c);font-size:.66rem;letter-spacing:.26em;color:var(--text)}
+.cart-x{
+  width:30px;height:30px;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);transition:border-color .2s,color .2s;
+}
+.cart-x:hover{border-color:var(--dim);color:var(--text)}
+.cart-x svg{stroke:currentColor;fill:none;stroke-width:1.5;width:12px;height:12px}
 
-.cart-hd {
-  padding: 22px 26px;
-  border-bottom: 1px solid var(--edge);
-  display: flex; align-items: center; justify-content: space-between;
+.cart-bd{flex:1;overflow-y:auto;padding:20px 24px}
+.cart-nil{
+  height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;text-align:center;
 }
-.cart-hd-title { font-family: var(--caps); font-size: .68rem; letter-spacing: .24em; color: var(--parch); }
-.cart-hd-close {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 1px solid var(--edge); color: var(--smoke);
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color .2s, color .2s;
+.cart-nil-glyph{font-family:var(--s);font-size:3rem;color:var(--line)}
+.cart-nil p{font-family:var(--u);font-size:.78rem;color:var(--muted)}
+.cart-items{display:flex;flex-direction:column}
+.cart-row{
+  display:grid;grid-template-columns:52px 1fr auto;
+  gap:12px;align-items:start;
+  padding:16px 0;border-bottom:1px solid var(--line);
 }
-.cart-hd-close:hover { border-color: var(--gold-lo); color: var(--parch); }
-.cart-hd-close svg { stroke: currentColor; fill: none; stroke-width: 1.6; }
+.cart-row:last-child{border-bottom:none}
+.ci-thumb{
+  aspect-ratio:3/4;
+  background:linear-gradient(155deg,var(--p1),var(--p3));
+  border-radius:2px;
+  box-shadow:0 3px 10px rgba(0,0,0,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--c);font-size:.3rem;letter-spacing:.1em;color:var(--pd);
+}
+.ci-info{display:flex;flex-direction:column;gap:4px}
+.ci-nm{font-family:var(--c);font-size:.58rem;letter-spacing:.14em;color:var(--text)}
+.ci-ed{font-family:var(--u);font-size:.68rem;color:var(--muted)}
+.ci-dc{font-family:var(--u);font-size:.62rem;color:#7abf8a}
+.ci-qrow{display:flex;align-items:center;gap:8px;margin-top:6px}
+.ciq{
+  width:22px;height:22px;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;color:var(--muted);transition:border-color .2s,color .2s;
+}
+.ciq:hover{border-color:var(--dim);color:var(--text)}
+.ciqn{font-family:var(--c);font-size:.6rem;color:var(--text);min-width:16px;text-align:center}
+.ci-rm{font-family:var(--u);font-size:.62rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px;cursor:pointer;margin-top:5px;transition:color .2s}
+.ci-rm:hover{color:var(--text)}
+.ci-pr{font-family:var(--s);font-size:.95rem;color:var(--text);white-space:nowrap}
 
-.cart-bd { flex: 1; overflow-y: auto; padding: 22px 26px; }
+.cart-ft{
+  padding:18px 24px;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:12px;
+}
+.cart-total-row{display:flex;justify-content:space-between;align-items:baseline}
+.ctl{font-family:var(--c);font-size:.56rem;letter-spacing:.22em;color:var(--muted)}
+.ctv{font-family:var(--s);font-size:1.5rem;color:var(--text)}
+.cart-note-t{font-family:var(--u);font-size:.68rem;color:var(--muted)}
+.checkout{
+  padding:15px;background:var(--gold);color:var(--bg);
+  font-family:var(--c);font-size:.6rem;letter-spacing:.26em;
+  text-align:center;transition:background .25s;
+}
+.checkout:hover{background:#d4b458}
 
-.cart-empty {
-  height: 100%; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 14px; text-align: center;
-}
-.cart-empty-glyph { font-family: var(--serif); font-size: 3.5rem; color: var(--edge); }
-.cart-empty p { font-family: var(--ui); font-size: .78rem; color: var(--smoke); }
-
-.cart-list { display: flex; flex-direction: column; gap: 22px; }
-.cart-item {
-  display: grid; grid-template-columns: 58px 1fr auto;
-  gap: 14px; align-items: start;
-  padding-bottom: 22px; border-bottom: 1px solid var(--edge);
-}
-.cart-item:last-child { border-bottom: none; }
-.ci-thumb {
-  aspect-ratio: 3/4; border-radius: 6px;
-  background: linear-gradient(155deg, var(--p1), var(--p3));
-  filter: drop-shadow(0 3px 10px rgba(0,0,0,.4));
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--caps); font-size: .3rem; letter-spacing: .1em; color: var(--p-dim);
-}
-.ci-info { display: flex; flex-direction: column; gap: 5px; }
-.ci-name { font-family: var(--caps); font-size: .6rem; letter-spacing: .14em; color: var(--parch); }
-.ci-ed   { font-family: var(--ui); font-size: .68rem; color: var(--smoke); }
-.ci-disc { font-family: var(--ui); font-size: .64rem; color: #7abf8a; }
-.ci-qty-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-.ci-q {
-  width: 24px; height: 24px; border-radius: 50%;
-  border: 1px solid var(--edge); color: var(--smoke); font-size: .9rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color .2s, color .2s;
-}
-.ci-q:hover { border-color: var(--gold-lo); color: var(--parch); }
-.ci-qn { font-family: var(--caps); font-size: .6rem; color: var(--parch); min-width: 16px; text-align: center; }
-.ci-rm { font-family: var(--ui); font-size: .62rem; color: var(--smoke); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; margin-top: 6px; transition: color .2s; }
-.ci-rm:hover { color: var(--parch); }
-.ci-price { font-family: var(--serif); font-size: 1rem; color: var(--parch); white-space: nowrap; }
-
-.cart-ft {
-  padding: 20px 26px; border-top: 1px solid var(--edge);
-  display: flex; flex-direction: column; gap: 12px;
-}
-.cart-total-row { display: flex; justify-content: space-between; align-items: baseline; }
-.cart-total-lbl { font-family: var(--caps); font-size: .58rem; letter-spacing: .2em; color: var(--smoke); }
-.cart-total-val { font-family: var(--serif); font-size: 1.6rem; color: var(--white); }
-.cart-note { font-family: var(--ui); font-size: .68rem; color: var(--smoke); }
-.btn-checkout {
-  padding: 16px; border-radius: 50px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-hi) 60%, var(--gold));
-  color: var(--ink); font-family: var(--caps);
-  font-size: .62rem; letter-spacing: .22em;
-  transition: opacity .25s, transform .25s;
-}
-.btn-checkout:hover { opacity: .9; transform: translateY(-1px); }
-
-/* ═══════════════════════════════════════════
+/* ─────────────────────────────────────────────
    LIGHTBOX
-═══════════════════════════════════════════ */
-.lb-veil {
-  position: fixed; inset: 0; z-index: 600;
-  background: rgba(4,3,8,.94); backdrop-filter: blur(16px);
-  opacity: 0; pointer-events: none; transition: opacity .4s var(--ease);
-  display: flex; align-items: center; justify-content: center;
+───────────────────────────────────────────── */
+.lb-veil{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(4,3,8,.96);backdrop-filter:blur(20px);
+  opacity:0;pointer-events:none;transition:opacity .4s var(--t);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:clamp(16px,3vw,40px);gap:20px;
 }
-.lb-veil.open { opacity: 1; pointer-events: all; }
+.lb-veil.on{opacity:1;pointer-events:all}
 
-.lb-wrap {
-  position: relative; width: min(900px, 94vw);
-  display: flex; flex-direction: column; align-items: center; gap: 24px;
+.lb-close{
+  position:fixed;top:20px;right:24px;
+  width:36px;height:36px;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);transition:border-color .2s,color .2s;
 }
-.lb-close {
-  position: absolute; top: -48px; right: 0;
-  width: 38px; height: 38px; border-radius: 50%;
-  border: 1px solid var(--edge); color: var(--smoke);
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color .2s, color .2s;
-}
-.lb-close:hover { border-color: var(--gold-lo); color: var(--parch); }
-.lb-close svg { stroke: currentColor; fill: none; stroke-width: 1.6; }
+.lb-close:hover{border-color:var(--dim);color:var(--text)}
+.lb-close svg{stroke:currentColor;fill:none;stroke-width:1.5;width:13px;height:13px}
 
-.lb-stage {
-  width: 100%; display: flex; align-items: stretch; justify-content: center; gap: 0;
-  filter: drop-shadow(0 20px 60px rgba(0,0,0,.7));
-  min-height: min(70vh, 500px);
+.lb-spread{
+  display:flex;width:min(860px,100%);
+  box-shadow:0 24px 80px rgba(0,0,0,.8);
+  max-height:80vh;overflow:hidden;
 }
+.lb-pg{
+  flex:1;padding:clamp(18px,3vw,40px);
+  background:linear-gradient(155deg,var(--p1),var(--p2) 45%,var(--p3));
+  color:var(--pi);overflow-y:auto;
+}
+.lb-pg+.lb-pg{border-left:1px solid rgba(100,65,20,.15);background:linear-gradient(155deg,var(--p2),var(--p3) 45%,var(--p2))}
+.lp-hd{display:flex;justify-content:space-between;margin-bottom:16px}
+.lp-s{font-family:var(--c);font-size:.42rem;letter-spacing:.26em;color:var(--pd)}
+.lp-pn{font-family:var(--c);font-size:.42rem;letter-spacing:.1em;color:var(--pd)}
+.lp-t{font-family:var(--c);font-size:clamp(.75rem,1.6vw,1rem);letter-spacing:.1em;color:var(--pi);margin-bottom:10px}
+.lp-r{height:1px;background:rgba(100,65,20,.18);margin-bottom:14px}
+.lp-b{font-family:var(--s);font-size:clamp(.78rem,1.3vw,.92rem);line-height:1.9;color:var(--pm)}
+.lp-ls{display:flex;flex-direction:column;gap:8px;margin:12px 0;flex:1}
+.lp-ln{height:1px;background:rgba(100,65,20,.1)}
+.lp-ln.s{width:68%}
+.lp-ck{display:flex;flex-direction:column;gap:9px;margin:10px 0}
+.lp-cr{display:flex;align-items:center;gap:9px;font-family:var(--s);font-size:.82rem;color:var(--pm)}
+.lp-bx{width:12px;height:12px;border:1.5px solid rgba(100,65,20,.28);border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.52rem}
+.lp-it{font-family:var(--s);font-style:italic;font-size:clamp(.78rem,1.3vw,.9rem);color:var(--pm);line-height:1.85}
+.lp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:10px 0}
+.lp-dt{aspect-ratio:1;border-radius:50%;background:rgba(100,65,20,.1);border:1px solid rgba(100,65,20,.12)}
+.lp-dt.f{background:rgba(100,65,20,.32)}
 
-/* Left page */
-.lb-page {
-  width: 50%; min-height: 100%;
-  background: linear-gradient(160deg, var(--p1), var(--p2) 50%, var(--p3));
-  padding: clamp(20px,3vw,40px);
-  display: flex; flex-direction: column;
-  font-family: var(--serif); color: var(--p-ink);
-  position: relative; overflow: hidden;
-}
-.lb-page.right-page {
-  background: linear-gradient(160deg, var(--p2), var(--p3) 50%, var(--p2));
-  border-left: 1px solid rgba(100,70,25,.15);
-}
-.lp-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 20px;
-}
-.lp-section { font-family: var(--caps); font-size: .44rem; letter-spacing: .28em; color: var(--p-dim); }
-.lp-page-n  { font-family: var(--caps); font-size: .44rem; letter-spacing: .1em; color: var(--p-dim); }
-.lp-title   { font-family: var(--caps); font-size: clamp(.8rem,1.8vw,1.1rem); letter-spacing: .1em; color: var(--p-ink); margin-bottom: 12px; }
-.lp-rule    { height: 1px; background: rgba(100,65,20,.18); margin-bottom: 16px; }
-.lp-body    { font-size: clamp(.78rem,1.4vw,.92rem); line-height: 1.9; color: var(--p-mid); }
-.lp-line-row { display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: flex-end; margin-top: 16px; }
-.lp-line     { height: 1px; background: rgba(100,65,20,.12); }
-.lp-line.sh  { width: 70%; }
-.lp-check-block { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
-.lp-check-row   { display: flex; align-items: center; gap: 10px; font-size: .82rem; color: var(--p-mid); }
-.lp-box {
-  width: 13px; height: 13px; border: 1.5px solid rgba(100,65,20,.3);
-  border-radius: 3px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .55rem; color: var(--p-mid);
-}
-.lp-italic  { font-style: italic; font-size: clamp(.8rem,1.4vw,.95rem); color: var(--p-mid); line-height: 1.8; }
-.lp-grid4 { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin: 10px 0; }
-.lp-dot {
-  aspect-ratio: 1; border-radius: 50%;
-  background: rgba(100,65,20,.12);
-  border: 1px solid rgba(100,65,20,.15);
-}
-.lp-dot.filled { background: rgba(100,65,20,.35); }
+.lb-nav{display:flex;align-items:center;gap:16px}
+.lb-arr{width:36px;height:36px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:border-color .2s,color .2s}
+.lb-arr:hover{border-color:var(--dim);color:var(--text)}
+.lb-arr svg{stroke:currentColor;fill:none;stroke-width:1.5;width:12px;height:12px}
+.lb-dots{display:flex;gap:7px}
+.lb-dot{width:5px;height:5px;border-radius:50%;background:var(--faint);transition:background .25s,transform .25s}
+.lb-dot.on{background:var(--gold);transform:scale(1.5)}
+.lb-lbl{font-family:var(--c);font-size:.48rem;letter-spacing:.22em;color:var(--muted)}
 
-/* Spread nav */
-.lb-nav {
-  display: flex; align-items: center; gap: 20px;
-}
-.lb-nav-btn {
-  width: 40px; height: 40px; border-radius: 50%;
-  border: 1px solid var(--edge); color: var(--smoke);
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color .25s, color .25s;
-}
-.lb-nav-btn:hover { border-color: var(--gold-lo); color: var(--parch); }
-.lb-nav-btn svg { stroke: currentColor; fill: none; stroke-width: 1.6; }
-.lb-dots { display: flex; gap: 8px; }
-.lb-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--edge); transition: background .25s, transform .25s;
-}
-.lb-dot.on { background: var(--gold); transform: scale(1.4); }
-.lb-page-label {
-  font-family: var(--caps); font-size: .5rem; letter-spacing: .22em; color: var(--smoke);
-}
-
-/* ═══════════════════════════════════════════
+/* ─────────────────────────────────────────────
    FOOTER
-═══════════════════════════════════════════ */
-footer {
-  position: relative; z-index: 2;
-  border-top: 1px solid var(--edge);
-  padding: 24px clamp(20px,5vw,60px);
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
-  background: rgba(8,7,12,.6);
+───────────────────────────────────────────── */
+footer{
+  position:relative;z-index:2;
+  border-top:1px solid var(--line);
+  padding:20px clamp(20px,5vw,64px);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
 }
-.foot-logo {
-  display: flex; align-items: center; gap: 10px;
-  font-family: var(--serif); font-size: .95rem;
-  letter-spacing: .16em; color: var(--gold); text-transform: uppercase;
+.foot-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--s);font-size:.92rem;letter-spacing:.16em;
+  color:var(--gold);text-transform:uppercase;
 }
-.foot-logo img { width: 30px; height: 33px; opacity: .85; }
-.foot-links { display: flex; gap: 28px; }
-.foot-links a { font-family: var(--caps); font-size: .5rem; letter-spacing: .18em; color: var(--smoke); transition: color .3s; }
-.foot-links a:hover { color: var(--gold); }
-.foot-copy { font-family: var(--ui); font-size: .66rem; color: var(--smoke); opacity: .45; }
+.foot-logo img{width:28px;height:31px;opacity:.85}
+.foot-links{display:flex;gap:28px}
+.foot-links a{font-family:var(--c);font-size:.48rem;letter-spacing:.18em;color:var(--muted);transition:color .3s}
+.foot-links a:hover{color:var(--gold)}
+.foot-copy{font-family:var(--u);font-size:.64rem;color:var(--faint)}
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════ */
-@media (max-width: 860px) {
-  .page-wrap { grid-template-columns: 1fr; gap: 40px; }
-  .visual-col { position: static; }
-  .paper-surface { padding: 24px 16px 20px; }
-  .journal-wrap { width: min(220px, 60vw); }
-  .nav-center { display: none; }
-  .lb-stage { flex-direction: column; min-height: unset; }
-  .lb-page { width: 100%; }
-  .lb-page.right-page { border-left: none; border-top: 1px solid rgba(100,70,25,.15); }
+/* ─────────────────────────────────────────────
+   MOBILE
+───────────────────────────────────────────── */
+@media(max-width:800px){
+  .nav-mid{display:none}
+  .hero::before{display:none}
+  .hero-inner{grid-template-columns:1fr;gap:32px}
+  .hero-journal-mini{padding-left:0;padding-bottom:0;display:flex;gap:20px;align-items:flex-end}
+  .journal-mini{width:min(110px,40%)}
+  .hero-meta{display:block}
+  .hero-bar{flex-wrap:wrap;gap:14px}
+  .spread{grid-template-columns:1fr}
+  .spread-left{border-right:none;border-bottom:1px solid var(--line);padding-right:0;padding-bottom:clamp(24px,4vw,40px)}
+  .spread-right{padding-left:0;padding-top:clamp(24px,4vw,40px)}
+  .journal-large{margin:0 auto}
+  .thumbs{margin-top:20px}
+  .contents-section{grid-template-columns:1fr}
+  .contents-paper{display:none}
+  .contents-list{border-right:none;padding-right:0}
+  .order-section{grid-template-columns:1fr}
+  .order-left{border-right:none;border-bottom:1px solid var(--line);padding-right:0;padding-bottom:clamp(24px,4vw,40px)}
+  .order-right{padding-left:0;padding-top:clamp(24px,4vw,40px)}
+  .foot-links{display:none}
 }
-@media (max-width: 500px) {
-  .editions { flex-direction: column; }
-  .meta-grid { grid-template-columns: 1fr; }
-  .meta-cell:nth-child(even) { border-right: none; }
-  .meta-cell:nth-last-child(-n+2) { border-bottom: 1px solid var(--edge); }
-  .meta-cell:last-child { border-bottom: none; }
+@media(max-width:500px){
+  .hero-title{font-size:clamp(3.8rem,18vw,6rem)}
+  .eds{flex-direction:column}
+  .thumbs{grid-template-columns:repeat(2,1fr)}
+  .cart-panel{width:100vw}
+  .lb-spread{flex-direction:column;max-height:75vh}
+  .lb-pg+.lb-pg{border-left:none;border-top:1px solid rgba(100,65,20,.15)}
 }
 </style>
 </head>
 <body>
 
-<!-- SVG filters -->
-<svg class="filters" aria-hidden="true">
-  <defs>
-    <filter id="paper" x="0%" y="0%" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="4" stitchTiles="stitch" result="noise"/>
-      <feColorMatrix type="saturate" values="0" result="gray"/>
-      <feBlend in="SourceGraphic" in2="gray" mode="multiply" result="blend"/>
-      <feComponentTransfer><feFuncA type="linear" slope="1"/></feComponentTransfer>
-    </filter>
-    <filter id="crumple" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency=".02 .03" numOctaves="4" seed="3" result="warp"/>
-      <feDisplacementMap in="SourceGraphic" in2="warp" scale="12" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-  </defs>
-</svg>
-
-<div class="paper-bg" aria-hidden="true"></div>
 <div id="grain" aria-hidden="true"></div>
 
 <!-- ═══ NAV ═══ -->
-<nav class="nav">
-  <a href="index.html" class="nav-logo">
+<nav id="nav">
+  <a href="index.html" class="logo">
     <img src="/grankers-lion.png" alt="Grankers">
     Grankers
   </a>
-  <div class="nav-center">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="story.html" class="nav-link">Story</a>
-    <a href="shop.html"  class="nav-link here">Shop</a>
+  <div class="nav-mid">
+    <a href="index.html">Home</a>
+    <a href="story.html">Story</a>
+    <a href="shop.html" class="here">Shop</a>
   </div>
-  <button class="cart-btn" id="cartOpen" aria-label="Open cart">
+  <button class="cart-trigger" id="cartOpen" aria-label="Cart">
     <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
     Cart
-    <span class="cart-badge" id="cartBadge">0</span>
+    <span class="cbadge" id="cbadge">0</span>
   </button>
 </nav>
 
-<!-- ═══ MAIN ═══ -->
-<main class="page-wrap">
-
-  <!-- LEFT: visual -->
-  <div class="visual-col">
-    <div class="paper-surface">
-      <div class="journal-wrap" id="journalBtn" role="button" aria-label="Preview journal pages" tabindex="0">
-        <div class="journal-body">
-          <div class="journal-spine"><span class="spine-txt">Progressio · Grankers Team · 2025</span></div>
-          <div class="journal-face">
-            <div class="jf-top">
-              <span class="jf-vol">Vol. I</span>
-              <div class="jf-seal">GT</div>
-            </div>
-            <div class="jf-mid">
-              <h2 class="jf-title">PROGRESSIO</h2>
-              <div class="jf-rule"></div>
-              <p class="jf-sub">Write Your Story</p>
-              <div class="jf-lines">
-                <div class="jf-line"></div>
-                <div class="jf-line"></div>
-                <div class="jf-line"></div>
-                <div class="jf-line short"></div>
-              </div>
-            </div>
-            <div class="jf-bottom">
-              <span class="jf-year">2025</span>
-              <span class="jf-brand">Grankers</span>
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="hero-index">Grankers Team · 2025 · Vol. I</span>
+      <h1 class="hero-title">Progressio</h1>
+      <p class="hero-desc">The Structured Year Journal</p>
+    </div>
+    <div class="hero-journal-mini">
+      <div class="journal-mini" id="heroJournal" role="button" tabindex="0" aria-label="Preview journal">
+        <div class="jm-spine"></div>
+        <div class="jm-face">
+          <span>Vol.I</span>
+          <div class="jm-mid">
+            <span class="jm-t">PROGRESSIO</span>
+            <div class="jm-r"></div>
+            <div class="jm-lines">
+              <div class="jm-l"></div><div class="jm-l"></div>
+              <div class="jm-l"></div><div class="jm-l s"></div>
             </div>
           </div>
+          <span>2025</span>
         </div>
-        <span class="journal-hint">Click to preview pages ↗</span>
+      </div>
+      <p class="mini-hint">Click to preview</p>
+      <!-- mobile specs inline -->
+      <div class="hero-meta">
+        A5 · Hardcover<br>
+        365+ pages<br>
+        Ships worldwide
       </div>
     </div>
+  </div>
+  <div class="hero-bar">
+    <div class="hero-price">
+      <sup>USD</sup>
+      <span id="heroPrice">80.00</span>
+    </div>
+    <a href="#order" class="hero-cta-link">Order Now</a>
+    <div class="hero-price" style="font-size:clamp(1rem,2vw,1.4rem);color:var(--muted);display:none" id="heroMeta">
+      <span>A5 · Hardcover · 365 pages</span>
+    </div>
+  </div>
+</header>
 
-    <div class="thumbs">
-      <div class="thumb" data-spread="0" role="button" tabindex="0" title="Preview">
-        <div class="thumb-inner">
-          <span class="th-cap">Daily</span>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l sh"></div>
-        </div>
-        <div class="thumb-label">Daily Planning</div>
+<!-- ═══ PRODUCT SPREAD ═══ -->
+<div class="content">
+  <div class="hr"></div>
+  <div class="s-head"><span class="s-head-l">Product</span><span class="s-head-r">001</span></div>
+
+  <div class="spread">
+    <div class="spread-left">
+      <div>
+        <p class="prod-edition">First Edition · Cream Cover · Limited Run</p>
+        <h2 class="prod-title">Progressio<br><em>Journal</em></h2>
       </div>
-      <div class="thumb" data-spread="1" role="button" tabindex="0" title="Preview">
-        <div class="thumb-inner">
-          <span class="th-cap">Habits</span>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l sh"></div>
+      <p class="prod-desc">
+        A physical journal that carries you through an entire year —
+        <strong>structured enough that you won't quit after a month,</strong>
+        flexible enough for whatever you're building.
+        Every page is a question, a task, a fragment of your story.
+        In twenty years you'll open it and understand why it mattered.
+      </p>
+      <table class="specs">
+        <tr><td>Format</td><td>A5 · Hardcover</td></tr>
+        <tr><td>Pages</td><td>365+ cream pages</td></tr>
+        <tr><td>Paper weight</td><td>90 gsm</td></tr>
+        <tr><td>Duration</td><td>One full year</td></tr>
+        <tr><td>Ships from</td><td>Warsaw, Poland</td></tr>
+        <tr><td>Delivery</td><td>7–14 days worldwide</td></tr>
+      </table>
+    </div>
+
+    <div class="spread-right">
+      <div class="journal-large" id="spreadJournal" role="button" tabindex="0" aria-label="Preview journal">
+        <div class="jl-spine"><span>Progressio · Grankers Team · 2025</span></div>
+        <div class="jl-face">
+          <div class="jl-top"><span>Vol. I</span><span>GT</span></div>
+          <div class="jl-mid">
+            <h2 class="jl-h">PROGRESSIO</h2>
+            <div class="jl-rule"></div>
+            <p class="jl-i">Write Your Story</p>
+            <div class="jl-lines">
+              <div class="jl-ln"></div><div class="jl-ln"></div>
+              <div class="jl-ln"></div><div class="jl-ln sh"></div>
+            </div>
+          </div>
+          <div class="jl-bot"><span>2025</span><span>Grankers</span></div>
         </div>
-        <div class="thumb-label">Habit Tracker</div>
       </div>
-      <div class="thumb" data-spread="2" role="button" tabindex="0" title="Preview">
-        <div class="thumb-inner">
-          <span class="th-cap">Review</span>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l sh"></div>
+
+      <p class="preview-label">Click journal to preview pages</p>
+
+      <div class="thumbs">
+        <div class="th" data-s="0" role="button" tabindex="0">
+          <div class="th-inner"><span class="th-cap">Daily</span><div class="th-l"></div><div class="th-l"></div><div class="th-l"></div><div class="th-l s"></div></div>
+          <div class="th-overlay">Daily Planning</div>
         </div>
-        <div class="thumb-label">Monthly Review</div>
-      </div>
-      <div class="thumb" data-spread="3" role="button" tabindex="0" title="Preview">
-        <div class="thumb-inner">
-          <span class="th-cap">Letter</span>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l"></div><div class="th-l"></div>
-          <div class="th-l sh"></div>
+        <div class="th" data-s="1" role="button" tabindex="0">
+          <div class="th-inner"><span class="th-cap">Habits</span><div class="th-l"></div><div class="th-l"></div><div class="th-l"></div><div class="th-l s"></div></div>
+          <div class="th-overlay">Habit Tracker</div>
         </div>
-        <div class="thumb-label">Letter to Self</div>
+        <div class="th" data-s="2" role="button" tabindex="0">
+          <div class="th-inner"><span class="th-cap">Review</span><div class="th-l"></div><div class="th-l"></div><div class="th-l"></div><div class="th-l s"></div></div>
+          <div class="th-overlay">Monthly Review</div>
+        </div>
+        <div class="th" data-s="3" role="button" tabindex="0">
+          <div class="th-inner"><span class="th-cap">Letter</span><div class="th-l"></div><div class="th-l"></div><div class="th-l"></div><div class="th-l s"></div></div>
+          <div class="th-overlay">Letter to Self</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- RIGHT: buy -->
-  <div class="buy-col">
-    <p class="breadcrumb">
-      <a href="index.html">Home</a>
-      <span class="sep">/</span>
-      <span style="color:var(--ash)">Progressio Journal</span>
-    </p>
+  <!-- ═══ CONTENTS ═══ -->
+  <div class="hr"></div>
+  <div class="s-head"><span class="s-head-l">What's inside</span><span class="s-head-r">002</span></div>
 
-    <h1 class="product-name">Progressio<br><em>Journal</em></h1>
-    <p class="product-sub">The Structured Year · First Edition · 2025</p>
-
-    <div class="price-block">
-      <div class="price-line">
-        <span class="price-cur">USD</span>
-        <span class="price-num" id="priceDisplay">80.00</span>
-        <span class="price-original" id="priceOriginal">$80.00</span>
+  <div class="contents-section">
+    <div class="contents-list">
+      <ol>
+        <li class="ci"><span class="ci-n">01</span><span class="ci-name">Daily Planning Page</span><span class="ci-tag">365 spreads</span></li>
+        <li class="ci"><span class="ci-n">02</span><span class="ci-name">Habit Tracker</span><span class="ci-tag">Monthly grid</span></li>
+        <li class="ci"><span class="ci-n">03</span><span class="ci-name">Monthly Review</span><span class="ci-tag">12 spreads</span></li>
+        <li class="ci"><span class="ci-n">04</span><span class="ci-name">Goals & Intentions</span><span class="ci-tag">Quarterly</span></li>
+        <li class="ci"><span class="ci-n">05</span><span class="ci-name">Idea Capture Pages</span><span class="ci-tag">Open format</span></li>
+        <li class="ci"><span class="ci-n">06</span><span class="ci-name">Letter to Future Self</span><span class="ci-tag">Sealed page</span></li>
+        <li class="ci"><span class="ci-n">07</span><span class="ci-name">Year in Review</span><span class="ci-tag">Final spread</span></li>
+      </ol>
+    </div>
+    <div class="contents-paper">
+      <div class="paper-frag">
+        <p class="pf-head">Note · Progressio</p>
+        <div class="pf-rule"></div>
+        <p class="pf-body">
+          "You return not because you have to, but because you are curious
+          what comes next. There is space here for the moments you don't
+          want to forget, for ideas that arrive at midnight, for failures
+          you would rather analyse than suppress."
+        </p>
+        <span class="pf-sig">— Karol, Grankers Team</span>
       </div>
-      <p class="price-note" id="priceNote">Free worldwide shipping on first orders</p>
-      <span class="price-tag">Launch Price · Limited First Run</span>
-    </div>
-
-    <div class="separator"></div>
-
-    <label class="field-label">Edition</label>
-    <div class="editions" id="editionBtns">
-      <button class="ed-btn on" data-edition="Cream Cover">
-        Cream Cover<span>Standard · available</span>
-      </button>
-      <button class="ed-btn" disabled data-edition="Dark Edition">
-        Dark Edition<span>Coming soon</span>
-      </button>
-    </div>
-
-    <label class="field-label">Quantity</label>
-    <div class="qty-row">
-      <div class="qty-wrap">
-        <button class="qty-btn" id="qtyDown" aria-label="Decrease">−</button>
-        <div class="qty-num" id="qtyNum">1</div>
-        <button class="qty-btn" id="qtyUp" aria-label="Increase">+</button>
-      </div>
-      <span class="qty-total" id="qtyTotal"></span>
-    </div>
-
-    <label class="field-label">Discount code</label>
-    <div class="discount-wrap">
-      <input class="discount-input" id="discountInput" type="text" placeholder="Enter code…" autocomplete="off" spellcheck="false">
-      <button class="discount-apply" id="discountApply">Apply</button>
-      <span class="discount-msg" id="discountMsg"></span>
-    </div>
-
-    <div style="height:30px"></div>
-
-    <button class="btn-primary" id="addToCart">Add to Cart</button>
-    <button class="btn-secondary">Save for Later</button>
-
-    <div class="meta-grid">
-      <div class="meta-cell"><span class="meta-k">Format</span><span class="meta-v">A5 · Hardcover</span></div>
-      <div class="meta-cell"><span class="meta-k">Pages</span><span class="meta-v">365+ pages</span></div>
-      <div class="meta-cell"><span class="meta-k">Paper</span><span class="meta-v">90 gsm cream</span></div>
-      <div class="meta-cell"><span class="meta-k">Duration</span><span class="meta-v">One full year</span></div>
-    </div>
-
-    <div class="ship">
-      <svg width="15" height="15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Ships from Warsaw, Poland · 7–14 days worldwide · All orders tracked
     </div>
   </div>
-</main>
 
-<!-- ═══ CART DRAWER ═══ -->
-<div class="cart-veil" id="cartVeil"></div>
+  <!-- ═══ ORDER ═══ -->
+  <div class="hr"></div>
+  <div class="s-head" id="order"><span class="s-head-l">Order</span><span class="s-head-r">003</span></div>
+
+  <div class="order-section">
+    <div class="order-left">
+      <div>
+        <h2 class="order-title">Get your<br><em>Progressio</em></h2>
+      </div>
+      <div>
+        <div class="price-display">
+          <span class="pd-cur">USD</span>
+          <span class="pd-amt" id="pdAmt">80.00</span>
+          <span class="pd-orig" id="pdOrig">$80.00</span>
+        </div>
+        <p class="pd-note" id="pdNote">Free worldwide shipping on first orders</p>
+      </div>
+      <p style="font-family:var(--s);font-size:clamp(.9rem,1.5vw,1.05rem);line-height:1.85;color:var(--muted);max-width:46ch">
+        Not a promise of success — a tool that won't fail you if you use it.
+        Your physical record of real growth, from day one.
+      </p>
+    </div>
+
+    <div class="order-right">
+      <div>
+        <span class="f-label">Edition</span>
+        <div class="eds" id="eds">
+          <button class="ed on" data-ed="Cream Cover">Cream Cover<small>Standard · available</small></button>
+          <button class="ed" disabled data-ed="Dark Edition">Dark Edition<small>Coming soon</small></button>
+        </div>
+      </div>
+
+      <div>
+        <span class="f-label">Quantity</span>
+        <div class="qty-row">
+          <div class="qty-ctrl">
+            <button class="qb" id="qd" aria-label="Less">−</button>
+            <div class="qn" id="qn">1</div>
+            <button class="qb" id="qu" aria-label="More">+</button>
+          </div>
+          <span class="qty-tot" id="qtot"></span>
+        </div>
+      </div>
+
+      <div>
+        <span class="f-label">Discount code</span>
+        <div class="disc-row" id="discRow">
+          <input class="disc-in" id="discIn" type="text" placeholder="Enter code…" autocomplete="off" spellcheck="false">
+          <button class="disc-btn" id="discBtn">Apply</button>
+        </div>
+        <p class="disc-msg" id="discMsg"></p>
+      </div>
+
+      <button class="cta" id="addBtn">Add to Cart</button>
+      <button class="cta-ghost">Save for Later</button>
+
+      <p class="ship-note">
+        Ships from Warsaw, Poland · Estimated 7–14 days internationally · All orders tracked
+      </p>
+    </div>
+  </div>
+
+  <div class="hr gold"></div>
+</div>
+
+<!-- ═══ CART ═══ -->
+<div class="veil" id="veil"></div>
 <aside class="cart-panel" id="cartPanel" aria-label="Cart">
   <div class="cart-hd">
-    <span class="cart-hd-title">Your Cart</span>
-    <button class="cart-hd-close" id="cartClose" aria-label="Close">
-      <svg width="14" height="14" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <span class="cart-hd-t">Cart</span>
+    <button class="cart-x" id="cartClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
   <div class="cart-bd" id="cartBd">
-    <div class="cart-empty" id="cartEmpty">
-      <span class="cart-empty-glyph">◻</span>
+    <div class="cart-nil" id="cartNil">
+      <span class="cart-nil-glyph">◻</span>
       <p>Your cart is empty.</p>
     </div>
-    <div class="cart-list" id="cartList" style="display:none"></div>
+    <div class="cart-items" id="cartItems" style="display:none"></div>
   </div>
   <div class="cart-ft" id="cartFt" style="display:none">
     <div class="cart-total-row">
-      <span class="cart-total-lbl">Subtotal</span>
-      <span class="cart-total-val" id="cartTotal">$0.00</span>
+      <span class="ctl">Subtotal</span>
+      <span class="ctv" id="ctv">$0.00</span>
     </div>
-    <p class="cart-note">Shipping & taxes calculated at checkout</p>
-    <button class="btn-checkout">Proceed to Checkout</button>
+    <p class="cart-note-t">Shipping calculated at checkout</p>
+    <button class="checkout">Proceed to Checkout</button>
   </div>
 </aside>
 
 <!-- ═══ LIGHTBOX ═══ -->
-<div class="lb-veil" id="lbVeil" role="dialog" aria-modal="true" aria-label="Journal preview">
-  <div class="lb-wrap">
-    <button class="lb-close" id="lbClose" aria-label="Close preview">
-      <svg width="14" height="14" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-
-    <div class="lb-stage" id="lbStage">
-      <!-- populated by JS -->
-    </div>
-
-    <div class="lb-nav">
-      <button class="lb-nav-btn" id="lbPrev" aria-label="Previous spread">
-        <svg width="14" height="14" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <div class="lb-dots" id="lbDots"></div>
-      <button class="lb-nav-btn" id="lbNext" aria-label="Next spread">
-        <svg width="14" height="14" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </div>
-
-    <span class="lb-page-label" id="lbLabel"></span>
+<div class="lb-veil" id="lbVeil" role="dialog" aria-modal="true">
+  <button class="lb-close" id="lbClose" aria-label="Close">
+    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="lb-spread" id="lbSpread"></div>
+  <div class="lb-nav">
+    <button class="lb-arr" id="lbPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="lb-dots" id="lbDots"></div>
+    <button class="lb-arr" id="lbNext" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   </div>
+  <span class="lb-lbl" id="lbLbl"></span>
 </div>
 
 <!-- ═══ FOOTER ═══ -->
@@ -1011,354 +1058,239 @@ footer {
 </footer>
 
 <script>
-/* ─────────────────────────────────────────
-   PRICING & DISCOUNT
-───────────────────────────────────────── */
-const BASE_PRICE = 80;
-const CODES = {
-  'GRANKERS':  { pct: 10, label: '10% off applied' },
-  'LAUNCH20':  { pct: 20, label: '20% launch discount applied' },
-  'STORY15':   { pct: 15, label: '15% off for story readers' },
-  'FIRSTDAY':  { pct:  5, label: '5% welcome discount applied' },
-};
+/* ── Nav scroll ── */
+const navEl=document.getElementById('nav');
+window.addEventListener('scroll',()=>navEl.classList.toggle('solid',scrollY>10),{passive:true});
 
-let discount = 0; // percentage
+/* ── Pricing ── */
+const BASE=80;
+const CODES={'GRANKERS':{pct:10},'LAUNCH20':{pct:20},'STORY15':{pct:15},'FIRSTDAY':{pct:5}};
+let disc=0;
 
-function effectivePrice() {
-  return BASE_PRICE * (1 - discount / 100);
+function ep(){return BASE*(1-disc/100)}
+function fmt(n){return n.toFixed(2)}
+
+function refreshPrice(){
+  const p=ep();
+  document.getElementById('heroPrice').textContent=fmt(p);
+  document.getElementById('pdAmt').textContent=fmt(p);
+  document.getElementById('pdAmt').classList.toggle('off',disc>0);
+  document.getElementById('pdOrig').classList.toggle('show',disc>0);
+  refreshQtot();
 }
 
-function refreshPrice() {
-  const p = effectivePrice();
-  const priceEl = document.getElementById('priceDisplay');
-  const origEl  = document.getElementById('priceOriginal');
-  priceEl.textContent = p.toFixed(2);
-  priceEl.classList.toggle('discounted', discount > 0);
-  origEl.classList.toggle('show', discount > 0);
-  refreshQtyTotal();
+/* ── Quantity ── */
+let qty=1;
+function refreshQtot(){
+  const tot=ep()*qty;
+  document.getElementById('qtot').textContent=qty>1?`$${fmt(tot)} total`:'';
 }
+document.getElementById('qd').addEventListener('click',()=>{if(qty>1){qty--;document.getElementById('qn').textContent=qty;refreshQtot()}});
+document.getElementById('qu').addEventListener('click',()=>{if(qty<10){qty++;document.getElementById('qn').textContent=qty;refreshQtot()}});
 
-/* ─────────────────────────────────────────
-   QUANTITY
-───────────────────────────────────────── */
-let qty = 1;
-function refreshQtyTotal() {
-  const total = effectivePrice() * qty;
-  document.getElementById('qtyTotal').textContent =
-    qty > 1 ? `$${total.toFixed(2)} total` : '';
-}
-document.getElementById('qtyDown').addEventListener('click', () => {
-  if (qty > 1) { qty--; document.getElementById('qtyNum').textContent = qty; refreshQtyTotal(); }
-});
-document.getElementById('qtyUp').addEventListener('click', () => {
-  if (qty < 10) { qty++; document.getElementById('qtyNum').textContent = qty; refreshQtyTotal(); }
-});
-refreshQtyTotal();
-
-/* ─────────────────────────────────────────
-   EDITION
-───────────────────────────────────────── */
-document.querySelectorAll('.ed-btn:not(:disabled)').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.ed-btn').forEach(b => b.classList.remove('on'));
-    btn.classList.add('on');
+/* ── Edition ── */
+document.querySelectorAll('.ed:not(:disabled)').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.ed').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
   });
 });
-function activeEdition() {
-  return document.querySelector('.ed-btn.on')?.dataset.edition || 'Cream Cover';
-}
+const activeEd=()=>document.querySelector('.ed.on')?.dataset.ed||'Cream Cover';
 
-/* ─────────────────────────────────────────
-   DISCOUNT CODE
-───────────────────────────────────────── */
-const discInput = document.getElementById('discountInput');
-const discMsg   = document.getElementById('discountMsg');
-
-function showDiscMsg(text, type) {
-  discMsg.textContent = text;
-  discMsg.className = `discount-msg show ${type}`;
-  setTimeout(() => discMsg.classList.remove('show'), 3500);
-}
-
-document.getElementById('discountApply').addEventListener('click', applyDiscount);
-discInput.addEventListener('keydown', e => { if (e.key === 'Enter') applyDiscount(); });
-
-function applyDiscount() {
-  const code = discInput.value.trim().toUpperCase();
-  if (!code) return;
-  if (CODES[code]) {
-    discount = CODES[code].pct;
-    discInput.classList.add('ok'); discInput.classList.remove('err');
-    showDiscMsg(`✓ ${CODES[code].label}`, 'ok');
+/* ── Discount ── */
+const discIn=document.getElementById('discIn');
+const discMsg=document.getElementById('discMsg');
+const discRow=document.getElementById('discRow');
+function applyDisc(){
+  const code=discIn.value.trim().toUpperCase();
+  if(!code)return;
+  if(CODES[code]){
+    disc=CODES[code].pct;
+    discRow.classList.add('ok');discRow.classList.remove('err');
+    discMsg.textContent=`✓ ${disc}% discount applied`;
+    discMsg.className='disc-msg show ok';
     refreshPrice();
-  } else {
-    discInput.classList.add('err'); discInput.classList.remove('ok');
-    showDiscMsg('Invalid code — try GRANKERS or LAUNCH20', 'err');
+  }else{
+    discRow.classList.add('err');discRow.classList.remove('ok');
+    discMsg.textContent='Code not found — try GRANKERS or LAUNCH20';
+    discMsg.className='disc-msg show err';
+    setTimeout(()=>discMsg.classList.remove('show'),3000);
   }
 }
+document.getElementById('discBtn').addEventListener('click',applyDisc);
+discIn.addEventListener('keydown',e=>{if(e.key==='Enter')applyDisc()});
 
-/* ─────────────────────────────────────────
-   CART
-───────────────────────────────────────── */
-let cartItems = [];
-
-function renderCart() {
-  const badge  = document.getElementById('cartBadge');
-  const empty  = document.getElementById('cartEmpty');
-  const list   = document.getElementById('cartList');
-  const ft     = document.getElementById('cartFt');
-  const total  = document.getElementById('cartTotal');
-  const totalQ = cartItems.reduce((s,i) => s + i.qty, 0);
-
-  badge.textContent = totalQ;
-  badge.classList.toggle('show', totalQ > 0);
-
-  if (!cartItems.length) {
-    empty.style.display = ''; list.style.display = 'none'; ft.style.display = 'none'; return;
-  }
-  empty.style.display = 'none'; list.style.display = ''; ft.style.display = '';
-
-  list.innerHTML = cartItems.map((item, i) => `
-    <div class="cart-item">
+/* ── Cart ── */
+let cart=[];
+function renderCart(){
+  const badge=document.getElementById('cbadge');
+  const nil=document.getElementById('cartNil');
+  const items=document.getElementById('cartItems');
+  const ft=document.getElementById('cartFt');
+  const ctv=document.getElementById('ctv');
+  const totalQ=cart.reduce((s,i)=>s+i.qty,0);
+  badge.textContent=totalQ;
+  badge.classList.toggle('on',totalQ>0);
+  if(!cart.length){nil.style.display='';items.style.display='none';ft.style.display='none';return}
+  nil.style.display='none';items.style.display='';ft.style.display='';
+  items.innerHTML=cart.map((r,i)=>`
+    <div class="cart-row">
       <div class="ci-thumb">GT</div>
       <div class="ci-info">
-        <span class="ci-name">Progressio</span>
-        <span class="ci-ed">${item.edition}</span>
-        ${item.disc > 0 ? `<span class="ci-disc">−${item.disc}% applied</span>` : ''}
-        <div class="ci-qty-row">
-          <button class="ci-q" onclick="changeQty(${i},-1)">−</button>
-          <span class="ci-qn">${item.qty}</span>
-          <button class="ci-q" onclick="changeQty(${i},1)">+</button>
-          <button class="ci-rm" onclick="removeItem(${i})">Remove</button>
+        <span class="ci-nm">Progressio</span>
+        <span class="ci-ed">${r.edition}</span>
+        ${r.disc>0?`<span class="ci-dc">−${r.disc}% applied</span>`:''}
+        <div class="ci-qrow">
+          <button class="ciq" onclick="cq(${i},-1)">−</button>
+          <span class="ciqn">${r.qty}</span>
+          <button class="ciq" onclick="cq(${i},1)">+</button>
+          <button class="ci-rm" onclick="cr(${i})">Remove</button>
         </div>
       </div>
-      <span class="ci-price">$${(item.unitPrice * item.qty).toFixed(2)}</span>
+      <span class="ci-pr">$${fmt(r.unit*r.qty)}</span>
     </div>`).join('');
-
-  const sub = cartItems.reduce((s,i) => s + i.unitPrice * i.qty, 0);
-  total.textContent = `$${sub.toFixed(2)}`;
+  const sub=cart.reduce((s,i)=>s+i.unit*i.qty,0);
+  ctv.textContent=`$${fmt(sub)}`;
 }
+window.cq=(i,d)=>{cart[i].qty=Math.max(1,Math.min(10,cart[i].qty+d));renderCart()};
+window.cr=(i)=>{cart.splice(i,1);renderCart()};
 
-window.changeQty = (i, d) => {
-  cartItems[i].qty = Math.max(1, Math.min(10, cartItems[i].qty + d));
+document.getElementById('addBtn').addEventListener('click',()=>{
+  const ed=activeEd();
+  const unit=ep();
+  const ex=cart.find(c=>c.edition===ed&&c.disc===disc);
+  if(ex)ex.qty=Math.min(10,ex.qty+qty);
+  else cart.push({edition:ed,qty,unit,disc});
   renderCart();
-};
-window.removeItem = i => { cartItems.splice(i,1); renderCart(); };
-
-document.getElementById('addToCart').addEventListener('click', () => {
-  const edition = activeEdition();
-  const unit    = effectivePrice();
-  const existing = cartItems.find(c => c.edition === edition && c.disc === discount);
-  if (existing) existing.qty = Math.min(10, existing.qty + qty);
-  else cartItems.push({ edition, qty, unitPrice: unit, disc: discount });
-  renderCart();
-
-  const badge = document.getElementById('cartBadge');
-  badge.classList.add('bump');
-  setTimeout(() => badge.classList.remove('bump'), 400);
+  const b=document.getElementById('cbadge');
+  b.classList.add('pop');setTimeout(()=>b.classList.remove('pop'),400);
   openCart();
 });
 
-/* ─────────────────────────────────────────
-   CART OPEN / CLOSE
-───────────────────────────────────────── */
-const cartVeil  = document.getElementById('cartVeil');
-const cartPanel = document.getElementById('cartPanel');
-function openCart()  { cartVeil.classList.add('open'); cartPanel.classList.add('open'); document.body.style.overflow='hidden'; }
-function closeCart() { cartVeil.classList.remove('open'); cartPanel.classList.remove('open'); document.body.style.overflow=''; }
-document.getElementById('cartOpen').addEventListener('click', openCart);
-document.getElementById('cartClose').addEventListener('click', closeCart);
-cartVeil.addEventListener('click', closeCart);
+/* ── Cart open/close ── */
+const veil=document.getElementById('veil');
+const panel=document.getElementById('cartPanel');
+function openCart(){veil.classList.add('on');panel.classList.add('on');document.body.style.overflow='hidden'}
+function closeCart(){veil.classList.remove('on');panel.classList.remove('on');document.body.style.overflow=''}
+document.getElementById('cartOpen').addEventListener('click',openCart);
+document.getElementById('cartClose').addEventListener('click',closeCart);
+veil.addEventListener('click',closeCart);
 
-/* ─────────────────────────────────────────
-   LIGHTBOX SPREADS
-───────────────────────────────────────── */
-const spreads = [
-  {
-    label: 'Daily Planning',
-    left: `
-      <div class="lp-header"><span class="lp-section">Daily Planning</span><span class="lp-page-n">p. 14</span></div>
-      <div class="lp-title">Morning Intention</div>
-      <div class="lp-rule"></div>
-      <p class="lp-body">What is the one thing that, if done today, would make everything else easier?</p>
-      <div class="lp-line-row">
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div><div class="lp-line"></div>
-      </div>
-      <div style="margin-top:20px"><div class="lp-title" style="font-size:.75rem">Top 3 Priorities</div>
-      <div class="lp-rule"></div>
-      <div class="lp-check-block">
-        <div class="lp-check-row"><div class="lp-box">1</div><span>—</span></div>
-        <div class="lp-check-row"><div class="lp-box">2</div><span>—</span></div>
-        <div class="lp-check-row"><div class="lp-box">3</div><span>—</span></div>
-      </div></div>`,
-    right: `
-      <div class="lp-header"><span class="lp-section">Daily Planning</span><span class="lp-page-n">p. 15</span></div>
-      <div class="lp-title">Evening Reflection</div>
-      <div class="lp-rule"></div>
-      <p class="lp-body">What went well today? What would you do differently?</p>
-      <div class="lp-line-row">
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div>
-      </div>
-      <div style="margin-top:16px">
-        <div class="lp-title" style="font-size:.75rem">Energy · Mood · Focus</div>
-        <div class="lp-rule"></div>
-        <div class="lp-check-block">
-          <div class="lp-check-row"><div class="lp-box"></div><span style="flex:1">Energy</span><span>○ ○ ○ ○ ○</span></div>
-          <div class="lp-check-row"><div class="lp-box"></div><span style="flex:1">Mood</span><span>○ ○ ○ ○ ○</span></div>
-          <div class="lp-check-row"><div class="lp-box"></div><span style="flex:1">Focus</span><span>○ ○ ○ ○ ○</span></div>
-        </div>
-      </div>`
-  },
-  {
-    label: 'Habit Tracker',
-    left: `
-      <div class="lp-header"><span class="lp-section">Habit Tracker</span><span class="lp-page-n">p. 8</span></div>
-      <div class="lp-title">Month of January</div>
-      <div class="lp-rule"></div>
-      <p class="lp-body" style="margin-bottom:14px">Track the habits that move you forward. One dot per day.</p>
-      <div class="lp-check-block">
-        <div class="lp-check-row"><div class="lp-box">✓</div><span style="flex:1">Morning pages</span></div>
-        <div class="lp-check-row"><div class="lp-box">✓</div><span style="flex:1">Exercise</span></div>
-        <div class="lp-check-row"><div class="lp-box"></div><span style="flex:1">Read 20 min</span></div>
-        <div class="lp-check-row"><div class="lp-box"></div><span style="flex:1">No phone 1h after wake</span></div>
-        <div class="lp-check-row"><div class="lp-box"></div><span style="flex:1">Cold shower</span></div>
+/* ── Lightbox ── */
+const spreads=[
+  {label:'Daily Planning',
+   L:`<div class="lp-hd"><span class="lp-s">Daily Planning</span><span class="lp-pn">p. 14</span></div>
+      <div class="lp-t">Morning Intention</div><div class="lp-r"></div>
+      <p class="lp-b">What is the one thing that, if done today, would make everything else easier?</p>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div></div>
+      <div class="lp-t" style="font-size:.72rem;margin-top:16px">Top 3 Priorities</div><div class="lp-r"></div>
+      <div class="lp-ck">
+        <div class="lp-cr"><div class="lp-bx">1</div><span>——</span></div>
+        <div class="lp-cr"><div class="lp-bx">2</div><span>——</span></div>
+        <div class="lp-cr"><div class="lp-bx">3</div><span>——</span></div>
       </div>`,
-    right: `
-      <div class="lp-header"><span class="lp-section">Habit Tracker</span><span class="lp-page-n">p. 9</span></div>
-      <div class="lp-title">January Grid</div>
-      <div class="lp-rule"></div>
-      <p class="lp-body" style="margin-bottom:14px">Fill each circle when complete. The pattern tells your real story.</p>
-      <div class="lp-grid4">
-        ${Array.from({length:31},(_,i)=>`<div class="lp-dot${i<22&&Math.random()>.3?' filled':''}"></div>`).join('')}
-      </div>
-      <p class="lp-italic" style="margin-top:14px">"You don't rise to the level of your goals. You fall to the level of your systems."</p>`
-  },
-  {
-    label: 'Monthly Review',
-    left: `
-      <div class="lp-header"><span class="lp-section">Monthly Review</span><span class="lp-page-n">p. 38</span></div>
-      <div class="lp-title">What Shifted This Month</div>
-      <div class="lp-rule"></div>
-      <p class="lp-body">Be honest — not motivational. What actually changed?</p>
-      <div class="lp-line-row">
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div>
-      </div>
-      <div style="margin-top:16px">
-        <div class="lp-title" style="font-size:.75rem">Biggest Win</div>
-        <div class="lp-rule"></div>
-        <div class="lp-line-row"><div class="lp-line"></div><div class="lp-line"></div><div class="lp-line sh"></div></div>
+   R:`<div class="lp-hd"><span class="lp-s">Daily Planning</span><span class="lp-pn">p. 15</span></div>
+      <div class="lp-t">Evening Reflection</div><div class="lp-r"></div>
+      <p class="lp-b">What went well today? What would you do differently?</p>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div></div>
+      <div class="lp-t" style="font-size:.72rem;margin-top:16px">Energy · Mood · Focus</div><div class="lp-r"></div>
+      <div class="lp-ck">
+        <div class="lp-cr"><div class="lp-bx"></div><span style="flex:1">Energy</span><span>○○○○○</span></div>
+        <div class="lp-cr"><div class="lp-bx"></div><span style="flex:1">Mood</span><span>○○○○○</span></div>
+        <div class="lp-cr"><div class="lp-bx"></div><span style="flex:1">Focus</span><span>○○○○○</span></div>
+      </div>`},
+  {label:'Habit Tracker',
+   L:`<div class="lp-hd"><span class="lp-s">Habit Tracker</span><span class="lp-pn">p. 8</span></div>
+      <div class="lp-t">January</div><div class="lp-r"></div>
+      <div class="lp-ck">
+        <div class="lp-cr"><div class="lp-bx">✓</div><span>Morning pages</span></div>
+        <div class="lp-cr"><div class="lp-bx">✓</div><span>Exercise</span></div>
+        <div class="lp-cr"><div class="lp-bx"></div><span>Read 20 min</span></div>
+        <div class="lp-cr"><div class="lp-bx"></div><span>No phone 1h</span></div>
+        <div class="lp-cr"><div class="lp-bx"></div><span>Cold shower</span></div>
       </div>`,
-    right: `
-      <div class="lp-header"><span class="lp-section">Monthly Review</span><span class="lp-page-n">p. 39</span></div>
-      <div class="lp-title">What I Would Do Differently</div>
-      <div class="lp-rule"></div>
-      <p class="lp-body">Evidence, not motivation. Analysis, not self-criticism.</p>
-      <div class="lp-line-row">
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div><div class="lp-line"></div>
+   R:`<div class="lp-hd"><span class="lp-s">Habit Tracker</span><span class="lp-pn">p. 9</span></div>
+      <div class="lp-t">January Grid</div><div class="lp-r"></div>
+      <p class="lp-b" style="margin-bottom:12px">Fill each circle when complete.</p>
+      <div class="lp-grid">${Array.from({length:31},(_,i)=>`<div class="lp-dt${i<22&&(i%3!==0)?' f':''}"></div>`).join('')}</div>
+      <p class="lp-it" style="margin-top:14px">"You don't rise to the level of your goals. You fall to the level of your systems."</p>`},
+  {label:'Monthly Review',
+   L:`<div class="lp-hd"><span class="lp-s">Monthly Review</span><span class="lp-pn">p. 38</span></div>
+      <div class="lp-t">What shifted this month</div><div class="lp-r"></div>
+      <p class="lp-b">Be honest — not motivational. What actually changed?</p>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div></div>
+      <div class="lp-t" style="font-size:.72rem;margin-top:14px">Biggest Win</div><div class="lp-r"></div>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln s"></div></div>`,
+   R:`<div class="lp-hd"><span class="lp-s">Monthly Review</span><span class="lp-pn">p. 39</span></div>
+      <div class="lp-t">Score 1–10</div><div class="lp-r"></div>
+      <div class="lp-ck">
+        <div class="lp-cr"><span style="flex:1">Productivity</span><span>○○○○○○○○○○</span></div>
+        <div class="lp-cr"><span style="flex:1">Health</span><span>○○○○○○○○○○</span></div>
+        <div class="lp-cr"><span style="flex:1">Relationships</span><span>○○○○○○○○○○</span></div>
+        <div class="lp-cr"><span style="flex:1">Focus</span><span>○○○○○○○○○○</span></div>
       </div>
-      <div style="margin-top:16px">
-        <div class="lp-title" style="font-size:.75rem">Score: 1–10</div>
-        <div class="lp-rule"></div>
-        <div class="lp-check-block">
-          <div class="lp-check-row"><span style="flex:1">Productivity</span><span>○ ○ ○ ○ ○ ○ ○ ○ ○ ○</span></div>
-          <div class="lp-check-row"><span style="flex:1">Health</span><span>○ ○ ○ ○ ○ ○ ○ ○ ○ ○</span></div>
-          <div class="lp-check-row"><span style="flex:1">Relationships</span><span>○ ○ ○ ○ ○ ○ ○ ○ ○ ○</span></div>
-        </div>
-      </div>`
-  },
-  {
-    label: 'Letter to Future Self',
-    left: `
-      <div class="lp-header"><span class="lp-section">Letter to Future Self</span><span class="lp-page-n">p. 2</span></div>
-      <div class="lp-title">Dear future me,</div>
-      <div class="lp-rule"></div>
-      <p class="lp-italic">Written on: _______________</p>
-      <div style="height:12px"></div>
-      <p class="lp-italic">By the time you read this, I hope that…</p>
-      <div class="lp-line-row">
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div><div class="lp-line"></div>
-      </div>`,
-    right: `
-      <div class="lp-header"><span class="lp-section">Letter to Future Self</span><span class="lp-page-n">p. 3</span></div>
-      <p class="lp-italic" style="margin-bottom:16px">The one thing I want you to remember about who I was today…</p>
-      <div class="lp-line-row">
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line"></div><div class="lp-line"></div>
-      </div>
-      <p class="lp-italic" style="margin:16px 0">What I'm most afraid of right now:</p>
-      <div class="lp-line-row">
-        <div class="lp-line"></div><div class="lp-line"></div>
-        <div class="lp-line sh"></div>
-      </div>
-      <p class="lp-italic" style="margin-top:auto;padding-top:20px;border-top:1px solid rgba(100,65,20,.12)">
-        Seal this page. Open it in 20 years.
-      </p>`
-  }
+      <div class="lp-t" style="font-size:.72rem;margin-top:14px">What I would do differently</div><div class="lp-r"></div>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln s"></div></div>`},
+  {label:'Letter to Future Self',
+   L:`<div class="lp-hd"><span class="lp-s">Letter to Future Self</span><span class="lp-pn">p. 2</span></div>
+      <div class="lp-t">Dear future me,</div><div class="lp-r"></div>
+      <p class="lp-it">Written on: ___________</p>
+      <div style="height:10px"></div>
+      <p class="lp-it">By the time you read this, I hope that…</p>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div></div>`,
+   R:`<div class="lp-hd"><span class="lp-s">Letter to Future Self</span><span class="lp-pn">p. 3</span></div>
+      <p class="lp-it" style="margin-bottom:14px">The one thing I want you to remember about who I was today…</p>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln"></div></div>
+      <p class="lp-it" style="margin:14px 0">What I am most afraid of right now:</p>
+      <div class="lp-ls"><div class="lp-ln"></div><div class="lp-ln"></div><div class="lp-ln s"></div></div>
+      <p class="lp-it" style="margin-top:auto;padding-top:18px;border-top:1px solid rgba(100,65,20,.12)">Seal this page. Open it in 20 years.</p>`}
 ];
 
-let lbIdx = 0;
-
-function renderSpread(idx) {
-  const s = spreads[idx];
-  document.getElementById('lbStage').innerHTML = `
-    <div class="lb-page">${s.left}</div>
-    <div class="lb-page right-page">${s.right}</div>`;
-  document.getElementById('lbLabel').textContent = s.label;
-  document.querySelectorAll('.lb-dot').forEach((d,i) => d.classList.toggle('on', i===idx));
+let lbI=0;
+function renderSpread(i){
+  const s=spreads[i];
+  document.getElementById('lbSpread').innerHTML=`<div class="lb-pg">${s.L}</div><div class="lb-pg">${s.R}</div>`;
+  document.getElementById('lbLbl').textContent=s.label;
+  document.querySelectorAll('.lb-dot').forEach((d,j)=>d.classList.toggle('on',j===i));
 }
-
-function openLightbox(idx) {
-  lbIdx = idx;
-  document.getElementById('lbVeil').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  renderSpread(lbIdx);
-}
-function closeLightbox() {
-  document.getElementById('lbVeil').classList.remove('open');
-  document.body.style.overflow = '';
-}
+function openLb(i){lbI=i;document.getElementById('lbVeil').classList.add('on');document.body.style.overflow='hidden';renderSpread(i)}
+function closeLb(){document.getElementById('lbVeil').classList.remove('on');document.body.style.overflow=''}
 
 /* Build dots */
-const dotsEl = document.getElementById('lbDots');
-spreads.forEach((_,i) => {
-  const d = document.createElement('button');
-  d.className = 'lb-dot' + (i===0?' on':'');
-  d.setAttribute('aria-label', `Go to spread ${i+1}`);
-  d.addEventListener('click', () => { lbIdx=i; renderSpread(i); });
+const dotsEl=document.getElementById('lbDots');
+spreads.forEach((_,i)=>{
+  const d=document.createElement('button');
+  d.className='lb-dot'+(i===0?' on':'');
+  d.setAttribute('aria-label',`Spread ${i+1}`);
+  d.addEventListener('click',()=>{lbI=i;renderSpread(i)});
   dotsEl.appendChild(d);
 });
 
-document.getElementById('lbPrev').addEventListener('click', () => { lbIdx=(lbIdx-1+spreads.length)%spreads.length; renderSpread(lbIdx); });
-document.getElementById('lbNext').addEventListener('click', () => { lbIdx=(lbIdx+1)%spreads.length; renderSpread(lbIdx); });
-document.getElementById('lbClose').addEventListener('click', closeLightbox);
-document.getElementById('lbVeil').addEventListener('click', e => { if (e.target===document.getElementById('lbVeil')) closeLightbox(); });
-
-/* Keyboard nav */
-document.addEventListener('keydown', e => {
-  if (!document.getElementById('lbVeil').classList.contains('open')) return;
-  if (e.key === 'ArrowRight') { lbIdx=(lbIdx+1)%spreads.length; renderSpread(lbIdx); }
-  if (e.key === 'ArrowLeft')  { lbIdx=(lbIdx-1+spreads.length)%spreads.length; renderSpread(lbIdx); }
-  if (e.key === 'Escape') closeLightbox();
+document.getElementById('lbPrev').addEventListener('click',()=>{lbI=(lbI-1+spreads.length)%spreads.length;renderSpread(lbI)});
+document.getElementById('lbNext').addEventListener('click',()=>{lbI=(lbI+1)%spreads.length;renderSpread(lbI)});
+document.getElementById('lbClose').addEventListener('click',closeLb);
+document.getElementById('lbVeil').addEventListener('click',e=>{if(e.target===document.getElementById('lbVeil'))closeLb()});
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lbVeil').classList.contains('on'))return;
+  if(e.key==='ArrowRight'){lbI=(lbI+1)%spreads.length;renderSpread(lbI)}
+  if(e.key==='ArrowLeft'){lbI=(lbI-1+spreads.length)%spreads.length;renderSpread(lbI)}
+  if(e.key==='Escape')closeLb();
 });
 
-/* Triggers */
-document.getElementById('journalBtn').addEventListener('click', () => openLightbox(0));
-document.getElementById('journalBtn').addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') openLightbox(0); });
-document.querySelectorAll('.thumb').forEach(t => {
-  const idx = parseInt(t.dataset.spread ?? 0);
-  t.addEventListener('click', () => openLightbox(idx));
-  t.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') openLightbox(idx); });
+/* Trigger lightbox */
+['heroJournal','spreadJournal'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('click',()=>openLb(0));
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openLb(0)});
+});
+document.querySelectorAll('.th').forEach(t=>{
+  const i=parseInt(t.dataset.s||0);
+  t.addEventListener('click',()=>openLb(i));
+  t.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openLb(i)});
 });
 
 renderCart();
+refreshPrice();
 </script>
 </body>
 </html>
